@@ -4,11 +4,6 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const metadata = {
-  title: 'Contact Us | Levy Mwanawasa Medical University (LMMU)',
-  description: 'Get in touch with Levy Mwanawasa Medical University. Find our contact information, location, and send us a message.',
-};
-
 interface FormData {
   name: string;
   email: string;

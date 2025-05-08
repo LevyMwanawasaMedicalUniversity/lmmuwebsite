@@ -2,94 +2,93 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 export default function CategorySection() {
-  // We'll need to initialize any sliders/carousels on component mount
-  useEffect(() => {
-    // Initialize carousel if needed (using a library like Slick)
-    // This would typically be done using useEffect and importing the library
-    // For now, we'll assume the styling handles the appearance
-  }, []);
-
+  const academicPrograms = [
+    {
+      id: 1,
+      title: "School of Medicine & Clinical Sciences",
+      description: "Comprehensive medical programs including MBChB and specialized clinical training.",
+      icon: "/assets/images/all-icon/ctg-1.jpeg",
+      link: "/academics/schools/somcs",
+      color: "#2a76dd"
+    },
+    {
+      id: 2,
+      title: "School of Health Sciences",
+      description: "Programs in nursing, pharmacy, physiotherapy, and allied health professions.",
+      icon: "/assets/images/all-icon/ctg-2.jpg",
+      link: "/academics/schools/soh",
+      color: "#17a2b8"
+    },
+    {
+      id: 3,
+      title: "School of Public Health & Environmental Sciences",
+      description: "Focused on public health, epidemiology, and environmental health sciences.",
+      icon: "/assets/images/all-icon/ctg-3.jpg",
+      link: "/academics/schools/sophes",
+      color: "#28a745"
+    },
+    {
+      id: 4,
+      title: "Institute of Basic and Biomedical Sciences",
+      description: "Advanced research and education in basic and biomedical sciences.",
+      icon: "/assets/images/all-icon/ctg-4.jpg",
+      link: "/academics/ibbs",
+      color: "#6f42c1"
+    },
+    {
+      id: 5,
+      title: "School of Nursing",
+      description: "Programs in nursing education and research.",
+      icon: "/assets/images/all-icon/ctg-5.png",
+      link: "/academics/schools/ns",
+      color: "#dc3545"
+    }
+  ];
+  
   return (
-    <section id="category-part">
+    <section id="category-part" className="py-5">
       <div className="container">
-        <div className="category pt-40 pb-80">
+        <div className="row mb-5 align-items-center">
+          <div className="col-lg-6">
+            <h6 className="text-primary text-uppercase fw-bold">Academic Programs</h6>
+            <h2 className="display-5 fw-bold">Our Schools & Faculties</h2>
+            <p className="lead">Discover our specialized programs designed to prepare healthcare professionals for the future</p>
+          </div>
+        </div>
+        
+        <div className="academic-programs">
           <div className="row">
-            <div className="col-lg-4">
-              <div className="category-text pt-40">
-                <h2>Learn More about our schools/Faculties</h2>
-              </div>
-            </div>
-            <div className="col-lg-6 offset-lg-1 col-md-8 offset-md-2 col-sm-8 offset-sm-2 col-8 offset-2">
-              <div className="row category-slied mt-40">
-                <div className="col-lg-4">
-                  <Link href="/somcs">
-                    <div className="singel-category text-center color-1">
-                      <div className="icon">
-                        <Image src="/assets/images/all-icon/ctg-1.jpeg" alt="School of Medicine and Clinical Sciences" width={64} height={64} />
-                      </div>
-                      <div className="cont">
-                        <span>School of Medicine and Clinical Sciences</span>
-                      </div>
+            {academicPrograms.map((program) => (
+              <div className="col-lg-4 col-md-6 mb-4" key={program.id}>
+                <div className="program-card h-100 bg-white rounded shadow-sm overflow-hidden transition-all hover-shadow">
+                  <div className="program-icon p-4" style={{ backgroundColor: program.color }}>
+                    <div className="icon-wrapper bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto" 
+                      style={{ width: '80px', height: '80px', padding: '15px' }}
+                    >
+                      <Image 
+                        src={program.icon} 
+                        alt={program.title} 
+                        width={50} 
+                        height={50} 
+                        className="img-fluid"
+                      />
                     </div>
-                  </Link>
-                </div>
-                
-                <div className="col-lg-4">
-                  <Link href="/ibbs">
-                    <div className="singel-category text-center color-2">
-                      <div className="icon">
-                        <Image src="/assets/images/all-icon/ctg-4.jpg" alt="Institute of Basic and Biomedical Sciences" width={64} height={64} />
-                      </div>
-                      <div className="cont">
-                        <span>Institute of Basic and Biomedical Sciences</span>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-                
-                <div className="col-lg-4">
-                  <Link href="/sophes">
-                    <div className="singel-category text-center color-3">
-                      <div className="icon">
-                        <Image src="/assets/images/all-icon/ctg-3.jpg" alt="School of Public Health and Environmental Sciences" width={64} height={64} />
-                      </div>
-                      <div className="cont">
-                        <span>School of Public Health and Environmental Sciences</span>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-                
-                <div className="col-lg-4">
-                  <Link href="/soh">
-                    <div className="singel-category text-center color-1">
-                      <div className="icon">
-                        <Image src="/assets/images/all-icon/ctg-2.JPG" alt="School of Health Sciences" width={64} height={64} />
-                      </div>
-                      <div className="cont">
-                        <span>School of Health Sciences</span>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-                
-                <div className="col-lg-4">
-                  <Link href="/ns">
-                    <div className="singel-category text-center color-2">
-                      <div className="icon">
-                        <Image src="/assets/images/all-icon/ctg-5.png" alt="School of Nursing" width={64} height={64} />
-                      </div>
-                      <div className="cont">
-                        <span>School of Nursing</span>
-                      </div>
-                    </div>
-                  </Link>
+                  </div>
+                  <div className="program-content p-4 text-center">
+                    <h4 className="mb-3">{program.title}</h4>
+                    <p className="text-muted mb-4">{program.description}</p>
+                    <Link 
+                      href={program.link} 
+                      className="btn btn-outline-primary btn-sm rounded-pill px-4"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
