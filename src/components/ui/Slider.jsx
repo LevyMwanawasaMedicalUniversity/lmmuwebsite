@@ -90,14 +90,14 @@ export default function Slider() {
                       animation: currentSlide === index ? 'fadeInUp 1s ease-out' : 'none'
                     }}
                   >
-                    <span className="text-primary text-uppercase fw-bold mb-3 d-block">
+                    <span className="text-white text-uppercase fw-bold mb-3 d-block">
                       {slide.subtitle}
                     </span>
-                    <h1 className="display-4 fw-bold mb-4">{slide.title}</h1>
-                    <p className="lead mb-5">{slide.text}</p>
+                    <h1 className="display-4 fw-bold mb-4 text-white">{slide.title}</h1>
+                    <p className="lead mb-5 text-white">{slide.text}</p>
                     <Link 
                       href={slide.link} 
-                      className="btn btn-primary btn-lg px-4 py-2"
+                      className="main-btn"
                     >
                       {slide.linkText}
                     </Link>

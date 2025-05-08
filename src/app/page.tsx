@@ -20,10 +20,10 @@ export default function HomePage(): React.ReactNode {
       <Slider />
       
       {/* Quick Links/Stats Section */}
-      <StatsSection />
+      {/* <StatsSection /> */}
       
       {/* Academic Programs Section */}
-      <section className="container py-5 my-md-5">
+      <section className="container py-3 my-md-2">
         <div className="row mb-4">
           <div className="col-lg-8 mx-auto text-center">
             <h6 className="text-primary text-uppercase fw-bold">Excellence in Education</h6>
@@ -33,11 +33,13 @@ export default function HomePage(): React.ReactNode {
             </p>
           </div>
         </div>
-        <CategorySection />
       </section>
       
+      <section>
+        <CategorySection />
+      </section>
       {/* Application Section with Gradient Background */}
-      <div className="bg-gradient-primary-to-secondary py-5 my-5">
+      <div className="bg-gradient-primary-to-secondary py-2 my-0">
         <ApplySection />
       </div>
       
@@ -56,12 +58,12 @@ export default function HomePage(): React.ReactNode {
       </section>
       
       {/* Upcoming Events Section */}
-      <div className="bg-light py-5 my-5">
+      {/* <div className="bg-light py-5 my-5">
         <UpcomingEventsSection />
-      </div>
+      </div> */}
       
       {/* Testimonials Section */}
-      <section className="container py-5 my-5">
+      {/* <section className="container py-5 my-5">
         <div className="row mb-5">
           <div className="col-lg-8 mx-auto text-center">
             <h6 className="text-primary text-uppercase fw-bold">Success Stories</h6>
@@ -69,7 +71,7 @@ export default function HomePage(): React.ReactNode {
           </div>
         </div>
         <TestimonialsSection />
-      </section>
+      </section> */}
     </main>
   );
 }

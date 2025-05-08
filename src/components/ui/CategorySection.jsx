@@ -2,8 +2,38 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState, useRef, useEffect } from 'react';
 
 export default function CategorySection() {
+  const scrollRef = useRef(null);
+  const [showScrollButtons, setShowScrollButtons] = useState(false);
+  
+  // Check if scroll buttons should be shown
+  useEffect(() => {
+    const checkScrollWidth = () => {
+      if (scrollRef.current) {
+        const { scrollWidth, clientWidth } = scrollRef.current;
+        setShowScrollButtons(scrollWidth > clientWidth);
+      }
+    };
+    
+    checkScrollWidth();
+    window.addEventListener('resize', checkScrollWidth);
+    return () => window.removeEventListener('resize', checkScrollWidth);
+  }, []);
+
+  // Scroll functions
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
   const academicPrograms = [
     {
       id: 1,
@@ -48,41 +78,73 @@ export default function CategorySection() {
   ];
   
   return (
-    <section id="category-part" className="py-5">
-      <div className="container">
-        <div className="row mb-5 align-items-center">
-          <div className="col-lg-6">
-            <h6 className="text-primary text-uppercase fw-bold">Academic Programs</h6>
-            <h2 className="display-5 fw-bold">Our Schools & Faculties</h2>
-            <p className="lead">Discover our specialized programs designed to prepare healthcare professionals for the future</p>
+    <section id="category-part" className="py-5 bg-light">
+      <div className="container-fluid px-md-5">
+        <div className="row mb-5 justify-content-center">
+          <div className="col-lg-8 text-center">
+            <h6 className="text-uppercase fw-bold" style={{ color: '#ffc600' }}>Academic Programs</h6>
+            <h2 className="display-5 fw-bold mb-3">Our Schools & Faculties</h2>
+            <p className="lead">Discover our specialized programs designed to prepare healthcare professionals for the future of medicine and public health.</p>
           </div>
         </div>
         
-        <div className="academic-programs">
-          <div className="row">
+        <div className="position-relative academic-programs">
+          {showScrollButtons && (
+            <>
+              <button 
+                className="position-absolute start-0 top-50 translate-middle-y z-index-1 btn btn-circle btn-light shadow-sm border" 
+                onClick={scrollLeft}
+                style={{ width: '40px', height: '40px', left: '-5px' }}
+                aria-label="Scroll left"
+              >
+                <i className="fa fa-chevron-left"></i>
+              </button>
+              <button 
+                className="position-absolute end-0 top-50 translate-middle-y z-index-1 btn btn-circle btn-light shadow-sm border" 
+                onClick={scrollRight}
+                style={{ width: '40px', height: '40px', right: '-5px' }}
+                aria-label="Scroll right"
+              >
+                <i className="fa fa-chevron-right"></i>
+              </button>
+            </>
+          )}
+          
+          <div 
+            className="d-flex flex-nowrap overflow-auto pb-4 pt-2 px-md-4 px-2 justify-content-center" 
+            ref={scrollRef}
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+          >
             {academicPrograms.map((program) => (
-              <div className="col-lg-4 col-md-6 mb-4" key={program.id}>
-                <div className="program-card h-100 bg-white rounded shadow-sm overflow-hidden transition-all hover-shadow">
-                  <div className="program-icon p-4" style={{ backgroundColor: program.color }}>
-                    <div className="icon-wrapper bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto" 
-                      style={{ width: '80px', height: '80px', padding: '15px' }}
-                    >
-                      <Image 
-                        src={program.icon} 
-                        alt={program.title} 
-                        width={50} 
-                        height={50} 
-                        className="img-fluid"
-                      />
+              <div 
+                className="flex-shrink-0 mx-md-3 mx-2" 
+                key={program.id}
+                style={{ width: '350px' }}
+              >
+                <div className="program-card h-100 bg-white rounded shadow overflow-hidden transition-all hover-shadow border">
+                  <div className="position-relative program-image" style={{ height: '180px' }}>
+                    <div className="position-absolute w-100 h-100" style={{ backgroundColor: program.color, opacity: 0.9 }}></div>
+                    <div className="d-flex align-items-center justify-content-center w-100 h-100">
+                      <div 
+                        className="rounded-circle bg-white d-flex align-items-center justify-content-center shadow-lg position-relative school-icon" 
+                        style={{ width: '130px', height: '130px', zIndex: 2 }}
+                      >
+                        <Image 
+                          src={program.icon} 
+                          alt={program.title} 
+                          width={100} 
+                          height={100} 
+                          className="img-fluid rounded-circle p-2"
+                          style={{ objectFit: 'contain' }}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div className="program-content p-4 text-center">
-                    <h4 className="mb-3">{program.title}</h4>
+                  
+                  <div className="p-4 text-center">
+                    <h4 className="fw-bold mb-3" style={{ minHeight: '60px' }}>{program.title}</h4>
                     <p className="text-muted mb-4">{program.description}</p>
-                    <Link 
-                      href={program.link} 
-                      className="btn btn-outline-primary btn-sm rounded-pill px-4"
-                    >
+                    <Link href={program.link} className="main-btn">
                       Learn More
                     </Link>
                   </div>
