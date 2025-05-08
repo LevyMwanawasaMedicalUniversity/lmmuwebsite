@@ -7,6 +7,10 @@ import { useState, useRef, useEffect } from 'react';
 export default function CategorySection() {
   const scrollRef = useRef(null);
   const [showScrollButtons, setShowScrollButtons] = useState(false);
+  const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
+  const autoScrollIntervalRef = useRef(null);
+  const currentScrollPos = useRef(0);
+  const [scrollDirection, setScrollDirection] = useState('right'); // Track scrolling direction
   
   // Check if scroll buttons should be shown
   useEffect(() => {
@@ -21,6 +25,82 @@ export default function CategorySection() {
     window.addEventListener('resize', checkScrollWidth);
     return () => window.removeEventListener('resize', checkScrollWidth);
   }, []);
+
+  // Setup continuous one-direction carousel scrolling
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    
+    const startAutoScroll = () => {
+      if (!autoScrollEnabled) return;
+      
+      // Find the width of a single card + its margin
+      const firstCard = scrollRef.current.querySelector('.program-card');
+      if (!firstCard) return;
+      
+      const cardContainer = firstCard.parentElement;
+      const cardWidth = cardContainer.offsetWidth;
+      
+      autoScrollIntervalRef.current = setInterval(() => {
+        if (!scrollRef.current) return;
+
+        const { scrollLeft } = scrollRef.current;
+        
+        // Scroll one card at a time for full visibility
+        if (scrollLeft < scrollRef.current.scrollWidth - scrollRef.current.clientWidth - 10) {
+          // Smooth scroll to the next card
+          scrollRef.current.scrollTo({
+            left: scrollLeft + cardWidth,
+            behavior: 'smooth'
+          });
+        } else {
+          // When we reach the end, quickly reset to beginning (not visible to user)
+          scrollRef.current.scrollLeft = 0;
+          // Then immediately continue the smooth scrolling from the beginning
+          setTimeout(() => {
+            scrollRef.current.scrollTo({
+              left: cardWidth,
+              behavior: 'smooth'
+            });
+          }, 50);
+        }
+      }, 4000); // Auto-scroll every 4 seconds for better viewing
+    };
+    
+    // Start auto scrolling after 3 seconds initial delay
+    const initialDelay = setTimeout(() => {
+      startAutoScroll();
+    }, 3000);
+    
+    // Pause auto-scroll when user interacts with the scroll
+    const handleScrollInteraction = () => {
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
+        autoScrollIntervalRef.current = null;
+        
+        // Resume auto-scroll after 8 seconds of inactivity
+        setTimeout(() => {
+          startAutoScroll();
+        }, 8000);
+      }
+    };
+    
+    const container = scrollRef.current;
+    container.addEventListener('mousedown', handleScrollInteraction);
+    container.addEventListener('touchstart', handleScrollInteraction);
+    container.addEventListener('wheel', handleScrollInteraction);
+    
+    return () => {
+      clearTimeout(initialDelay);
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current);
+      }
+      if (container) {
+        container.removeEventListener('mousedown', handleScrollInteraction);
+        container.removeEventListener('touchstart', handleScrollInteraction);
+        container.removeEventListener('wheel', handleScrollInteraction);
+      }
+    };
+  }, [autoScrollEnabled]);
 
   // Scroll functions
   const scrollLeft = () => {
