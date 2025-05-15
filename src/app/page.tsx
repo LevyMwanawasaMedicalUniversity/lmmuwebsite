@@ -36,7 +36,7 @@ export default function HomePage(): React.ReactNode {
       </section>
       
       <section>
-        <CategorySection />
+        <CategorySection customTitle="Academic Programs" customDescription="Explore our range of academic programs" />
       </section>
       {/* Application Section with Gradient Background */}
       <div className="bg-gradient-primary-to-secondary py-2 my-0">

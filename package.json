@@ -10,6 +10,7 @@
     "copy-assets": "node scripts/copy-assets.js"
   },
   "dependencies": {
+    "framer-motion": "^12.11.4",
     "fs-extra": "^11.3.0",
     "next": "15.3.1",
     "pnpm": "^10.9.0",
