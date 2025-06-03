@@ -41,7 +41,7 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
   const nextCardSet = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       // Math.ceil because we want to include the last item if it doesn't fill a full page
-      const totalSets = Math.ceil(programmes.length / 4);
+      const totalSets = Math.ceil(programmes.length / getCardsPerPage());
       return (prevIndex + 1) % totalSets;
     });
   }, [programmes.length]);
@@ -49,7 +49,7 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
   // Setup auto-scrolling
   useEffect(() => {
     const startAutoScroll = () => {
-      if (programmes.length > 4) { // Only auto-scroll if there are enough programmes
+      if (programmes.length > getCardsPerPage()) { // Only auto-scroll if there are enough programmes
         autoScrollRef.current = setInterval(() => {
           if (!isHovering) {
             nextCardSet();
@@ -85,6 +85,21 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
     }, 8000); // Resume after 8 seconds of inactivity
   };
 
+  // Function to get pattern class based on pattern type with more randomness
+  const getPatternClass = (pattern: PatternType): string => {
+    switch(pattern) {
+      case 'radial': return 'bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.3)_1px,transparent_8px),radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.2)_1px,transparent_6px)] bg-[length:24px_24px]';
+      case 'diagonal': return 'bg-[linear-gradient(135deg,rgba(255,255,255,0.3)_25%,transparent_25%),linear-gradient(225deg,rgba(255,255,255,0.2)_25%,transparent_25%)] bg-[length:16px_16px]';
+      case 'mesh': return 'bg-[linear-gradient(0deg,rgba(255,255,255,0)_9px,rgba(255,255,255,0.2)_10px,rgba(255,255,255,0)_11px),linear-gradient(90deg,rgba(255,255,255,0)_9px,rgba(255,255,255,0.2)_10px,rgba(255,255,255,0)_11px)] bg-[length:30px_30px]';
+      case 'wave': return 'bg-[url("data:image/svg+xml,%3Csvg width=\'120\' height=\'20\' viewBox=\'0 0 120 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M-50.129,15.369 C-26.558,15.369 -26.558,4.631 -3,4.631 C20.558,4.631 20.558,15.369 44.129,15.369 C67.687,15.369 67.687,4.631 91.254,4.631 C114.813,4.631 114.813,15.369 138.371,15.369\' stroke=\'rgba(255,255,255,0.2)\' stroke-width=\'1.5\' fill=\'none\' /%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg width=\'120\' height=\'20\' viewBox=\'0 0 120 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M-50.129,10.369 C-26.558,10.369 -26.558,1.631 -3,1.631 C20.558,1.631 20.558,10.369 44.129,10.369 C67.687,10.369 67.687,1.631 91.254,1.631 C114.813,1.631 114.813,10.369 138.371,10.369\' stroke=\'rgba(255,255,255,0.15)\' stroke-width=\'1\' fill=\'none\' /%3E%3C/svg%3E")]';
+      case 'dots': return 'bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.3)_2px,transparent_2px),radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.2)_4px,transparent_4px)] bg-[length:24px_24px,25px_25px] bg-[position:0_0,12px_12px]';
+      case 'circles': return 'bg-[radial-gradient(circle_at_center,transparent_40%,rgba(255,255,255,0.2)_41%,rgba(255,255,255,0.2)_43%,transparent_44%)] bg-[length:40px_40px]';
+      case 'zigzag': return 'bg-[linear-gradient(135deg,rgba(255,255,255,0.25)_25%,transparent_25%),linear-gradient(225deg,rgba(255,255,255,0.25)_25%,transparent_25%)] bg-[size:20px_40px] bg-[position:0_0,10px_0]';
+      case 'bubbles': return 'bg-[radial-gradient(circle_at_20%_80%,rgba(255,255,255,0.2)_0,rgba(255,255,255,0.2)_3px,transparent_3px),radial-gradient(circle_at_80%_40%,rgba(255,255,255,0.25)_0,rgba(255,255,255,0.25)_6px,transparent_6px),radial-gradient(circle_at_40%_30%,rgba(255,255,255,0.3)_0,rgba(255,255,255,0.3)_4px,transparent_4px)] bg-[length:60px_60px]';
+      default: return '';
+    }
+  };
+  
   // Function to get pattern style based on pattern type
   const getPatternStyle = (pattern: PatternType): React.CSSProperties => {
     switch(pattern) {
@@ -615,227 +630,219 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
   // Calculate the number of cards to show per page based on screen size
   // We'll use a responsive approach for different screen sizes
   const getCardsPerPage = () => {
-    // Check if window exists (client-side only)
-    if (typeof window !== 'undefined') {
-      const width = window.innerWidth;
-      if (width >= 1280) return 4; // xl screens: 4 cards
-      if (width >= 1024) return 3; // lg screens: 3 cards
-      if (width >= 640) return 2;  // sm screens: 2 cards
-      return 1; // xs screens: 1 card
-    }
-    return 4; // Default for SSR
+    // For standalone carousel view, we use fixed number
+    return 4; // Show 4 cards per page
   };
-
-  // Calculate visible card indices based on current index
-  const visibleCardIndices = () => {
-    const cardsPerPage = getCardsPerPage();
-    const startIdx = currentIndex * cardsPerPage;
-    const endIdx = Math.min(startIdx + cardsPerPage, programmes.length);
-    return programmes.slice(startIdx, endIdx);
-  };
-
-  // Function to calculate total number of pages
+  
+  // Calculate total pages for pagination
   const getTotalPages = () => {
     return Math.ceil(programmes.length / getCardsPerPage());
   };
   
-  // Enhanced navigation dots for card sets
-  const renderNavigationDots = () => {
-    const totalPages = getTotalPages();
-    if (totalPages <= 1) return null;
-    
-    return (
-      <div className="flex justify-center mt-8 space-x-3">
-        {Array.from({ length: totalPages }).map((_, index) => {
-          const isActive = index === currentIndex;
-          return (
-            <motion.button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-4 h-4 rounded-full transition-all ${isActive 
-                ? 'bg-blue-600 shadow-md shadow-blue-400/20' 
-                : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'}`}
-              aria-label={`Go to card set ${index + 1}`}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-              animate={isActive ? {
-                scale: [1, 1.15, 1],
-                boxShadow: [
-                  '0 0 0 0 rgba(37, 99, 235, 0)',
-                  '0 0 0 4px rgba(37, 99, 235, 0.3)',
-                  '0 0 0 0 rgba(37, 99, 235, 0)'
-                ]
-              } : {}}
-              transition={isActive ? {
-                duration: 2,
-                repeat: Infinity,
-                repeatDelay: 1
-              } : {}}
-            />
-          );
-        })}
-      </div>
-    );
+  // Calculate which card indices are visible on the current page
+  const visibleCardIndices = () => {
+    return programmes.slice(
+      currentIndex,
+      currentIndex + getCardsPerPage()
+    ).map((_, i) => currentIndex + i);
   };
 
-  // Card hover animation variants
+  // Determine if we should use grid view or carousel view
+  const useGridView = () => {
+    // If there are 8 or fewer programmes, use grid view
+    return programmes.length <= 8;
+  };
+
+  // Simplified card hover for grid view
   const cardHover = {
     rest: { scale: 1, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' },
     hover: { 
-      scale: 1.02, 
+      scale: 1.03, 
       boxShadow: '0 10px 15px rgba(0,0,0,0.15)',
       transition: { duration: 0.3 }
     }
   };
 
+  // Render the grid view with all cards visible at once
+  const renderGridView = () => {
+    return (
+      <motion.div 
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+      >
+        {programmes.map((programme, index) => (
+          <motion.div
+            key={programme.id}
+            className="programme-card bg-white rounded-lg shadow-sm flex flex-col h-full hover:shadow-md transition-shadow duration-300 overflow-hidden"
+            variants={fadeIn}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <div className={`h-32 relative overflow-hidden bg-gradient-to-br ${programme.gradient}`}>
+              {/* Pattern overlay based on programme type */}
+              <div className={`absolute inset-0 opacity-20 ${getPatternClass(programme.pattern)}`}></div>
+              
+              {/* Client-only decorative elements */}
+              <ClientAnimation>
+                <div className="absolute inset-0 pointer-events-none">
+                  {getDecorativeElements(index)}
+                </div>
+              </ClientAnimation>
+              
+              {/* Icon container */}
+              <ClientAnimation>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {React.cloneElement(getIconContainerStyle(index), {}, 
+                    <i className={`fa-solid ${programme.icon} text-white text-2xl`} />
+                  )}
+                </div>
+              </ClientAnimation>
+            </div>
+            
+            <div className="p-3 flex flex-col flex-1">
+              <h3 className="text-sm font-bold mb-1 text-blue-900">{programme.title}</h3>
+              <div className="mb-1 flex flex-wrap gap-1">
+                <span className="inline-block bg-blue-100 text-blue-800 text-xs px-1.5 py-0.5 rounded-sm">
+                  {programme.level}
+                </span>
+                <span className="inline-block bg-blue-100 text-blue-800 text-xs px-1.5 py-0.5 rounded-sm">
+                  {programme.duration}
+                </span>
+              </div>
+              <p className="text-gray-600 text-xs line-clamp-3">{programme.description}</p>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    );
+  };
+
+  // Render pagination dots for navigation between card sets
+  const renderNavigationDots = () => {
+    const totalPages = getTotalPages();
+    if (totalPages <= 1) return null;
+    
+    return (
+      <div className="flex justify-center items-center space-x-2 mt-6">
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index * getCardsPerPage())}
+            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+              Math.floor(currentIndex / getCardsPerPage()) === index
+                ? 'bg-blue-600 dark:bg-blue-400 scale-125'
+                : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+            }`}
+            aria-label={`Go to page ${index + 1}`}
+          />
+        ))}
+      </div>
+    );
+  };
+  
+  // Render the carousel view with auto-scrolling and navigation
+  const renderCarouselView = () => {
+    return (
+      <>
+        <div className="relative overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={currentIndex}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              {visibleCardIndices().map((actualIndex) => {
+                const programme = programmes[actualIndex];
+                const colorSet = getCardColors(actualIndex);
+                
+                return (
+                  <motion.div 
+                    key={programme.id}
+                    className={`flex flex-col h-36 rounded-xl overflow-hidden ${colorSet.shadow} hover:shadow-xl transition-shadow duration-300 relative z-0 border ${colorSet.border}`}
+                    variants={fadeIn}
+                    whileHover={{
+                      scale: 1.03,
+                      transition: { duration: 0.2 }
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className={`h-36 ${getCardStyle(actualIndex)} relative overflow-hidden`}>
+                      {/* Pattern overlay based on programme type */}
+                      <div className="absolute inset-0 opacity-20" style={getPatternStyle(programme.pattern)}></div>
+                      
+                      {/* Decorative background elements */}
+                      <ClientAnimation>
+                        <div className="absolute inset-0 pointer-events-none">
+                          {getDecorativeElements(actualIndex)}
+                        </div>
+                      </ClientAnimation>
+                      
+                      {/* Enhanced icon container */}
+                      <ClientAnimation>
+                        <div className="absolute inset-0 flex items-center justify-center z-20">
+                          {React.cloneElement(getIconContainerStyle(actualIndex), {}, 
+                            <i className={`fa-solid ${programme.icon} text-white text-3xl drop-shadow-md`} />
+                          )}
+                        </div>
+                      </ClientAnimation>
+                      
+                      {/* Enhanced title banner with better readability and no truncation */}
+                      <div className={`absolute bottom-0 inset-x-0 px-3 py-2.5 backdrop-blur-md bg-gradient-to-t ${colorSet.gradient} bg-opacity-90 z-30 border-t border-white/10`}>
+                        <h3 className="text-sm font-bold tracking-tight text-white drop-shadow-sm break-words hyphens-auto">
+                          {programme.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+          
+          {/* Navigation arrows if there are multiple card sets */}
+          {getTotalPages() > 1 && (
+            <>
+              <motion.button 
+                onClick={() => setCurrentIndex((prev) => (prev === 0 ? getTotalPages() - 1 : prev - 1))}
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-white hover:scale-110 transition-all z-10 border border-gray-100 dark:border-slate-700"
+                aria-label="Previous card set"
+                whileHover={{ scale: 1.1, x: -20 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <i className="fa-solid fa-chevron-left"></i>
+              </motion.button>
+              <motion.button 
+                onClick={() => nextCardSet()}
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-white hover:scale-110 transition-all z-10 border border-gray-100 dark:border-slate-700"
+                aria-label="Next card set"
+                whileHover={{ scale: 1.1, x: 20 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <i className="fa-solid fa-chevron-right"></i>
+              </motion.button>
+            </>
+          )}
+        </div>
+        
+        {/* Navigation dots */}
+        {renderNavigationDots()}
+      </>
+    );
+  };
+
   return (
-    <div className="programme-cards-container" 
-      onMouseEnter={handleInteractionStart}
+    <div className="w-full relative" 
+      onMouseEnter={handleInteractionStart} 
       onMouseLeave={handleInteractionEnd}
       onTouchStart={handleInteractionStart}
       onTouchEnd={handleInteractionEnd}
     >
-      <div className="relative">
-        <AnimatePresence mode="wait">
-          <motion.div 
-            key={currentIndex}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.5 }}
-          >
-            {visibleCardIndices().map((programme, index) => {
-              const actualIndex = (currentIndex * 4) + index;
-              const colorSet = getCardColors(actualIndex);
-              
-              return (
-                <motion.div
-                  key={programme.id}
-                  className={`programme-card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden flex flex-col h-full ${colorSet.shadow} transition-all duration-300 ease-in-out`}
-                  initial="rest"
-                  whileHover={{
-                    y: -8,
-                    boxShadow: '0 20px 30px rgba(0,0,0,0.15)',
-                    transition: { duration: 0.3, ease: 'easeOut' }
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div 
-                    className={`h-36 relative overflow-hidden ${getCardStyle(actualIndex)}`}
-                  >
-                    {/* Enhanced gradient background */}
-                    <div className={`absolute inset-0 ${colorSet.gradient} bg-opacity-90`}></div>
-                    
-                    {/* Decorative pattern with animated opacity */}
-                    <ClientAnimation>
-                      <motion.div 
-                        className="absolute inset-0" 
-                        style={getPatternStyle(programme.pattern)}
-                        animate={{ 
-                          opacity: [0.1, 0.2, 0.15], 
-                        }}
-                        transition={{ 
-                          duration: 6, 
-                          repeat: Infinity, 
-                          repeatType: 'reverse' 
-                        }}
-                      />
-                    </ClientAnimation>
-                    
-                    {/* Animated glass shine effect */}
-                    <ClientAnimation>
-                      <motion.div 
-                        className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent" 
-                        initial={{ opacity: 0.1 }}
-                        animate={{ 
-                          opacity: [0.1, 0.2, 0.1],
-                          backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-                        }}
-                        transition={{ 
-                          duration: 10, 
-                          repeat: Infinity,
-                          ease: 'linear'
-                        }}
-                      />
-                    </ClientAnimation>
-                    
-                    {/* Decorative elements */}
-                    <ClientAnimation>
-                      <div className="absolute inset-0 pointer-events-none z-10">
-                        {getDecorativeElements(actualIndex)}
-                      </div>
-                    </ClientAnimation>
-                    
-                    {/* Enhanced icon container */}
-                    <ClientAnimation>
-                      <div className="absolute inset-0 flex items-center justify-center z-20">
-                        {React.cloneElement(getIconContainerStyle(actualIndex), {}, 
-                          <i className={`fa-solid ${programme.icon} text-white text-3xl drop-shadow-md`} />
-                        )}
-                      </div>
-                    </ClientAnimation>
-                    
-                    {/* Enhanced title banner with better readability and no truncation */}
-                    <div className={`absolute bottom-0 inset-x-0 px-3 py-2.5 backdrop-blur-md bg-gradient-to-t ${colorSet.gradient} bg-opacity-90 z-30 border-t border-white/10`}>
-                      <h3 className="text-sm font-bold tracking-tight text-white drop-shadow-sm break-words hyphens-auto">
-                        {programme.title}
-                      </h3>
-                    </div>
-                  </div>
-                  
-                  <div className="p-3 flex flex-col flex-grow bg-white dark:bg-slate-800 relative">
-                    {/* Condensed badges for shorter cards */}
-                    <div className="flex flex-wrap gap-1.5 z-10">
-                      {/* Streamlined badge styling */}
-                      <span className={`inline-block ${colorSet.accent} text-xs font-semibold px-2.5 py-1 rounded-full ${colorSet.border} border shadow-sm`}>
-                        {programme.level}
-                      </span>
-                      <span className={`inline-block ${colorSet.accent} text-xs font-semibold px-2.5 py-1 rounded-full ${colorSet.border} border shadow-sm`}>
-                        {programme.duration}
-                      </span>
-                    </div>
-                    
-                    {/* Subtle decorative corner accent - smaller for shorter cards */}
-                    <div className={`absolute top-0 right-0 w-16 h-16 ${colorSet.gradient} opacity-5 rounded-bl-full`}></div>
-                    
-                    <p className={`text-xs ${colorSet.textColor} dark:text-gray-300 mt-2 line-clamp-2`}>
-                      {programme.description}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
-        
-        {/* Navigation arrows if there are multiple card sets */}
-        {getTotalPages() > 1 && (
-          <>
-            <motion.button 
-              onClick={() => setCurrentIndex((prev) => (prev === 0 ? getTotalPages() - 1 : prev - 1))}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-white hover:scale-110 transition-all z-10 border border-gray-100 dark:border-slate-700"
-              aria-label="Previous card set"
-              whileHover={{ scale: 1.1, x: -20 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <i className="fa-solid fa-chevron-left"></i>
-            </motion.button>
-            <motion.button 
-              onClick={() => nextCardSet()}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-white hover:scale-110 transition-all z-10 border border-gray-100 dark:border-slate-700"
-              aria-label="Next card set"
-              whileHover={{ scale: 1.1, x: 20 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <i className="fa-solid fa-chevron-right"></i>
-            </motion.button>
-          </>
-        )}
-      </div>
-      
-      {/* Navigation dots */}
-      {renderNavigationDots()}
+      {useGridView() ? renderGridView() : renderCarouselView()}
     </div>
   );
 };
