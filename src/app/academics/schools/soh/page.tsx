@@ -859,16 +859,16 @@ export default function SchoolOfHealthSciencesPage(): React.ReactNode {
               
               <div className="flex flex-wrap gap-4">
                 <Link 
-                  href="#programs" 
+                  href="#academic-programmes" 
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition duration-300 flex items-center"
                 >
-                  Our Programs <i className="fa fa-arrow-right ml-2"></i>
+                  Academic Programmes <i className="fa fa-arrow-right ml-2"></i>
                 </Link>
                 <Link 
-                  href="#departments" 
+                  href="#fee-structure" 
                   className="px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-medium rounded-md transition duration-300 flex items-center"
                 >
-                  Departments <i className="fa fa-arrow-right ml-2"></i>
+                  Fee Structure <i className="fa fa-arrow-right ml-2"></i>
                 </Link>
               </div>
             </motion.div>
@@ -949,7 +949,7 @@ export default function SchoolOfHealthSciencesPage(): React.ReactNode {
       
 
       {/* Academic Programmes Section */}
-      <section id="programmes" className="py-20">
+      <section id="academic-programmes" className="py-20">
         <div className="container mx-auto px-4">
           <motion.div 
             className="mb-16 text-center"
@@ -971,7 +971,7 @@ export default function SchoolOfHealthSciencesPage(): React.ReactNode {
       </section>
       
       {/* Fee Structure */}
-      <section className="fee-structure-section py-20 bg-gray-50">
+      <section id="fee-structure" className="fee-structure-section py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div 
             className="text-center mb-12"
@@ -1063,33 +1063,95 @@ export default function SchoolOfHealthSciencesPage(): React.ReactNode {
                 </tbody>
               </table>
               <div className="my-8"></div>
-              <h3 className="text-xl font-bold mb-2">OTHER FEES</h3>
-              <table className="min-w-[300px] bg-white border border-black">
-                <thead>
-                  <tr className="bg-blue-100 text-black">
-                    <th className="py-2 px-4 border border-black">OTHER FEES</th>
-                    <th className="py-2 px-4 border border-black">AMOUNT</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="py-2 px-4 border border-black">Registration</td>
-                    <td className="py-2 px-4 border border-black">K100</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 px-4 border border-black">Recreation</td>
-                    <td className="py-2 px-4 border border-black">K150</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 px-4 border border-black">Medical</td>
-                    <td className="py-2 px-4 border border-black">K100</td>
-                  </tr>
-                  <tr>
-                    <td className="py-2 px-4 border border-black">Maintenance</td>
-                    <td className="py-2 px-4 border border-black">K200</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="flex flex-col md:flex-row gap-8">
+                <div>
+                  <h3 className="text-xl font-bold mb-2">OTHER FEES</h3>
+                  <table className="min-w-[300px] bg-white border border-black">
+                    <thead>
+                      <tr className="bg-blue-100 text-black">
+                        <th className="py-2 px-4 border border-black">OTHER FEES</th>
+                        <th className="py-2 px-4 border border-black">AMOUNT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Registration</td>
+                        <td className="py-2 px-4 border border-black">K100</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Recreation</td>
+                        <td className="py-2 px-4 border border-black">K150</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Medical</td>
+                        <td className="py-2 px-4 border border-black">K100</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Maintenance</td>
+                        <td className="py-2 px-4 border border-black">K200</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Student Guild</td>
+                        <td className="py-2 px-4 border border-black">K200</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Library Services</td>
+                        <td className="py-2 px-4 border border-black">K475</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Internet</td>
+                        <td className="py-2 px-4 border border-black">K200</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Examination</td>
+                        <td className="py-2 px-4 border border-black">K200</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Practical</td>
+                        <td className="py-2 px-4 border border-black">K900</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">Student ID card</td>
+                        <td className="py-2 px-4 border border-black">K100</td>
+                      </tr>
+                      <tr className="bg-blue-50 font-bold">
+                        <td className="py-2 px-4 border border-black">TOTAL</td>
+                        <td className="py-2 px-4 border border-black">K2,625</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-bold mb-2">INDEX FEES</h3>
+                  <table className="min-w-[300px] bg-white border border-black">
+                    <thead>
+                      <tr className="bg-blue-100 text-black">
+                        <th className="py-2 px-4 border border-black">INDEX FEES</th>
+                        <th className="py-2 px-4 border border-black">AMOUNT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">GNC</td>
+                        <td className="py-2 px-4 border border-black">K356</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">HPCZ DEGREE</td>
+                        <td className="py-2 px-4 border border-black">K250</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">HPCZ DIPLOMA</td>
+                        <td className="py-2 px-4 border border-black">K220</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-4 border border-black">HPCZ CERTIFICATE</td>
+                        <td className="py-2 px-4 border border-black">K190</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
