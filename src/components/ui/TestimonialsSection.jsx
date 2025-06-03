@@ -1,9 +1,42 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function TestimonialsSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  // Animation variants
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+  
+  // Auto-rotate testimonials every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
+  
   const testimonials = [
     {
       id: 1,
@@ -29,16 +62,39 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <div className="testimonials-slider">
+    <motion.div 
+      className="testimonials-slider"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={staggerContainer}
+    >
       <div className="row">
-        {testimonials.map((testimonial) => (
-          <div className="col-lg-4 col-md-6 mb-4" key={testimonial.id}>
-            <div className="testimonial-card h-100 p-4 bg-white rounded shadow-sm">
+        {testimonials.map((testimonial, index) => (
+          <motion.div 
+            className="col-lg-4 col-md-6 mb-4" 
+            key={testimonial.id}
+            variants={fadeIn}
+            animate={index === activeIndex ? { scale: 1.03, boxShadow: "0 10px 30px rgba(0,0,0,0.1)" } : { scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="testimonial-card h-100 p-4 bg-white rounded shadow-sm" 
+              style={{ 
+                borderLeft: index === activeIndex ? "4px solid var(--bs-primary)" : "4px solid transparent",
+                transition: "all 0.3s ease"
+              }}
+            >
               <div className="testimonial-content">
-                <div className="quote-icon text-primary mb-3">
+                <motion.div 
+                  className="quote-icon text-primary mb-3"
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
                   <i className="fa fa-quote-left fa-2x"></i>
-                </div>
-                <p className="mb-4">{testimonial.quote}</p>
+                </motion.div>
+                <p className="mb-4" style={{ fontStyle: "italic", lineHeight: "1.6" }}>"{testimonial.quote}"</p>
                 <div className="testimonial-author d-flex align-items-center">
                   <div className="author-image me-3">
                     <Image 
@@ -60,12 +116,30 @@ export default function TestimonialsSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-      <div className="text-center mt-4">
-        <a href="/testimonials" className="btn btn-primary">Read More Stories</a>
+      <div className="text-center mt-5">
+        <div className="testimonial-indicators mb-4">
+          {testimonials.map((_, index) => (
+            <button 
+              key={index}
+              className={`btn btn-sm rounded-circle mx-1 ${index === activeIndex ? 'btn-primary' : 'btn-outline-primary'}`}
+              style={{ width: '12px', height: '12px', padding: 0 }}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
+        <motion.a 
+          href="/testimonials" 
+          className="btn btn-primary px-4"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Read More Stories
+        </motion.a>
       </div>
-    </div>
+    </motion.div>
   );
 }

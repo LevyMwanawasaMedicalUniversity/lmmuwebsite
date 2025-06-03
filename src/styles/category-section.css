@@ -1,0 +1,163 @@
+/* Modern Card Styling */
+.modern-card {
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Glass Morphism Header */
+.glassmorphism-header {
+  height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 25px;
+  overflow: hidden;
+}
+
+.glassmorphism-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(7px);
+}
+
+/* Badge with modern styling */
+.program-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* Icon with perspective effect */
+.icon-perspective-container {
+  position: absolute;
+  top: 60px;
+  left: 30px;
+  perspective: 1000px;
+  z-index: 20;
+}
+
+.icon-wrapper {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transform-style: preserve-3d;
+}
+
+.modern-icon {
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* Content area */
+.card-content {
+  padding: 70px 25px 25px;
+  z-index: 1;
+}
+
+/* Title with animated underline */
+.title-container {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.school-title {
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.title-underline {
+  height: 3px;
+  border-radius: 2px;
+}
+
+.school-description {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+/* Modern button styling */
+.learn-more-container {
+  margin-top: auto;
+}
+
+.learn-more-link {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 10px 0;
+}
+
+.learn-more-link:hover {
+  color: inherit;
+}
+
+.arrow-container {
+  display: inline-flex;
+  margin-left: 8px;
+}
+
+/* Decorative shapes */
+.decorative-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.shape1 {
+  width: 120px;
+  height: 120px;
+  bottom: -40px;
+  right: -30px;
+}
+
+.shape2 {
+  width: 80px;
+  height: 80px;
+  top: 20px;
+  left: -20px;
+  opacity: 0.05;
+}
+
+/* General styling */
+.academic-programs .row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+/* Entrance animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

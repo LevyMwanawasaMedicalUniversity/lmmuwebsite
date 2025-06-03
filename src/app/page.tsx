@@ -110,7 +110,14 @@ export default function HomePage(): React.ReactNode {
       <Slider />
       
       {/* Quick Links/Stats Section */}
-      {/* <StatsSection /> */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <StatsSection />
+      </motion.div>
       
       {/* Academic Programs Section - Modern Header */}
       <motion.section 
@@ -270,19 +277,56 @@ export default function HomePage(): React.ReactNode {
       </motion.section>
       
       {/* Upcoming Events Section */}
-      {/* <div className="bg-light py-5 my-5">
+      <motion.div 
+        className="bg-light py-5 my-5"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <UpcomingEventsSection />
-      </div> */}
+      </motion.div>
       {/* Testimonials Section */}
-      {/* <section className="container py-5 my-5">
-        <div className="row mb-5">
+      <motion.section 
+        className="container py-5 my-5"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
+        <motion.div className="row mb-5" variants={fadeIn}>
           <div className="col-lg-8 mx-auto text-center">
-            <h6 className="text-primary text-uppercase fw-bold">Success Stories</h6>
-            <h2 className="display-5 fw-bold">What Our Students Say</h2>
+            <motion.h6 
+              className="text-primary text-uppercase fw-bold" 
+              style={{ letterSpacing: "2px" }}
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Success Stories
+            </motion.h6>
+            <h2 className="display-5 fw-bold mb-4 position-relative">
+              What Our Students Say
+              <motion.div 
+                className="mx-auto" 
+                style={{ 
+                  height: "4px", 
+                  background: "var(--bs-primary)", 
+                  width: "60px", 
+                  borderRadius: "2px", 
+                  marginTop: "15px" 
+                }}
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
+              />
+            </h2>
           </div>
-        </div>
+        </motion.div>
         <TestimonialsSection />
-      </section> */}
+      </motion.section>
     </main>
   );
 }

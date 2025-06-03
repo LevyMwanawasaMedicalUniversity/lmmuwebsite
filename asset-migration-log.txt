@@ -1,0 +1,43 @@
+=== LMMU Website Asset Migration Log - 2025-06-02T11:00:38.034Z ===
+
+[2025-06-02T11:00:38.037Z] Starting asset migration process
+[2025-06-02T11:00:38.044Z] Creating asset directories...
+[2025-06-02T11:00:38.047Z] Created directory: images
+[2025-06-02T11:00:38.048Z] Created directory: images/about
+[2025-06-02T11:00:38.051Z] Created directory: images/all-icon
+[2025-06-02T11:00:38.052Z] Created directory: images/gallary
+[2025-06-02T11:00:38.053Z] Created directory: images/hubs
+[2025-06-02T11:00:38.056Z] Created directory: images/induction
+[2025-06-02T11:00:38.058Z] Created directory: images/labour
+[2025-06-02T11:00:38.062Z] Created directory: images/library
+[2025-06-02T11:00:38.063Z] Created directory: images/news
+[2025-06-02T11:00:38.064Z] Created directory: images/officers
+[2025-06-02T11:00:38.066Z] Created directory: images/portals
+[2025-06-02T11:00:38.067Z] Created directory: images/schools
+[2025-06-02T11:00:38.069Z] Created directory: images/slider
+[2025-06-02T11:00:38.071Z] Created directory: images/graduation
+[2025-06-02T11:00:38.074Z] Created directory: images/tradefair
+[2025-06-02T11:00:38.102Z] Created directory: images/university
+[2025-06-02T11:00:38.105Z] Created directory: images/academics
+[2025-06-02T11:00:38.108Z] Created directory: images/administration
+[2025-06-02T11:00:38.110Z] Created directory: files
+[2025-06-02T11:00:38.112Z] Created directory: css
+[2025-06-02T11:00:38.113Z] Created directory: js
+[2025-06-02T11:00:38.115Z] Created directory: fonts
+[2025-06-02T11:00:38.116Z] All directories created successfully
+[2025-06-02T11:00:38.117Z] Copying images...
+[2025-06-02T11:00:38.133Z] Found 143 image files/directories to process
+[2025-06-02T11:00:38.758Z] Images copied successfully
+[2025-06-02T11:00:38.760Z] Copying document files...
+[2025-06-02T11:00:38.781Z] Document files copied successfully
+[2025-06-02T11:00:38.783Z] Copying CSS files...
+[2025-06-02T11:00:38.786Z] Found 11 CSS files to copy
+[2025-06-02T11:00:38.806Z] CSS files copied successfully
+[2025-06-02T11:00:38.808Z] Copying JavaScript files...
+[2025-06-02T11:00:38.809Z] Found 14 JavaScript files to copy
+[2025-06-02T11:00:38.835Z] JavaScript files copied successfully
+[2025-06-02T11:00:38.836Z] Copying font files...
+[2025-06-02T11:00:38.849Z] Font files copied successfully
+[2025-06-02T11:00:38.853Z] Creating asset manifest...
+[2025-06-02T11:00:38.871Z] Asset manifest created with 130 images, 11 CSS files, 14 JS files, 6 font files, and 9 document files
+[2025-06-02T11:00:38.873Z] Asset migration completed successfully in 0.83 seconds!

@@ -3,15 +3,45 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function UpcomingEventsSection() {
+  // Animation variants
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+  
+  const hoverEffect = {
+    rest: { scale: 1, boxShadow: "0 4px 20px rgba(0,0,0,0.1)" },
+    hover: { 
+      scale: 1.03, 
+      boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+      transition: { duration: 0.3, ease: "easeOut" }
+    }
+  };
   const events = [
     {
       id: 1,
       title: "2025 Orientation Week",
       date: "January 15-20, 2025",
       location: "Main Campus",
-      image: "/images/events/orientation.jpg",
+      image: "/assets/images/events/orientation.jpg",
       description: "Welcome program for new students joining LMMU for the 2025 academic year.",
       link: "/events/orientation-2025"
     },
@@ -20,7 +50,7 @@ export default function UpcomingEventsSection() {
       title: "Annual Research Symposium",
       date: "February 5-6, 2025",
       location: "LMMU Conference Center",
-      image: "/images/events/research-symposium.jpg",
+      image: "/assets/images/events/research-symposium.jpg",
       description: "Showcase of research projects by faculty and students with keynote speakers.",
       link: "/events/research-symposium-2025"
     },
@@ -29,28 +59,76 @@ export default function UpcomingEventsSection() {
       title: "Healthcare Innovation Workshop",
       date: "March 12, 2025",
       location: "School of Medicine",
-      image: "/images/events/innovation-workshop.jpg",
+      image: "/assets/images/events/innovation-workshop.jpg",
       description: "Interactive workshop on healthcare innovation and technology.",
       link: "/events/innovation-workshop-2025"
     }
   ];
 
   return (
-    <div className="container">
-      <div className="row mb-4">
+    <motion.div 
+      className="container"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={staggerContainer}
+    >
+      <motion.div className="row mb-5" variants={fadeIn}>
         <div className="col-lg-8">
-          <h6 className="text-primary text-uppercase fw-bold">Mark Your Calendar</h6>
-          <h2 className="display-5 fw-bold">Upcoming Events</h2>
+          <motion.h6 
+            className="text-primary text-uppercase fw-bold" 
+            style={{ letterSpacing: "2px" }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            Mark Your Calendar
+          </motion.h6>
+          <h2 className="display-5 fw-bold position-relative">
+            Upcoming Events
+            <motion.span 
+              className="position-absolute"
+              style={{ 
+                height: "4px", 
+                background: "var(--bs-primary)", 
+                borderRadius: "2px", 
+                bottom: "-10px", 
+                left: 0
+              }}
+              initial={{ width: 0 }}
+              whileInView={{ width: "80px" }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+            />
+          </h2>
         </div>
         <div className="col-lg-4 d-flex align-items-center justify-content-lg-end">
-          <Link href="/events" className="btn btn-outline-primary">View All Events</Link>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link href="/events" className="btn btn-outline-primary px-4 py-2" style={{ borderRadius: "30px", borderWidth: "2px" }}>
+              View All Events
+            </Link>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="row">
+      <motion.div className="row" variants={staggerContainer}>
         {events.map((event) => (
-          <div className="col-lg-4 col-md-6 mb-4" key={event.id}>
-            <div className="event-card h-100 bg-white rounded shadow-sm overflow-hidden">
+          <motion.div 
+            className="col-lg-4 col-md-6 mb-4" 
+            key={event.id}
+            variants={fadeIn}
+            initial="rest"
+            whileHover="hover"
+            animate="rest"
+          >
+            <motion.div 
+              className="event-card h-100 bg-white rounded overflow-hidden"
+              variants={hoverEffect}
+            >
               <div className="event-image position-relative">
                 <Image 
                   src={event.image} 
@@ -60,7 +138,7 @@ export default function UpcomingEventsSection() {
                   className="img-fluid w-100"
                   // Fallback image if the event image is not available
                   onError={(e) => {
-                    e.currentTarget.src = "/images/events/default-event.jpg";
+                    e.currentTarget.src = "/assets/images/events/default-event.jpg";
                   }}
                 />
                 <div className="event-date position-absolute top-0 start-0 bg-primary text-white p-2 m-3 rounded">
@@ -84,10 +162,10 @@ export default function UpcomingEventsSection() {
                   Learn More
                 </Link>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
