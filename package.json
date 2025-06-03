@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "22.15.16",
     "@types/react": "19.1.2",

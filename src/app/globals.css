@@ -74,8 +74,6 @@ body {
 /* ===== Slider Styles ===== */
 .slider-active .single-slider {
   position: relative;
-  background-position: center center;
-  background-size: cover;
   height: 700px;
 }
 
