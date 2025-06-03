@@ -725,7 +725,7 @@ export default function SchoolOfHealthSciencesPage(): React.ReactNode {
             </div>
             
             <div className="p-3 flex flex-col flex-1">
-              <h3 className="text-sm font-bold mb-1 text-blue-900 line-clamp-2">{programme.title}</h3>
+              <h3 className="text-sm font-bold mb-1 text-blue-900">{programme.title}</h3>
               <div className="mb-1 flex flex-wrap gap-1">
                 <span className="inline-block bg-blue-100 text-blue-800 text-xs px-1.5 py-0.5 rounded-sm">
                   {programme.level}
