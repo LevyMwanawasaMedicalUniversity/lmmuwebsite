@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Programme, PatternType } from './SchoolPageTypes';
 
 // Client-only animation wrapper to avoid hydration mismatch
@@ -30,6 +30,61 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
   fadeIn, 
   staggerContainer 
 }) => {
+  // State for auto-scrolling cards functionality
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [touchTimeout, setTouchTimeout] = useState<NodeJS.Timeout | null>(null);
+  const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Function to advance to the next card set
+  const nextCardSet = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      // Math.ceil because we want to include the last item if it doesn't fill a full page
+      const totalSets = Math.ceil(programmes.length / 4);
+      return (prevIndex + 1) % totalSets;
+    });
+  }, [programmes.length]);
+  
+  // Setup auto-scrolling
+  useEffect(() => {
+    const startAutoScroll = () => {
+      if (programmes.length > 4) { // Only auto-scroll if there are enough programmes
+        autoScrollRef.current = setInterval(() => {
+          if (!isHovering) {
+            nextCardSet();
+          }
+        }, 5000); // Auto-scroll every 5 seconds
+      }
+    };
+    
+    startAutoScroll();
+    
+    return () => {
+      if (autoScrollRef.current) {
+        clearInterval(autoScrollRef.current);
+      }
+    };
+  }, [nextCardSet, programmes.length, isHovering]);
+  
+  // Handle mouse enter/leave and touch events to pause/resume scrolling
+  const handleInteractionStart = () => {
+    setIsHovering(true);
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current);
+      touchTimeoutRef.current = null;
+    }
+  };
+  
+  const handleInteractionEnd = () => {
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current);
+    }
+    touchTimeoutRef.current = setTimeout(() => {
+      setIsHovering(false);
+    }, 8000); // Resume after 8 seconds of inactivity
+  };
+
   // Function to get pattern style based on pattern type
   const getPatternStyle = (pattern: PatternType): React.CSSProperties => {
     switch(pattern) {
@@ -402,50 +457,385 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
     }
   };
 
+  // Generate advanced color palette for cards with rich gradients
+  const getCardColors = (index: number): { gradient: string, accent: string, textColor: string, border: string, shadow: string } => {
+    // Premium color palettes with multi-tone gradients
+    const colorPalettes = [
+      { 
+        gradient: 'from-blue-600 via-blue-500 to-indigo-700', 
+        accent: 'bg-blue-100 text-blue-800',
+        textColor: 'text-blue-700',
+        border: 'border-blue-300',
+        shadow: 'shadow-blue-400/20'
+      },
+      { 
+        gradient: 'from-purple-600 via-fuchsia-500 to-pink-600', 
+        accent: 'bg-purple-100 text-purple-800',
+        textColor: 'text-purple-700',
+        border: 'border-purple-300',
+        shadow: 'shadow-purple-400/20'
+      },
+      { 
+        gradient: 'from-emerald-600 via-emerald-500 to-teal-700', 
+        accent: 'bg-emerald-100 text-emerald-800',
+        textColor: 'text-emerald-700',
+        border: 'border-emerald-300',
+        shadow: 'shadow-emerald-400/20'
+      },
+      { 
+        gradient: 'from-orange-500 via-amber-500 to-amber-700', 
+        accent: 'bg-orange-100 text-orange-800',
+        textColor: 'text-orange-700',
+        border: 'border-orange-300',
+        shadow: 'shadow-orange-400/20'
+      },
+      { 
+        gradient: 'from-pink-600 via-rose-500 to-rose-700', 
+        accent: 'bg-pink-100 text-pink-800',
+        textColor: 'text-pink-700',
+        border: 'border-pink-300',
+        shadow: 'shadow-pink-400/20'
+      },
+      { 
+        gradient: 'from-cyan-600 via-cyan-500 to-blue-700', 
+        accent: 'bg-cyan-100 text-cyan-800',
+        textColor: 'text-cyan-700',
+        border: 'border-cyan-300',
+        shadow: 'shadow-cyan-400/20'
+      },
+      { 
+        gradient: 'from-lime-600 via-lime-500 to-green-700', 
+        accent: 'bg-lime-100 text-lime-800',
+        textColor: 'text-lime-700',
+        border: 'border-lime-300',
+        shadow: 'shadow-lime-400/20'
+      },
+      { 
+        gradient: 'from-red-600 via-red-500 to-rose-700', 
+        accent: 'bg-red-100 text-red-800',
+        textColor: 'text-red-700',
+        border: 'border-red-300',
+        shadow: 'shadow-red-400/20'
+      },
+      { 
+        gradient: 'from-indigo-600 via-violet-500 to-purple-700', 
+        accent: 'bg-indigo-100 text-indigo-800',
+        textColor: 'text-indigo-700',
+        border: 'border-indigo-300',
+        shadow: 'shadow-indigo-400/20'
+      },
+      { 
+        gradient: 'from-amber-600 via-yellow-500 to-orange-700', 
+        accent: 'bg-amber-100 text-amber-800',
+        textColor: 'text-amber-700',
+        border: 'border-amber-300',
+        shadow: 'shadow-amber-400/20'
+      },
+      { 
+        gradient: 'from-sky-600 via-sky-500 to-indigo-700', 
+        accent: 'bg-sky-100 text-sky-800',
+        textColor: 'text-sky-700',
+        border: 'border-sky-300',
+        shadow: 'shadow-sky-400/20'
+      },
+      { 
+        gradient: 'from-violet-600 via-violet-500 to-purple-700', 
+        accent: 'bg-violet-100 text-violet-800',
+        textColor: 'text-violet-700',
+        border: 'border-violet-300',
+        shadow: 'shadow-violet-400/20'
+      },
+    ];
+    
+    // Deterministic but seemingly random selection based on index
+    const colorIndex = (index * 7) % colorPalettes.length;
+    return colorPalettes[colorIndex];
+  };
+
+  // Enhanced card style with more sophisticated effects and layouts
+  const getCardStyle = (index: number): string => {
+    // Advanced gradient varieties
+    const complexGradients = [
+      'bg-gradient-to-br', // standard bottom-right
+      'bg-[linear-gradient(135deg,var(--tw-gradient-stops))]', // diagonal
+      'bg-[linear-gradient(45deg,var(--tw-gradient-stops))]',  // diagonal opposite
+      'bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))]', // radial from corner
+      'bg-[radial-gradient(circle_at_bottom_left,var(--tw-gradient-stops))]', // radial from corner
+      'bg-[conic-gradient(from_45deg_at_center,var(--tw-gradient-stops))]', // conic gradient
+      'bg-[linear-gradient(120deg,var(--tw-gradient-stops))]', // angled linear
+      'bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))]', // centered radial
+      'bg-[linear-gradient(to_right,var(--tw-gradient-stops))]', // horizontal
+      'bg-[linear-gradient(to_top,var(--tw-gradient-stops))]', // vertical
+      'bg-[linear-gradient(315deg,var(--tw-gradient-stops))]', // diagonal alternate
+      'bg-[conic-gradient(from_180deg_at_65%_65%,var(--tw-gradient-stops))]', // off-center conic
+    ];
+    
+    // Get the direction based on index
+    const direction = complexGradients[index % complexGradients.length];
+    
+    // Sophisticated layouts with design polish
+    const layouts = [
+      'flex items-center justify-center p-6 relative', // standard centered
+      'flex items-end justify-center p-5 relative overflow-hidden', // bottom centered
+      'flex items-center justify-end p-6 relative', // right aligned
+      'flex items-start justify-center p-6 relative overflow-hidden', // top centered
+      'flex items-center justify-start p-6 relative', // left aligned
+      'flex items-end justify-end p-5 relative overflow-hidden', // corner
+      'flex items-start justify-start p-6 relative overflow-hidden', // opposite corner
+      'flex items-center justify-center p-5 relative overflow-hidden', // centered with overflow
+      'flex items-start justify-end p-6 relative', // top-right aligned
+      'flex items-end justify-start p-6 relative', // bottom-left aligned
+      'flex items-center justify-center p-7 relative' // extra padded center
+    ];
+    
+    const layout = layouts[index % layouts.length];
+    
+    // Premium visual effects
+    const specialEffects = [
+      ' backdrop-blur-sm', // blur effect
+      ' shadow-[inset_5px_5px_15px_rgba(0,0,0,0.2)]', // inner shadow
+      ' shadow-[0_15px_30px_rgba(0,0,0,0.2)]', // elevated premium shadow
+      ' relative after:absolute after:inset-0 after:bg-gradient-to-t after:from-black/15 after:to-transparent after:z-0', // gradient overlay
+      ' border-b-[6px] border-white/20', // thick bottom border
+      ' border-l-[6px] border-white/20', // thick left border
+      ' border-r-[6px] border-white/20', // thick right border
+      ' border-t-[6px] border-white/20', // thick top border
+      ' shadow-inner shadow-white/20', // subtle inner glow
+      ' backdrop-saturate-150', // color boost
+      ' relative after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_center,transparent_65%,rgba(0,0,0,0.15)_100%)] after:z-0', // vignette effect
+      ' backdrop-contrast-110' // contrast boost
+    ];
+    
+    const effectIndex = (index * 3) % specialEffects.length;
+    const effect = specialEffects[effectIndex];
+    
+    return `${direction} ${layout}${effect}`;
+  };
+
+  // Calculate the number of cards to show per page based on screen size
+  // We'll use a responsive approach for different screen sizes
+  const getCardsPerPage = () => {
+    // Check if window exists (client-side only)
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      if (width >= 1280) return 4; // xl screens: 4 cards
+      if (width >= 1024) return 3; // lg screens: 3 cards
+      if (width >= 640) return 2;  // sm screens: 2 cards
+      return 1; // xs screens: 1 card
+    }
+    return 4; // Default for SSR
+  };
+
+  // Calculate visible card indices based on current index
+  const visibleCardIndices = () => {
+    const cardsPerPage = getCardsPerPage();
+    const startIdx = currentIndex * cardsPerPage;
+    const endIdx = Math.min(startIdx + cardsPerPage, programmes.length);
+    return programmes.slice(startIdx, endIdx);
+  };
+
+  // Function to calculate total number of pages
+  const getTotalPages = () => {
+    return Math.ceil(programmes.length / getCardsPerPage());
+  };
+  
+  // Enhanced navigation dots for card sets
+  const renderNavigationDots = () => {
+    const totalPages = getTotalPages();
+    if (totalPages <= 1) return null;
+    
+    return (
+      <div className="flex justify-center mt-8 space-x-3">
+        {Array.from({ length: totalPages }).map((_, index) => {
+          const isActive = index === currentIndex;
+          return (
+            <motion.button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-4 h-4 rounded-full transition-all ${isActive 
+                ? 'bg-blue-600 shadow-md shadow-blue-400/20' 
+                : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'}`}
+              aria-label={`Go to card set ${index + 1}`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+              animate={isActive ? {
+                scale: [1, 1.15, 1],
+                boxShadow: [
+                  '0 0 0 0 rgba(37, 99, 235, 0)',
+                  '0 0 0 4px rgba(37, 99, 235, 0.3)',
+                  '0 0 0 0 rgba(37, 99, 235, 0)'
+                ]
+              } : {}}
+              transition={isActive ? {
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 1
+              } : {}}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Card hover animation variants
+  const cardHover = {
+    rest: { scale: 1, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' },
+    hover: { 
+      scale: 1.02, 
+      boxShadow: '0 10px 15px rgba(0,0,0,0.15)',
+      transition: { duration: 0.3 }
+    }
+  };
+
   return (
-    <motion.div 
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      variants={staggerContainer}
+    <div className="programme-cards-container" 
+      onMouseEnter={handleInteractionStart}
+      onMouseLeave={handleInteractionEnd}
+      onTouchStart={handleInteractionStart}
+      onTouchEnd={handleInteractionEnd}
     >
-      {programmes.map((programme, index) => (
-        <motion.div
-          key={programme.id}
-          className="programme-card bg-white rounded-lg shadow-sm flex flex-col h-full hover:shadow-md transition-shadow duration-300 overflow-hidden"
-          variants={fadeIn}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
-        >
-          <div className="h-32 relative overflow-hidden" style={{ background: `linear-gradient(to bottom right, ${programme.gradient.split('from-')[1]?.split(' ')[0] || '#3b82f6'}, ${programme.gradient.split('to-')[1] || '#1e40af'})` }}>
-            <div className="absolute inset-0 opacity-20" style={getPatternStyle(programme.pattern)}></div>
-            <ClientAnimation>
-              <div className="absolute inset-0 pointer-events-none">
-                {getDecorativeElements(index)}
-              </div>
-            </ClientAnimation>
-            <ClientAnimation>
-              <div className="absolute inset-0 flex items-center justify-center">
-                {React.cloneElement(getIconContainerStyle(index), {}, 
-                  <i className={`fa-solid ${programme.icon} text-white text-2xl`} />
-                )}
-              </div>
-            </ClientAnimation>
-          </div>
-          <div className="p-4 flex flex-col flex-grow">
-            <h3 className="text-lg font-semibold text-gray-800 mb-1">
-              {programme.title}
-            </h3>
-            <div className="flex items-center text-sm text-gray-600 mb-2">
-              <span className="mr-3"> {programme.level} </span>
-              <span> {programme.duration} </span>
-            </div>
-            <p className="text-sm text-gray-600 mt-auto">
-              {programme.description}
-            </p>
-          </div>
-        </motion.div>
-      ))}
-    </motion.div>
+      <div className="relative">
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={currentIndex}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.5 }}
+          >
+            {visibleCardIndices().map((programme, index) => {
+              const actualIndex = (currentIndex * 4) + index;
+              const colorSet = getCardColors(actualIndex);
+              
+              return (
+                <motion.div
+                  key={programme.id}
+                  className={`programme-card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden flex flex-col h-full ${colorSet.shadow} transition-all duration-300 ease-in-out`}
+                  initial="rest"
+                  whileHover={{
+                    y: -8,
+                    boxShadow: '0 20px 30px rgba(0,0,0,0.15)',
+                    transition: { duration: 0.3, ease: 'easeOut' }
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div 
+                    className={`h-36 relative overflow-hidden ${getCardStyle(actualIndex)}`}
+                  >
+                    {/* Enhanced gradient background */}
+                    <div className={`absolute inset-0 ${colorSet.gradient} bg-opacity-90`}></div>
+                    
+                    {/* Decorative pattern with animated opacity */}
+                    <ClientAnimation>
+                      <motion.div 
+                        className="absolute inset-0" 
+                        style={getPatternStyle(programme.pattern)}
+                        animate={{ 
+                          opacity: [0.1, 0.2, 0.15], 
+                        }}
+                        transition={{ 
+                          duration: 6, 
+                          repeat: Infinity, 
+                          repeatType: 'reverse' 
+                        }}
+                      />
+                    </ClientAnimation>
+                    
+                    {/* Animated glass shine effect */}
+                    <ClientAnimation>
+                      <motion.div 
+                        className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent" 
+                        initial={{ opacity: 0.1 }}
+                        animate={{ 
+                          opacity: [0.1, 0.2, 0.1],
+                          backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+                        }}
+                        transition={{ 
+                          duration: 10, 
+                          repeat: Infinity,
+                          ease: 'linear'
+                        }}
+                      />
+                    </ClientAnimation>
+                    
+                    {/* Decorative elements */}
+                    <ClientAnimation>
+                      <div className="absolute inset-0 pointer-events-none z-10">
+                        {getDecorativeElements(actualIndex)}
+                      </div>
+                    </ClientAnimation>
+                    
+                    {/* Enhanced icon container */}
+                    <ClientAnimation>
+                      <div className="absolute inset-0 flex items-center justify-center z-20">
+                        {React.cloneElement(getIconContainerStyle(actualIndex), {}, 
+                          <i className={`fa-solid ${programme.icon} text-white text-3xl drop-shadow-md`} />
+                        )}
+                      </div>
+                    </ClientAnimation>
+                    
+                    {/* Enhanced title banner with better readability and no truncation */}
+                    <div className={`absolute bottom-0 inset-x-0 px-3 py-2.5 backdrop-blur-md bg-gradient-to-t ${colorSet.gradient} bg-opacity-90 z-30 border-t border-white/10`}>
+                      <h3 className="text-sm font-bold tracking-tight text-white drop-shadow-sm break-words hyphens-auto">
+                        {programme.title}
+                      </h3>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 flex flex-col flex-grow bg-white dark:bg-slate-800 relative">
+                    {/* Condensed badges for shorter cards */}
+                    <div className="flex flex-wrap gap-1.5 z-10">
+                      {/* Streamlined badge styling */}
+                      <span className={`inline-block ${colorSet.accent} text-xs font-semibold px-2.5 py-1 rounded-full ${colorSet.border} border shadow-sm`}>
+                        {programme.level}
+                      </span>
+                      <span className={`inline-block ${colorSet.accent} text-xs font-semibold px-2.5 py-1 rounded-full ${colorSet.border} border shadow-sm`}>
+                        {programme.duration}
+                      </span>
+                    </div>
+                    
+                    {/* Subtle decorative corner accent - smaller for shorter cards */}
+                    <div className={`absolute top-0 right-0 w-16 h-16 ${colorSet.gradient} opacity-5 rounded-bl-full`}></div>
+                    
+                    <p className={`text-xs ${colorSet.textColor} dark:text-gray-300 mt-2 line-clamp-2`}>
+                      {programme.description}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Navigation arrows if there are multiple card sets */}
+        {getTotalPages() > 1 && (
+          <>
+            <motion.button 
+              onClick={() => setCurrentIndex((prev) => (prev === 0 ? getTotalPages() - 1 : prev - 1))}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-white hover:scale-110 transition-all z-10 border border-gray-100 dark:border-slate-700"
+              aria-label="Previous card set"
+              whileHover={{ scale: 1.1, x: -20 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <i className="fa-solid fa-chevron-left"></i>
+            </motion.button>
+            <motion.button 
+              onClick={() => nextCardSet()}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-white hover:scale-110 transition-all z-10 border border-gray-100 dark:border-slate-700"
+              aria-label="Next card set"
+              whileHover={{ scale: 1.1, x: 20 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <i className="fa-solid fa-chevron-right"></i>
+            </motion.button>
+          </>
+        )}
+      </div>
+      
+      {/* Navigation dots */}
+      {renderNavigationDots()}
+    </div>
   );
 };
