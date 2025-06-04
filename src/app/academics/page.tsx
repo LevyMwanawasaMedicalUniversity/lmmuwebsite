@@ -151,7 +151,7 @@ export default function AcademicsPage(): React.ReactNode {
                   <p>
                     Specializes in public health, epidemiology, environmental health, and health promotion.
                   </p>
-                  <Link href="/sophes" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
+                  <Link href="/academics/schools/sophes" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
                 </div>
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function AcademicsPage(): React.ReactNode {
                   <p>
                     Offers programs in physiotherapy, occupational therapy, medical laboratory sciences, radiography, and other allied health disciplines.
                   </p>
-                  <Link href="/soh" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
+                  <Link href="/academics/schools/soh" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
                 </div>
               </div>
             </div>
