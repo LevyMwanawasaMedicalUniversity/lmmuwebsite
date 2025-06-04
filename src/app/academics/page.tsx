@@ -195,6 +195,26 @@ export default function AcademicsPage(): React.ReactNode {
                 </div>
               </div>
             </div>
+            <div className="col-lg-4 col-md-6">
+              <div className="school-card mb-30">
+                <div className="school-image">
+                  <Image 
+                    src="/assets/images/schools/drpgs.jpg" 
+                    alt="Directorate of Research and Postgraduate Studies" 
+                    width={400} 
+                    height={250} 
+                    className="img-fluid"
+                  />
+                </div>
+                <div className="school-content">
+                  <h4>Directorate of Research and Postgraduate Studies</h4>
+                  <p>
+                    Offers advanced postgraduate programs and promotes research excellence in healthcare disciplines.
+                  </p>
+                  <Link href="/academics/schools/drpgs" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

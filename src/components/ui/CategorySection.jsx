@@ -101,7 +101,15 @@ export default function CategorySection({ customTitle, customDescription }) {
       icon: "/assets/images/all-icon/ctg-5.png",
       link: "/academics/schools/son",
       color: "#dc3545"
-    }
+    },
+    {
+      id: 6,
+      title: "Directorate of Research and Postgraduate Studies",
+      description: "Postgraduate studies and research.",
+      icon: "/assets/images/all-icon/ctg-5.png",
+      link: "/academics/schools/drpgs",
+      color: "#dc3895"
+    },
   ];
   
   return (
