@@ -4,20 +4,20 @@ export const ibbsData: SchoolData = {
   name: "Institute of Basic and Biomedical Sciences",
   shortName: "IBBS",
   slug: "ibbs",
-  heroImage: "/images/schools/ibbs-banner.jpg",
+  heroImage: "/images/schools/ibbs/ibbs-banner.jpg",
   tagline: "Advancing knowledge in basic and biomedical sciences through innovative research and education",
-  overview: "The Institute of Basic and Biomedical Sciences at Levy Mwanawasa Medical University is dedicated to advancing knowledge in basic and biomedical sciences through innovative research and education. Our programmes are designed to provide students with a strong foundation in the basic sciences that underpin medical and health sciences.",
-  mission: "To provide high-quality education and conduct innovative research in basic and biomedical sciences that contributes to the advancement of knowledge and improves health outcomes in Zambia and beyond.",
-  vision: "To be a leading institute for basic and biomedical sciences education and research in Africa, recognized for its contribution to scientific knowledge and innovation.",
+  overview: "The Institute of Basic and Biomedical Sciences (IBBS) at Levy Mwanawasa Medical University is a center of excellence dedicated to advancing knowledge in basic and biomedical sciences through cutting-edge research and world-class education. Our programmes combine theoretical knowledge with practical laboratory experience, preparing students for successful careers in research, healthcare, and related industries. With state-of-the-art facilities and expert faculty, we provide a stimulating environment for scientific discovery and innovation.",
+  mission: "To provide high-quality education and conduct innovative research in basic and biomedical sciences that contributes to the advancement of knowledge, addresses local health challenges, and improves health outcomes in Zambia and beyond.",
+  vision: "To be a leading institute for basic and biomedical sciences education and research in Africa, recognized globally for its contribution to scientific knowledge, innovation, and the development of solutions to pressing health challenges.",
   director: {
-    name: "Prof. John Smith",
-    title: "Director",
-    qualifications: "PhD, MSc, BSc",
-    imageSrc: "/images/schools/ibbs-director.jpg",
+    name: "Dr. Mable Mutengo",
+    title: "Director – Institute of Basic & Biomedical Sciences",
+    qualifications: "BSc, MSc, PhD",
+    imageSrc: "/images/schools/ibbs/mable-ibbs.png",
     message: [
-      "Welcome to the Institute of Basic and Biomedical Sciences at Levy Mwanawasa Medical University.",
-      "Our institute is committed to excellence in teaching and research in the basic and biomedical sciences. We offer a range of programmes designed to prepare students for successful careers in science and research.",
-      "Our faculty members are experts in their fields and are dedicated to providing students with the knowledge and skills needed to excel in the scientific community."
+      "Welcome to the Levy Mwanawasa Medical University (LMMU) Institute of Basic and Biomedical Sciences.",
+      "The Chainama College of Health Sciences, Dental Training School, Levy Mwanawasa University Teaching Hospital and Chainama Hills Hospital have been integrated into the LMMU. The LMMU Institute of Basic and Biomedical Sciences is recognized nationally and internationally for excellence in educating and training healthcare workers for Zambia and the Southern Africa region.",
+      "The academic staff of the Institute of Basic and Biomedical Sciences are renowned for their dedication to inspiring students to prepare for careers as healthcare practitioners and researchers, and for deploying best global practices in nursing and healthcare management."
     ]
   },
   programmes: [
@@ -82,95 +82,44 @@ export const ibbsData: SchoolData = {
       pattern: "diagonal"
     }
   ],
-  feeStructure: [
-    {
-      title: "Bachelor of Science in Biomedical Sciences",
-      fees: [
-        {
-          category: "Tuition Fees",
-          items: [
-            { name: "Zambian Students", amount: "26,000" },
-            { name: "International Students", amount: "36,000" }
-          ]
-        },
-        {
-          category: "Other Fees",
-          items: [
-            { name: "Registration Fee", amount: "1,500" },
-            { name: "Library Fee", amount: "1,000" },
-            { name: "Computer Lab Fee", amount: "1,200" },
-            { name: "Student Union Fee", amount: "500" },
-            { name: "Laboratory Fee", amount: "2,000" }
-          ]
-        },
-        {
-          category: "Index Fees",
-          items: [
-            { name: "Examination Fee", amount: "2,500" },
-            { name: "Practicum Fee", amount: "3,000" }
-          ]
-        }
-      ]
-    },
-    {
-      title: "Bachelor of Science in Medical Laboratory Sciences",
-      fees: [
-        {
-          category: "Tuition Fees",
-          items: [
-            { name: "Zambian Students", amount: "27,000" },
-            { name: "International Students", amount: "37,000" }
-          ]
-        },
-        {
-          category: "Other Fees",
-          items: [
-            { name: "Registration Fee", amount: "1,500" },
-            { name: "Library Fee", amount: "1,000" },
-            { name: "Computer Lab Fee", amount: "1,200" },
-            { name: "Student Union Fee", amount: "500" },
-            { name: "Laboratory Fee", amount: "2,500" }
-          ]
-        },
-        {
-          category: "Index Fees",
-          items: [
-            { name: "Examination Fee", amount: "2,500" },
-            { name: "Practicum Fee", amount: "3,500" }
-          ]
-        }
-      ]
-    },
-    {
-      title: "Diploma in Biomedical Sciences",
-      fees: [
-        {
-          category: "Tuition Fees",
-          items: [
-            { name: "Zambian Students", amount: "19,000" },
-            { name: "International Students", amount: "29,000" }
-          ]
-        },
-        {
-          category: "Other Fees",
-          items: [
-            { name: "Registration Fee", amount: "1,200" },
-            { name: "Library Fee", amount: "800" },
-            { name: "Computer Lab Fee", amount: "1,000" },
-            { name: "Student Union Fee", amount: "500" },
-            { name: "Laboratory Fee", amount: "1,500" }
-          ]
-        },
-        {
-          category: "Index Fees",
-          items: [
-            { name: "Examination Fee", amount: "2,000" },
-            { name: "Practicum Fee", amount: "2,500" }
-          ]
-        }
-      ]
-    }
-  ],
+  feeStructure: {
+    programFees: [
+      {
+        programName: "Bachelor of Science in Biomedical Sciences",
+        tuitionFeeOnly: "K19,525",
+        year1TuitionAndFees: "K22,400",
+        year1RegistrationFee: "K5,600",
+        otherYearsTuitionAndFees: "K22,150",
+        otherYearsRegistrationFee: "K5,537.5"
+      },
+      {
+        programName: "Diploma in Biomedical Sciences",
+        tuitionFeeOnly: "K11,725",
+        year1TuitionAndFees: "K14,570",
+        year1RegistrationFee: "K3,642.5",
+        otherYearsTuitionAndFees: "K14,350",
+        otherYearsRegistrationFee: "K3,587.5"
+      }
+    ],
+    otherFees: [
+      { name: "Registration", amount: "K100" },
+      { name: "Recreation", amount: "K150" },
+      { name: "Medical", amount: "K100" },
+      { name: "Maintenance", amount: "K200" },
+      { name: "Student Guild", amount: "K200" },
+      { name: "Library Services", amount: "K475" },
+      { name: "Internet", amount: "K200" },
+      { name: "Examination", amount: "K200" },
+      { name: "Practical", amount: "K900" },
+      { name: "Student ID card", amount: "K100" }
+    ],
+    indexFees: [
+      { name: "GNC", amount: "K356" },
+      { name: "HPCZ DEGREE", amount: "K250" },
+      { name: "HPCZ DIPLOMA", amount: "K220" },
+      { name: "HPCZ CERTIFICATE", amount: "K190" }
+    ]
+  },
   facilities: [
     {
       icon: "fa-flask",
