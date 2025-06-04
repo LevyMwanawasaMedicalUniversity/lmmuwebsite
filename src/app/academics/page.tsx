@@ -191,7 +191,7 @@ export default function AcademicsPage(): React.ReactNode {
                   <p>
                     Specializes in nursing education, midwifery, and nursing specialties.
                   </p>
-                  <Link href="/ns" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
+                  <Link href="/academics/schools/son" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
                 </div>
               </div>
             </div>

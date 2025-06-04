@@ -71,7 +71,7 @@ export default function SchoolsPage(): React.ReactNode {
                 <div className="school-content p-4">
                   <h4><Link href="/academics/schools/soh">School of Health Sciences</Link></h4>
                   <p>
-                    Focuses on various health disciplines including Nursing, Pharmacy, Physiotherapy, and other 
+                    Focuses on various health disciplines including Pharmacy, Physiotherapy, and other 
                     allied health professions.
                   </p>
                   <Link href="/academics/schools/soh" className="btn btn-primary mt-3">Learn More</Link>
@@ -91,6 +91,23 @@ export default function SchoolsPage(): React.ReactNode {
                     Dedicated to public health education, research, and innovation to address public health challenges.
                   </p>
                   <Link href="/academics/schools/sophes" className="btn btn-primary mt-3">Learn More</Link>
+                </div>
+              </div>
+            </div>
+            
+            {/* School of Nursing */}
+            <div className="col-lg-4 col-md-6">
+              <div className="school-box mb-50">
+                <div className="school-image">
+                  <Image src="/assets/images/school-nursing.jpg" alt="School of Nursing" width={350} height={230} />
+                </div>
+                <div className="school-content p-4">
+                  <h4><Link href="/academics/schools/son">School of Nursing</Link></h4>
+                  <p>
+                    Dedicated to educating and training competent nursing professionals with programs in general nursing, 
+                    ophthalmic nursing, mental health nursing, and midwifery.
+                  </p>
+                  <Link href="/academics/schools/son" className="btn btn-primary mt-3">Learn More</Link>
                 </div>
               </div>
             </div>
