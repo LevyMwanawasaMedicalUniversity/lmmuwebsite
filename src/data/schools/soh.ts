@@ -4,7 +4,7 @@ export const sohData: SchoolData = {
   name: "School of Health Sciences",
   shortName: "SOH",
   slug: "soh",
-  heroImage: "/assets/images/schools/School of Health Sciences04.JPG",
+  heroImage: "/images/schools/sohs/School of Health Sciences04.JPG",
   tagline: "Excellence in educating and training healthcare workers for Zambia and the Southern Africa region",
   overview: "Welcome to the Levy Mwanawasa Medical University (LMMU) School of Health Sciences. The Chainama College of Health Sciences, Dental Training School, Levy Mwanawasa University Teaching Hospital and Chainama Hills Hospital have been integrated into the LMMU. The LMMU School of Health Sciences is recognized nationally and internationally for excellence in educating and training healthcare workers for Zambia and the Southern Africa region. The academic staff of the School of Health Sciences are renown for their dedication to inspiring students to prepare for careers as healthcare practitioners and researchers, and for deploying best global practices in Nutrition and Dietetics, Biomedical Sciences and other healthcare management.",
   mission: "To educate and train health professionals using hands-on and competence-based training that is administered through a distributed network of academic health complexes in order to contribute towards Universal Health Coverage in Zambia.",
@@ -13,7 +13,7 @@ export const sohData: SchoolData = {
     name: "Dr. Richard Kunda",
     title: "Dean – School of Health Sciences",
     qualifications: "BSc, MSc, PhD",
-    imageSrc: "/assets/images/schools/SOHS RICHARD.png",
+    imageSrc: "/images/schools/sohs/SOHS_RICHARD.png",
     message: [
       "Welcome to the School of Health Sciences at Levy Mwanawasa Medical University.",
       "Our school is committed to excellence in teaching, research, and service. We offer a range of programmes designed to prepare students for successful careers in healthcare.",
