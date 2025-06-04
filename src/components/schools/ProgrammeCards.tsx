@@ -650,7 +650,7 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
   // Determine if we should use grid view or carousel view
   const useGridView = () => {
     // If there are 8 or fewer programmes, use grid view
-    return programmes.length <= 8;
+    return programmes.length <= 20;
   };
 
   // Simplified card hover for grid view
@@ -695,7 +695,15 @@ export const ProgrammeCards: React.FC<ProgrammeCardsProps> = ({
               <ClientAnimation>
                 <div className="absolute inset-0 flex items-center justify-center">
                   {React.cloneElement(getIconContainerStyle(index), {}, 
-                    <i className={`fa-solid ${programme.icon} text-white text-2xl`} />
+                    programme.icon.startsWith('fa-') ? (
+                      <i className={`fa-solid ${programme.icon} text-white text-2xl`} />
+                    ) : (
+                      <img 
+                        src={programme.icon} 
+                        alt={programme.title}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    )
                   )}
                 </div>
               </ClientAnimation>
