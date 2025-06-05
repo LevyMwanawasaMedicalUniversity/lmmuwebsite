@@ -165,7 +165,7 @@ export default function Header() {
               <li className="nav-item dropdown mx-3">
                 <Link 
                   className={`nav-link custom-nav-link dropdown-toggle ${pathname?.includes('/university') ? 'active' : ''}`}
-                  href="/university"
+                  href="#"
                   role="button"
                   aria-expanded="false"
                 >
@@ -202,7 +202,7 @@ export default function Header() {
               <li className="nav-item dropdown mx-3">
                 <Link 
                   className={`nav-link custom-nav-link dropdown-toggle ${pathname?.includes('/academics') ? 'active' : ''}`}
-                  href="/academics"
+                  href="#"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -215,10 +215,10 @@ export default function Header() {
                   
                   <li><h6 className="dropdown-header">ACADEMIC AFFAIRS</h6></li>
                   <li><Link className="dropdown-item" href="/academics/postgrad">Postgraduate Studies</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/undergrad">Undergraduate Studies</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/undergraduate">Undergraduate Studies</Link></li>
                   <li><Link className="dropdown-item" href="/academics/files/LMMU 2025 ADVERT.pdf">HOW TO APPLY</Link></li>
                   <li><Link className="dropdown-item" href="/academics/LMMU 2025 APPLICATION FORM  FINAL.pdf">APPLICATION FORM</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/shools">TUITION FEES STRUCTURE</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools">TUITION FEES STRUCTURE</Link></li>
                   <li><Link className="dropdown-item" href="https://edurole.lmmu.ac.zm">APPLY ONLINE</Link></li>
                   <li><hr className="dropdown-divider" /></li>
 
@@ -238,13 +238,24 @@ export default function Header() {
                   <li><Link className="dropdown-item" href="/academics/files/SRC organogram.pdf">Student Representative Council</Link></li>
                 </ul>
               </li>
-              <li className="nav-item mx-3">
-                <Link 
-                  className={`nav-link custom-nav-link ${pathname?.includes('/portals') ? 'active' : ''}`}
-                  href="/portals"
+              <li className="nav-item dropdown mx-3">
+                <a 
+                  className={`nav-link custom-nav-link dropdown-toggle ${pathname?.includes('/portals') ? 'active' : ''}`}
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
                   PORTALS
-                </Link>
+                </a>
+                <ul className="dropdown-menu">
+                  <li><Link className="dropdown-item" href="/portals">Student And Staff Resources</Link></li>
+                  <li><hr className="dropdown-divider" /></li>
+                  
+                  <li><h6 className="dropdown-header">Portals</h6></li>
+                  <li><a className="dropdown-item" href="https://edurole.lmmu.ac.zm" target="_blank" rel="noopener noreferrer">Student Portal</a></li>
+                  <li><a className="dropdown-item" href="https://staff.lmmu.ac.zm" target="_blank" rel="noopener noreferrer">Staff Portal</a></li>
+                </ul>
               </li>
               <li className="nav-item mx-3">
                 <Link 

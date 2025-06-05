@@ -82,6 +82,28 @@ export default function SchoolsPage(): React.ReactNode {
           </div>
         </div>
         
+        {/* Fee Structure Notice */}
+        <motion.div 
+          className="alert alert-info p-4 mb-5 shadow-sm border-0"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <div className="d-flex align-items-center">
+            <div className="alert-icon me-3">
+              <i className="fas fa-info-circle fs-4 text-primary"></i>
+            </div>
+            <div className="alert-content">
+              <h5 className="mb-2">Tuition Fee Information</h5>
+              <p className="mb-0">
+                Detailed tuition fee structures for all programs are available on the respective school pages. 
+                Please select a school from the options below to view program-specific fee information and admission requirements.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+        
         {/* Auto-scrolling Programs Section */}
         <ProgramsSections columnsDesktop={3} />
       </div>
