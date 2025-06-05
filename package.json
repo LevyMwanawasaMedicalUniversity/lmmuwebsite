@@ -10,6 +10,8 @@
     "copy-assets": "node scripts/copy-assets.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "bootstrap": "^5.3.6",
     "framer-motion": "^12.11.4",
     "fs-extra": "^11.3.0",
     "next": "15.3.1",

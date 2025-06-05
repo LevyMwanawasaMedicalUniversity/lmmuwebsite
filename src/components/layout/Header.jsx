@@ -181,12 +181,12 @@ export default function Header() {
                   <li><hr className="dropdown-divider" /></li>
                   
                   <li><h6 className="dropdown-header">SCHOOLS / FACULTIES</h6></li>
-                  <li><Link className="dropdown-item" href="/schools/ibbs">Institute of Basic and Biomedical Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/schools/nursing">School of Nursing</Link></li>
-                  <li><Link className="dropdown-item" href="/schools/health-sciences">School of Health Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/schools/medicine">School of Medicine and Clinical Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/schools/public-health">School of Public Health and Environmental Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/schools/graduate-studies">Directorate of Research and Graduate Studies</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/ibbs">Institute of Basic and Biomedical Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/son">School of Nursing</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/soh">School of Health Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/somcs">School of Medicine and Clinical Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/sophes">School of Public Health and Environmental Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/drpgs">Directorate of Research and Graduate Studies</Link></li>
                   <li><hr className="dropdown-divider" /></li>
                   
                   <li><h6 className="dropdown-header">INSTITUTIONAL BUREAUS</h6></li>
