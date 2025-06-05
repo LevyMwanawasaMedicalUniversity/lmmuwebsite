@@ -1,0 +1,84 @@
+/* University Page Styles */
+
+/* Program Cards */
+.program-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 100%;
+}
+
+.program-card.active {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.program-item {
+  height: 100%;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.program-item .icon {
+  margin-bottom: 15px;
+}
+
+.program-item .icon img {
+  transition: transform 0.3s ease;
+}
+
+.program-card:hover .icon img {
+  transform: scale(1.1);
+}
+
+/* Mobile Slider */
+.program-slider {
+  position: relative;
+  padding: 20px 0;
+}
+
+.program-slide {
+  margin-bottom: 20px;
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.dot {
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  transform: scale(1.2);
+}
+
+.slider-nav-container {
+  margin-top: 15px;
+}
+
+.slider-nav {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hero Section */
+.hero-section {
+  margin-bottom: 70px;
+}
+
+.hero-content {
+  z-index: 10;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
