@@ -171,7 +171,10 @@ export default function Header() {
                 >
                   THE UNIVERSITY
                 </Link>
+                
                 <ul className="dropdown-menu">
+                <li><Link className="dropdown-item" href="/university">University Overview</Link></li>
+                <li><hr className="dropdown-divider" /></li>
                   <li><h6 className="dropdown-header">UNIVERSITY GOVERNANCE</h6></li>
                   <li><Link className="dropdown-item" href="/university/mission-vision">Mission, Vision and Motto</Link></li>
                   <li><Link className="dropdown-item" href="/university/background">University Background</Link></li>
@@ -211,19 +214,28 @@ export default function Header() {
                   <li><hr className="dropdown-divider" /></li>
                   
                   <li><h6 className="dropdown-header">ACADEMIC AFFAIRS</h6></li>
-                  <li><Link className="dropdown-item" href="/academics/admissions">Admissions</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/graduation">Graduation Information</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/dean-of-students">Dean of Students Affairs</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/calendar">Academic Calendar</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/postgrad">Postgraduate Studies</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/undergrad">Undergraduate Studies</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/files/LMMU 2025 ADVERT.pdf">HOW TO APPLY</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/LMMU 2025 APPLICATION FORM  FINAL.pdf">APPLICATION FORM</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/shools">TUITION FEES STRUCTURE</Link></li>
+                  <li><Link className="dropdown-item" href="https://edurole.lmmu.ac.zm">APPLY ONLINE</Link></li>
                   <li><hr className="dropdown-divider" /></li>
-                  
-                  <li><h6 className="dropdown-header">SCHOOLS / FACULTIES</h6></li>
-                  <li><Link className="dropdown-item" href="/academics/schools/ibbs">Institute of Basic and Biomedical Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/schools/son">School of Nursing</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/schools/soh">School of Health Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/schools/somcs">School of Medicine and Clinical Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/schools/sophes">School of Public Health and Environmental Sciences</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/schools/drpgs">Directorate of Research and Graduate Studies</Link></li>
+
+                  {/* <li><h6 className="dropdown-header">GRADUATION INFORMATION</h6></li>
+                  <li><Link className="dropdown-item" href="/academics/postgrad">Postgraduate Studies</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/undergrad">Undergraduate Studies</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/files/LMMU 2025 ADVERT.pdf">HOW TO APPLY</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/LMMU 2025 APPLICATION FORM  FINAL.pdf">APPLICATION FORM</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/LMMU 2025 APPLICATION FORM  FINAL.pdf">APPLICATION FORM</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/shools">TUITION FEES STRUCTURE</Link></li>
+                  <li><Link className="dropdown-item" href="https://edurole.lmmu.ac.zm">APPLY ONLINE</Link></li>
+                  <li><hr className="dropdown-divider" /></li>
+                   */}
+                  <li><h6 className="dropdown-header">DEANS OF STUDENTS AFFAIRS</h6></li>
+                  <li><Link className="dropdown-item" href="/academics/files/LMMU-2019-2022-Session-Dates-(2019).pdf">Unviersity Sessional Dates</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/files/council2024.pdf">Student Union Executive</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/files/SRC organogram.pdf">Student Representative Council</Link></li>
                 </ul>
               </li>
               <li className="nav-item mx-3">

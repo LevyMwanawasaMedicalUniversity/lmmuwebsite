@@ -82,7 +82,7 @@ export default function ProgramsSections({
   ];
   
   // Use provided programs or default ones
-  const academicPrograms = programs || defaultPrograms;
+  const academicPrograms = defaultPrograms;
 
   // Handle user interaction
   const handleInteraction = () => {
