@@ -29,7 +29,7 @@ export default function CategorySection({ customTitle, customDescription }) {
       if (!isPaused) {
         setActiveIndex(prevIndex => {
           // Cycle back to beginning when reaching the end
-          return (prevIndex + 1) % 5; // 5 is the number of programs
+          return (prevIndex + 1) % academicPrograms.length;
         });
       }
     }, 5000); // Auto-scroll every 5 seconds
@@ -45,20 +45,16 @@ export default function CategorySection({ customTitle, customDescription }) {
   
   // Define animation variants for cards
   const cardVariants = {
-    initial: { opacity: 0, y: 30, scale: 0.9 },
-    animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, staggerChildren: 0.15 } },
-    exit: { opacity: 0, scale: 0.95, transition: { duration: 0.3 } }
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
   };
   
-  // Staggered animation for children
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+  // Slider animation variants
+  const sliderVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { staggerChildren: 0.1 } },
+    exit: { opacity: 0 }
   };
 
   const academicPrograms = [
@@ -113,176 +109,133 @@ export default function CategorySection({ customTitle, customDescription }) {
   ];
   
   return (
-    <section id="category-part" className="py-5" style={{ background: 'linear-gradient(145deg, #f8f9fa, #ffffff)' }}>
-      <div className="container-fluid px-md-5">
-        <div className="row mb-5 justify-content-center">
-          <div className="col-lg-8 text-center">
+    <section id="category-part" className="py-5">
+      <div className="container">
+        {/* Section Header */}
+        <div className="row mb-5">
+          <div className="col-lg-6">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <h6 className="text-uppercase fw-bold" style={{ letterSpacing: '2px', color: '#ffc600' }}>{customTitle || 'Academic Programs'}</h6>
-              <motion.h2 
-                className="display-5 fw-bold mb-3"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-              >
-                Our Schools & Faculties
-              </motion.h2>
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: '80px' }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                style={{ height: '4px', background: '#ffc600', margin: '0 auto 20px', borderRadius: '2px' }}
-              />
-              <p className="lead" style={{ maxWidth: '800px', margin: '0 auto' }}>{customDescription || 'Discover our specialized programs designed to prepare healthcare professionals for the future of medicine and public health.'}</p>
+              transition={{ duration: 0.5 }}
+              className="section-title">
+              <h5 className="text-primary mb-2">{customTitle || 'Our Schools'}</h5>
+              <h2>Academic Programs</h2>
+              <p>{customDescription || 'LMMU comprises several specialized schools and faculties, each focusing on different aspects of healthcare education and research.'}</p>
             </motion.div>
           </div>
         </div>
         
-        {/* Navigation indicators */}
-        <div className="d-flex justify-content-center mb-4">
-          {academicPrograms.map((_, index) => (
-            <button 
-              key={index} 
-              onClick={() => {
-                setActiveIndex(index);
-                handleInteraction();
-              }}
-              className="btn btn-sm mx-1 p-0" 
-              style={{ 
-                width: '12px', 
-                height: '12px', 
-                borderRadius: '50%', 
-                background: activeIndex === index ? '#ffc600' : '#ddd',
-                border: 'none',
-                transition: 'all 0.3s ease'
-              }}
-              aria-label={`View program ${index + 1}`}
-            />
-          ))}
-        </div>
-        
-        <div 
-          className="position-relative academic-programs" 
-          ref={containerRef}
-          onMouseEnter={handleInteraction}
-          onTouchStart={handleInteraction}
-        >
-          <motion.div 
-            className="row g-4" 
-            variants={staggerContainer}
-            initial="hidden"
-            animate="show"
-          >
+        {/* Desktop View */}
+        <div className="d-none d-lg-block">
+          <div className="row category-grid">
             {academicPrograms.map((program, index) => (
-              <motion.div 
-                className={`col-lg-4 col-md-6 col-sm-12 mb-4 ${index === activeIndex ? 'active-program' : ''}`}
-                key={program.id}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                variants={cardVariants}
-                style={{
-                  transform: index === activeIndex ? 'scale(1.05)' : 'scale(1)',
-                  zIndex: index === activeIndex ? 10 : 1,
-                  transition: 'all 0.5s ease'  
-                }}
-              >
+              <div key={program.id} className="col-lg-4 col-md-6 mb-4">
                 <motion.div 
-                  className="modern-card h-100 position-relative overflow-hidden" 
-                  style={{
-                    background: `linear-gradient(145deg, ${program.color}15, ${program.color}05)`,
-                    borderRadius: '16px',
-                    boxShadow: index === activeIndex ? '0 20px 40px rgba(0,0,0,0.2)' : '0 8px 32px rgba(0,0,0,0.08)'
-                  }}
-                  whileHover={{
-                    y: -15,
-                    transition: { duration: 0.3, ease: 'easeOut' },
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`category-card ${index === activeIndex ? 'active' : ''}`}
+                  whileHover={{ y: -10, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
                   onClick={() => {
                     setActiveIndex(index);
                     handleInteraction();
                   }}
                 >
-                  {/* Glass morphism top accent bar */}
-                  <div 
-                    className="glassmorphism-header" 
-                    style={{ backgroundColor: program.color }}
-                  >
-                    <div className="glassmorphism-overlay"></div>
-                    <div className="program-badge">
-                      {program.id}
+                  <Link href={program.link}>
+                    <div className="singel-category text-center" style={{ backgroundColor: program.color }}>
+                      <div className="icon">
+                        <Image 
+                          src={program.icon} 
+                          alt={program.title} 
+                          width={80} 
+                          height={80}
+                          className="img-fluid"
+                        />
+                      </div>
+                      <div className="cont">
+                        <h4>{program.title}</h4>
+                        <p>{program.description}</p>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Mobile View with Slider */}
+        <div className="d-lg-none">
+          <div className="category-slider" ref={containerRef}>
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={activeIndex}
+                variants={cardVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="category-slide"
+              >
+                <Link href={academicPrograms[activeIndex].link}>
+                  <div className="singel-category text-center" style={{ backgroundColor: academicPrograms[activeIndex].color }}>
+                    <div className="icon">
+                      <Image 
+                        src={academicPrograms[activeIndex].icon} 
+                        alt={academicPrograms[activeIndex].title} 
+                        width={80} 
+                        height={80}
+                        className="img-fluid"
+                      />
+                    </div>
+                    <div className="cont">
+                      <h4>{academicPrograms[activeIndex].title}</h4>
+                      <p>{academicPrograms[activeIndex].description}</p>
                     </div>
                   </div>
-                  
-                  {/* Icon with perspective effect */}
-                  <div className="icon-perspective-container">
-                    <motion.div 
-                      className="icon-wrapper"
-                      initial={{ rotateY: 0 }}
-                      whileHover={{ rotateY: 15, scale: 1.05, z: 20 }}
-                      animate={index === activeIndex ? { 
-                        rotateY: [0, 10, 0], 
-                        scale: [1, 1.05, 1],
-                        transition: { duration: 2, repeat: Infinity, repeatType: "reverse" } 
-                      } : {}}
-                    >
-                      <Image 
-                        src={program.icon} 
-                        alt={program.title} 
-                        width={90} 
-                        height={90}
-                        className="modern-icon"
-                        style={{ objectFit: 'contain' }}
-                      />
-                    </motion.div>
-                  </div>
-                  
-                  <div className="card-content">
-                    {/* School name with animated underline */}
-                    <motion.div className="title-container">
-                      <h4 className="school-title">{program.title}</h4>
-                      <motion.div 
-                        className="title-underline"
-                        style={{ backgroundColor: program.color }}
-                        initial={{ width: '0%' }}
-                        animate={index === activeIndex ? { width: '40%' } : { width: '20%' }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </motion.div>
-                    
-                    <p className="school-description">{program.description}</p>
-                    
-                    <motion.div 
-                      whileTap={{ scale: 0.95 }}
-                      className="learn-more-container"
-                    >
-                      <Link href={program.link} className="learn-more-link">
-                        <span>Explore Programs</span>
-                        <motion.span 
-                          className="arrow-container"
-                          animate={{
-                            x: [0, 5, 0],
-                            transition: { repeat: Infinity, duration: 1.5, repeatType: "loop" }
-                          }}
-                        >
-                          <i className="fas fa-arrow-right"></i>
-                        </motion.span>
-                      </Link>
-                    </motion.div>
-                  </div>
-                  
-                  {/* Decorative elements */}
-                  <div className="decorative-shape shape1" style={{ backgroundColor: program.color }}></div>
-                  <div className="decorative-shape shape2" style={{ backgroundColor: program.color }}></div>
-                </motion.div>
+                </Link>
               </motion.div>
-            ))}
-          </motion.div>
+            </AnimatePresence>
+            
+            {/* Navigation dots */}
+            <div className="slider-dots mt-4">
+              {academicPrograms.map((_, index) => (
+                <button 
+                  key={index}
+                  className={`dot ${index === activeIndex ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    handleInteraction();
+                  }}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+            
+            {/* Navigation arrows */}
+            <div className="slider-nav-container">
+              <button 
+                className="slider-nav prev" 
+                onClick={() => {
+                  setActiveIndex((prev) => (prev - 1 + academicPrograms.length) % academicPrograms.length);
+                  handleInteraction();
+                }}
+                aria-label="Previous slide"
+              >
+                <i className="fas fa-chevron-left"></i>
+              </button>
+              <button 
+                className="slider-nav next" 
+                onClick={() => {
+                  setActiveIndex((prev) => (prev + 1) % academicPrograms.length);
+                  handleInteraction();
+                }}
+                aria-label="Next slide"
+              >
+                <i className="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

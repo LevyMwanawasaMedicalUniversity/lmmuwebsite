@@ -110,14 +110,14 @@ export default function HomePage(): React.ReactNode {
       <Slider />
       
       {/* Quick Links/Stats Section */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true, margin: "-100px" }}
       >
         <StatsSection />
-      </motion.div>
+      </motion.div> */}
       
       {/* Academic Programs Section - Modern Header */}
       <motion.section 
@@ -277,7 +277,7 @@ export default function HomePage(): React.ReactNode {
       </motion.section>
       
       {/* Upcoming Events Section */}
-      <motion.div 
+      {/* <motion.div 
         className="bg-light py-5 my-5"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -285,9 +285,9 @@ export default function HomePage(): React.ReactNode {
         viewport={{ once: true, margin: "-100px" }}
       >
         <UpcomingEventsSection />
-      </motion.div>
+      </motion.div> */}
       {/* Testimonials Section */}
-      <motion.section 
+      {/* <motion.section 
         className="container py-5 my-5"
         initial="hidden"
         whileInView="visible"
@@ -326,7 +326,7 @@ export default function HomePage(): React.ReactNode {
           </div>
         </motion.div>
         <TestimonialsSection />
-      </motion.section>
+      </motion.section> */}
     </main>
   );
 }
