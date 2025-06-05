@@ -1,76 +1,377 @@
 /* University Page Styles */
 
-/* Program Cards */
-.program-card {
+/* Global Spacing */
+section {
+  padding: 80px 0;
+  position: relative;
+}
+
+section:first-of-type {
+  padding-top: 0;
+}
+
+.section-spacing {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.section-title h2 {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.section-title h2:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 50px;
+  height: 3px;
+  background: #07294d;
+}
+
+.section-title p {
+  color: #555;
+  font-size: 1.1rem;
+}
+
+/* Hero Section */
+.hero-section {
+  margin-bottom: 80px;
+}
+
+.hero-image-container {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 8px 8px;
+}
+
+.hero-content {
+  z-index: 10;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.hero-content:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #07294d;
+}
+
+/* About University Section */
+.about-university {
+  background-color: #fff;
+}
+
+.about-content p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.about-image {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.about-image:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.about-image img {
+  border-radius: 10px;
+}
+
+/* Mission and Vision Section */
+.mission-vision {
+  background-color: #f8f9fa;
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-vision:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/university/pattern-bg.png') repeat;
+  opacity: 0.05;
+}
+
+.mission-box, .vision-box, .values-box {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  transition: all 0.4s ease;
+}
+
+.mission-box:hover, .vision-box:hover, .values-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.mission-box h3, .vision-box h3, .values-box h3 {
+  color: #07294d;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.mission-box h3:after, .vision-box h3:after, .values-box h3:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: #07294d;
+}
+
+.mission-box p, .vision-box p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+.values-box ul {
+  padding-left: 20px;
+}
+
+.values-box ul li {
+  margin-bottom: 15px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Leadership Section */
+.leadership {
+  background-color: #fff;
+}
+
+.leadership-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+  height: 100%;
+  margin-bottom: 30px;
+}
+
+.leadership-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.leadership-image {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 5px solid #f8f9fa;
+}
+
+.leadership-content h4 {
+  color: #07294d;
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.leadership-content span {
+  color: #555;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.main-btn {
+  display: inline-block;
+  padding: 10px 25px;
+  background-color: #07294d;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 500;
   transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.main-btn:hover {
+  background-color: #0a3d6f;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(7, 41, 77, 0.3);
+  color: #fff;
+}
+
+/* Program Cards */
+.programs-section {
+  background-color: #f8f9fa;
+  position: relative;
+  overflow: hidden;
+}
+
+.programs-section:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/university/pattern-bg.png') repeat;
+  opacity: 0.05;
+}
+
+.program-card {
+  transition: all 0.4s ease;
   cursor: pointer;
   height: 100%;
+  margin-bottom: 30px;
 }
 
 .program-card.active {
   transform: translateY(-10px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .program-item {
   height: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 .program-item .icon {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .program-item .icon img {
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .program-card:hover .icon img {
-  transform: scale(1.1);
+  transform: scale(1.1) rotate(3deg);
+}
+
+.program-item .content h4 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.program-item .content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 /* Mobile Slider */
 .program-slider {
   position: relative;
-  padding: 20px 0;
+  padding: 30px 0;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
 .program-slide {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  padding: 0 15px;
 }
 
 .slider-dots {
   display: flex;
   justify-content: center;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .dot {
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  margin: 0 5px;
 }
 
 .dot.active {
-  transform: scale(1.2);
+  transform: scale(1.3);
 }
 
 .slider-nav-container {
-  margin-top: 15px;
+  margin-top: 20px;
+  padding: 0 15px;
 }
 
 .slider-nav {
   cursor: pointer;
   transition: all 0.3s ease;
+  border: 1px solid #07294d;
+  color: #07294d;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 500;
 }
 
-/* Hero Section */
-.hero-section {
-  margin-bottom: 70px;
+.slider-nav:hover {
+  background-color: #07294d;
+  color: #fff;
 }
 
-.hero-content {
-  z-index: 10;
+/* Call to Action Section */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/university/pattern-light.png') repeat;
+  opacity: 0.1;
+}
+
+.cta-content h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.cta-content p {
+  font-size: 1.1rem;
+  margin-bottom: 0;
 }
 
 /* Animations */
@@ -79,6 +380,74 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 .animate-fade-in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  section {
+    padding: 60px 0;
+  }
+  
+  .hero-section {
+    margin-bottom: 60px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .section-title h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about-image {
+    margin-top: 30px;
+  }
+  
+  .mission-box, .vision-box {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  section {
+    padding: 50px 0;
+  }
+  
+  .hero-section {
+    margin-bottom: 50px;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .section-title h2 {
+    font-size: 1.6rem;
+  }
+  
+  .leadership-image {
+    width: 150px;
+    height: 150px;
+  }
 }

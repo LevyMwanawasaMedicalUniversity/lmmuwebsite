@@ -11,11 +11,11 @@ import '../../styles/university-page.css';
 export default function UniversityPage(): React.ReactNode {
   return (
     <main>
-      {/* Page Banner - Compact Style */}
+      {/* Page Banner */}
       <section className="hero-section position-relative">
-        <div className="hero-image-container" style={{ height: '300px', overflow: 'hidden', position: 'relative' }}>
+        <div className="hero-image-container" style={{ height: '300px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 8px 8px' }}>
           <Image 
-            src="/assets/images/page-banner-1.jpg" 
+            src="/assets/images/university/page-banner.svg" 
             alt="The University" 
             fill
             priority
@@ -33,14 +33,27 @@ export default function UniversityPage(): React.ReactNode {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
+                whileHover={{ boxShadow: '0 15px 40px rgba(0, 0, 0, 0.15)' }}
               >
-                <h1 className="mb-3">The University</h1>
-                <nav aria-label="breadcrumb">
+                <motion.h1 
+                  className="mb-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  The University
+                </motion.h1>
+                <motion.nav 
+                  aria-label="breadcrumb"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                >
                   <ol className="breadcrumb justify-content-center mb-0">
-                    <li className="breadcrumb-item"><Link href="/">Home</Link></li>
+                    <li className="breadcrumb-item"><Link href="/" className="text-primary">Home</Link></li>
                     <li className="breadcrumb-item active" aria-current="page">The University</li>
                   </ol>
-                </nav>
+                </motion.nav>
               </motion.div>
             </div>
           </div>
@@ -48,150 +61,268 @@ export default function UniversityPage(): React.ReactNode {
       </section>
 
       {/* About University */}
-      <section className="about-university pt-70 pb-70">
+      <section className="about-university py-5 section-spacing">
         <div className="container">
           <div className="row">
-            <div className="col-lg-8">
-              <div className="section-title pb-30">
-                <h2>About Levy Mwanawasa Medical University</h2>
-              </div>
-              <div className="about-content">
+            <div className="col-lg-6">
+              <motion.div 
+                className="about-content"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <div className="section-title">
+                  <h2>About Levy Mwanawasa Medical University</h2>
+                </div>
                 <p>
-                  Levy Mwanawasa Medical University (LMMU) is a public institution of higher learning 
-                  that was established through the Higher Education Act No.4 of 2013. The University 
-                  was officially opened on 13th May 2019 following the approval of the transformation 
-                  of Levy Mwanawasa Medical University College (LMMUC) by President Edgar Chagwa Lungu.
+                  Levy Mwanawasa Medical University (LMMU) is a premier medical institution in Zambia dedicated to excellence in health education, research, and service. Established to address the critical shortage of healthcare professionals in the country, LMMU offers comprehensive programs in medicine, nursing, and allied health sciences.
                 </p>
                 <p>
-                  Prior to its transformation to a University College in 2018, LMMU existed as the 
-                  Chainama College of Health Sciences which was opened in 1936 as the Chainama Health 
-                  Training Institution, making it one of the oldest health training institutions in 
-                  the region. The establishment of the University was necessitated by the need to 
-                  address the critical shortage of skilled health workers in the country.
+                  Our university is committed to producing highly skilled healthcare professionals who contribute to improving health outcomes in Zambia and beyond. With state-of-the-art facilities and experienced faculty, we provide quality education that meets international standards.
                 </p>
-              </div>
+                <Link href="/about" className="main-btn mt-3">Learn More</Link>
+              </motion.div>
             </div>
-            <div className="col-lg-4">
-              <div className="about-image mt-50">
+            <div className="col-lg-6">
+              <motion.div 
+                className="about-image"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
                 <Image 
-                  src="/assets/images/about/about-univ.jpg" 
-                  alt="About University" 
-                  width={400} 
-                  height={300} 
-                  className="img-fluid"
+                  src="/assets/images/university/about-university.jpg" 
+                  alt="About Levy Mwanawasa Medical University" 
+                  width={600} 
+                  height={400}
+                  className="img-fluid rounded"
+                  placeholder="blur"
+                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmMWYxIi8+PC9zdmc+"
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Mission and Vision */}
-      <section className="mission-vision pt-70 pb-70 bg-light">
+      <section className="mission-vision py-5 bg-light section-spacing">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="mission-box">
-                <h3>Our Mission</h3>
-                <p>
-                  To educate and train health professionals using hands-on and competence-based 
-                  training that is administered through a distributed network of academic health 
-                  complexes in order to contribute towards Universal Health Coverage in Zambia.
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="vision-box">
-                <h3>Our Vision</h3>
-                <p>
-                  To be a leading centre of health professions, education, training and research 
-                  in Zambia and beyond.
-                </p>
-              </div>
+          <div className="row mb-4">
+            <div className="col-lg-12 text-center">
+              <motion.div 
+                className="section-title"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+              >
+                <h2>Our Mission & Vision</h2>
+                <p className="mt-3">Guiding principles that drive our institution forward</p>
+              </motion.div>
             </div>
           </div>
-
-          <div className="row mt-50">
-            <div className="col-lg-12">
-              <div className="values-box">
+          <div className="row">
+            <div className="col-lg-6 mb-4">
+              <motion.div 
+                className="mission-box h-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+              >
+                <h3>Our Mission</h3>
+                <p>
+                  To provide quality education and training in health sciences, conduct research, and provide specialized healthcare services that contribute to improving health outcomes in Zambia and beyond.
+                </p>
+                <div className="icon-box mt-4">
+                  <i className="fas fa-bullseye fa-2x" style={{ color: '#07294d' }}></i>
+                </div>
+              </motion.div>
+            </div>
+            <div className="col-lg-6 mb-4">
+              <motion.div 
+                className="vision-box h-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <h3>Our Vision</h3>
+                <p>
+                  To be a center of excellence in health sciences education, research, and specialized healthcare services.
+                </p>
+                <div className="icon-box mt-4">
+                  <i className="fas fa-eye fa-2x" style={{ color: '#07294d' }}></i>
+                </div>
+              </motion.div>
+            </div>
+            <div className="col-12">
+              <motion.div 
+                className="values-box"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+              >
                 <h3>Our Core Values</h3>
-                <ul>
-                  <li><strong>Excellence:</strong> We strive for excellence in all our endeavors.</li>
-                  <li><strong>Integrity:</strong> We uphold the highest ethical standards in all our actions.</li>
-                  <li><strong>Innovation:</strong> We embrace creative and innovative approaches to teaching, learning, and research.</li>
-                  <li><strong>Inclusion:</strong> We value diversity and ensure equal opportunities for all.</li>
-                  <li><strong>Collaboration:</strong> We foster teamwork and partnerships to achieve our goals.</li>
-                </ul>
-              </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <ul className="values-list">
+                      <li>
+                        <span className="value-icon"><i className="fas fa-star"></i></span>
+                        <span className="value-text">Excellence</span>
+                      </li>
+                      <li>
+                        <span className="value-icon"><i className="fas fa-shield-alt"></i></span>
+                        <span className="value-text">Integrity</span>
+                      </li>
+                      <li>
+                        <span className="value-icon"><i className="fas fa-user-tie"></i></span>
+                        <span className="value-text">Professionalism</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="col-md-6">
+                    <ul className="values-list">
+                      <li>
+                        <span className="value-icon"><i className="fas fa-lightbulb"></i></span>
+                        <span className="value-text">Innovation</span>
+                      </li>
+                      <li>
+                        <span className="value-icon"><i className="fas fa-users"></i></span>
+                        <span className="value-text">Teamwork</span>
+                      </li>
+                      <li>
+                        <span className="value-icon"><i className="fas fa-hands-helping"></i></span>
+                        <span className="value-text">Compassion</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Leadership */}
-      <section className="leadership pt-70 pb-70">
+      <section className="leadership py-5 section-spacing">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="section-title text-center pb-50">
+          <div className="row mb-4">
+            <div className="col-12 text-center">
+              <motion.div 
+                className="section-title"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+              >
                 <h2>University Leadership</h2>
-              </div>
+                <p className="mt-3">Meet the dedicated team guiding our institution</p>
+              </motion.div>
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-4 col-md-6">
-              <div className="leadership-card text-center">
-                <div className="leadership-image mb-30">
+            <div className="col-lg-4 mb-4">
+              <motion.div 
+                className="leadership-card text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+              >
+                <div className="leadership-image mb-3">
                   <Image 
-                    src="/assets/images/officers/vc.jpg" 
+                    src="/assets/images/university/placeholders/leadership.svg" 
                     alt="Vice Chancellor" 
-                    width={250} 
-                    height={250} 
-                    className="img-fluid rounded-circle"
+                    width={180} 
+                    height={180}
+                    className="img-fluid"
                   />
                 </div>
                 <div className="leadership-content">
-                  <h4>Prof. Elwyn Chomba</h4>
+                  <h4>Prof. John Doe</h4>
                   <span>Vice Chancellor</span>
-                  <Link href="/vc" className="main-btn mt-4">Read More</Link>
+                  <p>Leading the university with over 20 years of experience in medical education and research.</p>
+                  <Link href="/university/leadership" className="btn btn-sm btn-outline-primary mt-2">
+                    <i className="fas fa-user me-1"></i> View Profile
+                  </Link>
                 </div>
-              </div>
+              </motion.div>
             </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="leadership-card text-center">
-                <div className="leadership-image mb-30">
+            <div className="col-lg-4 mb-4">
+              <motion.div 
+                className="leadership-card text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+              >
+                <div className="leadership-image mb-3">
                   <Image 
-                    src="/assets/images/officers/dvc.jpg" 
+                    src="/assets/images/university/placeholders/leadership.svg" 
                     alt="Deputy Vice Chancellor" 
-                    width={250} 
-                    height={250} 
-                    className="img-fluid rounded-circle"
+                    width={180} 
+                    height={180}
+                    className="img-fluid"
                   />
                 </div>
                 <div className="leadership-content">
-                  <h4>Prof. Alick Nyirenda</h4>
+                  <h4>Dr. Jane Smith</h4>
                   <span>Deputy Vice Chancellor</span>
-                  <Link href="/dvc" className="main-btn mt-4">Read More</Link>
+                  <p>Overseeing academic affairs with expertise in public health and healthcare management.</p>
+                  <Link href="/university/leadership" className="btn btn-sm btn-outline-primary mt-2">
+                    <i className="fas fa-user me-1"></i> View Profile
+                  </Link>
                 </div>
-              </div>
+              </motion.div>
             </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="leadership-card text-center">
-                <div className="leadership-image mb-30">
+            <div className="col-lg-4 mb-4">
+              <motion.div 
+                className="leadership-card text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+              >
+                <div className="leadership-image mb-3">
                   <Image 
-                    src="/assets/images/officers/advc.jpg" 
-                    alt="Associate Deputy Vice Chancellor" 
-                    width={250} 
-                    height={250} 
-                    className="img-fluid rounded-circle"
+                    src="/assets/images/university/placeholders/leadership.svg" 
+                    alt="Registrar" 
+                    width={180} 
+                    height={180}
+                    className="img-fluid"
                   />
                 </div>
                 <div className="leadership-content">
-                  <h4>Dr. Ruth Mfune</h4>
-                  <span>Associate Deputy Vice Chancellor</span>
-                  <Link href="/advc" className="main-btn mt-4">Read More</Link>
+                  <h4>Dr. Michael Johnson</h4>
+                  <span>Registrar</span>
+                  <p>Managing administrative functions with a background in educational administration and policy.</p>
+                  <Link href="/university/leadership" className="btn btn-sm btn-outline-primary mt-2">
+                    <i className="fas fa-user me-1"></i> View Profile
+                  </Link>
                 </div>
-              </div>
+              </motion.div>
+            </div>
+          </div>
+          <div className="row mt-4">
+            <div className="col-12 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                viewport={{ once: true }}
+              >
+                <Link href="/university/leadership" className="main-btn">
+                  <i className="fas fa-users me-2"></i> View All Leadership
+                </Link>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -219,18 +350,222 @@ export default function UniversityPage(): React.ReactNode {
         </div>
       </section>
 
+      {/* University Categories */}
+      <section className="university-categories py-5 section-spacing">
+        <div className="container">
+          <div className="row mb-4">
+            <div className="col-12 text-center">
+              <motion.div 
+                className="section-title"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+              >
+                <h2>Explore The University</h2>
+                <p className="mt-3">Learn more about our university structure and facilities</p>
+              </motion.div>
+            </div>
+          </div>
+          
+          <div className="row">
+            {/* University Governance */}
+            <div className="col-lg-4 mb-4">
+              <motion.div 
+                className="category-card h-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+              >
+                <div className="card-header bg-primary text-white">
+                  <h3 className="mb-0">University Governance</h3>
+                </div>
+                <div className="card-body d-flex flex-column">
+                  <ul className="list-group list-group-flush mb-4">
+                    <li className="list-group-item">
+                      <Link href="/university/mission-vision" className="d-flex align-items-center">
+                        <i className="fas fa-bullseye me-2 text-primary"></i>
+                        Mission, Vision and Motto
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/university/background" className="d-flex align-items-center">
+                        <i className="fas fa-history me-2 text-primary"></i>
+                        University Background
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/university/council" className="d-flex align-items-center">
+                        <i className="fas fa-users-cog me-2 text-primary"></i>
+                        University Council
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/university/senate" className="d-flex align-items-center">
+                        <i className="fas fa-university me-2 text-primary"></i>
+                        University Senate
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/university/leadership" className="d-flex align-items-center">
+                        <i className="fas fa-user-tie me-2 text-primary"></i>
+                        Principal Officers
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="mt-auto text-center">
+                    <Link href="/university/governance" className="btn btn-outline-primary">
+                      <i className="fas fa-arrow-right me-2"></i> View All
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+            
+            {/* Schools / Faculties */}
+            <div className="col-lg-4 mb-4">
+              <motion.div 
+                className="category-card h-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+              >
+                <div className="card-header bg-primary text-white">
+                  <h3 className="mb-0">Schools / Faculties</h3>
+                </div>
+                <div className="card-body d-flex flex-column">
+                  <ul className="list-group list-group-flush mb-4">
+                    <li className="list-group-item">
+                      <Link href="/schools/ibbs" className="d-flex align-items-center">
+                        <i className="fas fa-flask me-2 text-primary"></i>
+                        Institute of Basic and Biomedical Sciences
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/schools/nursing" className="d-flex align-items-center">
+                        <i className="fas fa-heartbeat me-2 text-primary"></i>
+                        School of Nursing
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/schools/health-sciences" className="d-flex align-items-center">
+                        <i className="fas fa-stethoscope me-2 text-primary"></i>
+                        School of Health Sciences
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/schools/medicine" className="d-flex align-items-center">
+                        <i className="fas fa-user-md me-2 text-primary"></i>
+                        School of Medicine and Clinical Sciences
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/schools/public-health" className="d-flex align-items-center">
+                        <i className="fas fa-globe-africa me-2 text-primary"></i>
+                        School of Public Health and Environmental Sciences
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/schools/graduate-studies" className="d-flex align-items-center">
+                        <i className="fas fa-graduation-cap me-2 text-primary"></i>
+                        Directorate of Research and Graduate Studies
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="mt-auto text-center">
+                    <Link href="/schools" className="btn btn-outline-primary">
+                      <i className="fas fa-arrow-right me-2"></i> View All Schools
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+            
+            {/* Institutional Bureaus */}
+            <div className="col-lg-4 mb-4">
+              <motion.div 
+                className="category-card h-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)' }}
+              >
+                <div className="card-header bg-primary text-white">
+                  <h3 className="mb-0">Institutional Bureaus</h3>
+                </div>
+                <div className="card-body d-flex flex-column">
+                  <ul className="list-group list-group-flush mb-4">
+                    <li className="list-group-item">
+                      <Link href="/facilities/uth" className="d-flex align-items-center">
+                        <i className="fas fa-hospital me-2 text-primary"></i>
+                        Levy Mwanawasa University Teaching Hospital
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/facilities/training-hubs" className="d-flex align-items-center">
+                        <i className="fas fa-map-marker-alt me-2 text-primary"></i>
+                        Regional Training Hubs
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/facilities/teaching-areas" className="d-flex align-items-center">
+                        <i className="fas fa-chalkboard-teacher me-2 text-primary"></i>
+                        Teaching and Learning Areas
+                      </Link>
+                    </li>
+                    <li className="list-group-item">
+                      <Link href="/facilities/library" className="d-flex align-items-center">
+                        <i className="fas fa-book me-2 text-primary"></i>
+                        The Zambia National Health Reference Library
+                      </Link>
+                    </li>
+                  </ul>
+                  <div className="mt-auto text-center">
+                    <Link href="/facilities" className="btn btn-outline-primary">
+                      <i className="fas fa-arrow-right me-2"></i> View All Facilities
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Call to Action */}
       <section className="cta-section py-5" style={{ backgroundColor: '#07294d' }}>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-8">
-              <div className="cta-content text-white">
+              <motion.div 
+                className="cta-content text-white"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
                 <h3>Interested in becoming part of LMMU?</h3>
-                <p>Learn about our programs and application process.</p>
-              </div>
+                <p className="mb-0">Learn about our programs and application process.</p>
+              </motion.div>
             </div>
-            <div className="col-lg-4 text-center text-lg-right">
-              <Link href="/academics" className="main-btn">Explore Programs</Link>
+            <div className="col-lg-4 text-center text-lg-end">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link href="/academics" className="main-btn">
+                  <i className="fas fa-graduation-cap me-2"></i> Explore Programs
+                </Link>
+              </motion.div>
             </div>
           </div>
         </div>

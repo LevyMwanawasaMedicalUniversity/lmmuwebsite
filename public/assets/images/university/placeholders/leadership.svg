@@ -1,0 +1,7 @@
+<svg width="180" height="180" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="90" cy="90" r="85" fill="#e0e0e0" stroke="#07294d" stroke-width="2"/>
+  <circle cx="90" cy="70" r="30" fill="#07294d"/>
+  <rect x="45" y="110" width="90" height="50" fill="#07294d" rx="5" ry="5"/>
+  <text x="90" y="140" font-family="Arial" font-size="14" text-anchor="middle" fill="#fff">Leadership</text>
+  <text x="90" y="160" font-family="Arial" font-size="10" text-anchor="middle" fill="#fff">Placeholder</text>
+</svg>

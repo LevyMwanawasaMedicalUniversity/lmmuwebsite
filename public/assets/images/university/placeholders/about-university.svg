@@ -1,0 +1,6 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#f1f1f1"/>
+  <rect x="50" y="50" width="500" height="300" fill="#e0e0e0" rx="10" ry="10"/>
+  <text x="300" y="200" font-family="Arial" font-size="24" text-anchor="middle" fill="#07294d">University Campus Image</text>
+  <text x="300" y="230" font-family="Arial" font-size="16" text-anchor="middle" fill="#555">Placeholder for campus photo</text>
+</svg>
