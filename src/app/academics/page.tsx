@@ -1,225 +1,96 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import ProgramsSections from '../university/components/ProgramsSections';
+import '../../styles/university-page.css';
 
-export const metadata = {
-  title: 'Academics | Levy Mwanawasa Medical University (LMMU)',
-  description: 'Explore academic programs, schools and faculties at Levy Mwanawasa Medical University. Find undergraduate and postgraduate courses in healthcare and medical sciences.',
-};
+// Metadata is now in a separate metadata.ts file
 
 export default function AcademicsPage(): React.ReactNode {
   return (
     <main>
       {/* Page Banner */}
-      <section className="page-banner pt-200 pb-100" style={{ backgroundImage: "url('/assets/images/page-banner-3.jpg')" }}>
-        <div className="container">
+      <section className="hero-section position-relative">
+        <div className="hero-image-container" style={{ height: '300px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 8px 8px' }}>
+          <Image 
+            src="/assets/images/academics/page-banner.svg" 
+            alt="Academics" 
+            fill
+            priority
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+          />
+          <div className="overlay position-absolute w-100 h-100 top-0" 
+            style={{ background: 'linear-gradient(rgba(7, 41, 77, 0.8), rgba(7, 41, 77, 0.7))' }}>
+          </div>
+        </div>
+        <div className="container position-relative" style={{ marginTop: '-150px' }}>
           <div className="row">
-            <div className="col-lg-8">
-              <div className="page-banner-content">
-                <h2>Academics</h2>
-                <ul>
-                  <li><Link href="/">Home</Link></li>
-                  <li>Academics</li>
-                </ul>
-              </div>
+            <div className="col-12">
+              <motion.div 
+                className="hero-content bg-white shadow-lg rounded-3 p-4 p-md-5 text-center position-relative"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                whileHover={{ boxShadow: '0 15px 40px rgba(0, 0, 0, 0.15)' }}
+              >
+                <motion.h1 
+                  className="mb-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  Academics
+                </motion.h1>
+                <motion.nav 
+                  aria-label="breadcrumb"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                >
+                  <ol className="breadcrumb justify-content-center mb-0">
+                    <li className="breadcrumb-item"><Link href="/" className="text-primary">Home</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Academics</li>
+                  </ol>
+                </motion.nav>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Academic Overview */}
-      <section className="academic-overview pt-70 pb-70">
+      <section className="academic-overview py-5 section-spacing">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-8">
-              <div className="section-title pb-30">
-                <h2>Academic Programs</h2>
+          <div className="row mb-4">
+            <div className="col-lg-8 mx-auto text-center">
+              <motion.div 
+                className="section-title"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="mb-3">Academic Programs</h2>
                 <p>
                   Levy Mwanawasa Medical University offers a wide range of academic programs 
                   designed to prepare students for successful careers in healthcare and related fields. 
                   Our programs combine theoretical knowledge with practical skills, ensuring that our 
                   graduates are well-equipped to meet the healthcare needs of Zambia and beyond.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="academic-box mb-50">
-                <div className="academic-icon">
-                  <i className="fa fa-graduation-cap"></i>
-                </div>
-                <div className="academic-content">
-                  <h4>Undergraduate Programs</h4>
-                  <p>
-                    Our undergraduate programs provide students with a solid foundation in healthcare 
-                    and medical sciences. These programs are designed to prepare students for entry-level 
-                    positions in healthcare or for further studies at the postgraduate level.
-                  </p>
-                  <Link href="/undergrad" className="main-btn mt-3">Learn More</Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="academic-box mb-50">
-                <div className="academic-icon">
-                  <i className="fa fa-book"></i>
-                </div>
-                <div className="academic-content">
-                  <h4>Postgraduate Programs</h4>
-                  <p>
-                    Our postgraduate programs offer advanced training and specialization in various 
-                    healthcare disciplines. These programs are designed for professionals seeking to 
-                    enhance their knowledge and skills or pursue careers in research and academia.
-                  </p>
-                  <Link href="/postgrad" className="main-btn mt-3">Learn More</Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          
+          {/* Auto-scrolling Programs Section */}
+          <ProgramsSections programs={academicPrograms} columnsDesktop={3} />
         </div>
       </section>
 
-      {/* Schools and Faculties */}
-      <section className="schools-section pt-70 pb-70 bg-light">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="section-title text-center pb-50">
-                <h2>Our Schools and Faculties</h2>
-                <p>
-                  LMMU comprises several specialized schools and faculties, each focusing on 
-                  different aspects of healthcare education and research.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-4 col-md-6">
-              <div className="school-card mb-30">
-                <div className="school-image">
-                  <Image 
-                    src="/assets/images/schools/somcs.jpg" 
-                    alt="School of Medicine and Clinical Sciences" 
-                    width={400} 
-                    height={250} 
-                    className="img-fluid"
-                  />
-                </div>
-                <div className="school-content">
-                  <h4>School of Medicine and Clinical Sciences</h4>
-                  <p>
-                    Offers programs in medicine, surgery, pediatrics, obstetrics, gynecology, and other clinical specialties.
-                  </p>
-                  <Link href="/somcs" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="school-card mb-30">
-                <div className="school-image">
-                  <Image 
-                    src="/assets/images/schools/ibbs.jpg" 
-                    alt="Institute of Basic and Biomedical Sciences" 
-                    width={400} 
-                    height={250} 
-                    className="img-fluid"
-                  />
-                </div>
-                <div className="school-content">
-                  <h4>Institute of Basic and Biomedical Sciences</h4>
-                  <p>
-                    Focuses on basic sciences, anatomy, physiology, biochemistry, pharmacology, and biomedical research.
-                  </p>
-                  <Link href="/ibbs" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="school-card mb-30">
-                <div className="school-image">
-                  <Image 
-                    src="/assets/images/schools/sophes.jpg" 
-                    alt="School of Public Health and Environmental Sciences" 
-                    width={400} 
-                    height={250} 
-                    className="img-fluid"
-                  />
-                </div>
-                <div className="school-content">
-                  <h4>School of Public Health and Environmental Sciences</h4>
-                  <p>
-                    Specializes in public health, epidemiology, environmental health, and health promotion.
-                  </p>
-                  <Link href="/academics/schools/sophes" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="school-card mb-30">
-                <div className="school-image">
-                  <Image 
-                    src="/assets/images/schools/soh.jpg" 
-                    alt="School of Health Sciences" 
-                    width={400} 
-                    height={250} 
-                    className="img-fluid"
-                  />
-                </div>
-                <div className="school-content">
-                  <h4>School of Health Sciences</h4>
-                  <p>
-                    Offers programs in physiotherapy, occupational therapy, medical laboratory sciences, radiography, and other allied health disciplines.
-                  </p>
-                  <Link href="/academics/schools/soh" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="school-card mb-30">
-                <div className="school-image">
-                  <Image 
-                    src="/assets/images/schools/nursing.jpg" 
-                    alt="School of Nursing" 
-                    width={400} 
-                    height={250} 
-                    className="img-fluid"
-                  />
-                </div>
-                <div className="school-content">
-                  <h4>School of Nursing</h4>
-                  <p>
-                    Specializes in nursing education, midwifery, and nursing specialties.
-                  </p>
-                  <Link href="/academics/schools/son" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="school-card mb-30">
-                <div className="school-image">
-                  <Image 
-                    src="/assets/images/schools/drpgs.jpg" 
-                    alt="Directorate of Research and Postgraduate Studies" 
-                    width={400} 
-                    height={250} 
-                    className="img-fluid"
-                  />
-                </div>
-                <div className="school-content">
-                  <h4>Directorate of Research and Postgraduate Studies</h4>
-                  <p>
-                    Offers advanced postgraduate programs and promotes research excellence in healthcare disciplines.
-                  </p>
-                  <Link href="/academics/schools/drpgs" className="read-more">Learn More <i className="fa fa-arrow-right"></i></Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Academic Resources */}
+      
+   {/* Academic Resources */}
       <section className="academic-resources pt-70 pb-70">
         <div className="container">
           <div className="row">
@@ -234,7 +105,7 @@ export default function AcademicsPage(): React.ReactNode {
           </div>
           <div className="row">
             <div className="col-lg-4 col-md-6">
-              <div className="resource-box text-center mb-30">
+              <div className="resource-box text-center mb-20">
                 <div className="resource-icon">
                   <i className="fa fa-book"></i>
                 </div>
@@ -292,3 +163,55 @@ export default function AcademicsPage(): React.ReactNode {
     </main>
   );
 }
+
+// Academic programs data
+const academicPrograms = [
+  {
+    id: 1,
+    title: "School of Medicine & Clinical Sciences",
+    description: "Comprehensive medical programs including MBChB and specialized clinical training.",
+    icon: "/assets/images/university/main/programs/medicine.svg",
+    link: "/academics/schools/somcs",
+    color: "#2a76dd"
+  },
+  {
+    id: 2,
+    title: "School of Health Sciences",
+    description: "Programs in nursing, pharmacy, physiotherapy, and allied health professions.",
+    icon: "/assets/images/university/main/programs/health-sciences.svg",
+    link: "/academics/schools/soh",
+    color: "#17a2b8"
+  },
+  {
+    id: 3,
+    title: "School of Public Health & Environmental Sciences",
+    description: "Focused on public health, epidemiology, and environmental health sciences.",
+    icon: "/assets/images/university/main/programs/public-health.svg",
+    link: "/academics/schools/sophes",
+    color: "#28a745"
+  },
+  {
+    id: 4,
+    title: "Institute of Basic and Biomedical Sciences",
+    description: "Advanced research and education in basic and biomedical sciences.",
+    icon: "/assets/images/university/main/programs/biomedical.svg",
+    link: "/academics/schools/ibbs",
+    color: "#6f42c1"
+  },
+  {
+    id: 5,
+    title: "School of Nursing",
+    description: "Programs in nursing education and research.",
+    icon: "/assets/images/university/main/programs/nursing.svg",
+    link: "/academics/schools/son",
+    color: "#dc3545"
+  },
+  {
+    id: 6,
+    title: "Directorate of Research and Postgraduate Studies",
+    description: "Postgraduate studies and research.",
+    icon: "/assets/images/university/main/programs/research.svg",
+    link: "/academics/schools/drpgs",
+    color: "#dc3895"
+  },
+];

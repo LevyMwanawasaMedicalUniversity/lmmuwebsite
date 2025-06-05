@@ -196,13 +196,35 @@ export default function Header() {
                   <li><Link className="dropdown-item" href="/facilities/library">The Zambia National Health Reference Library</Link></li>
                 </ul>
               </li>
-              <li className="nav-item mx-3">
+              <li className="nav-item dropdown mx-3">
                 <Link 
-                  className={`nav-link custom-nav-link ${pathname?.includes('/academics') ? 'active' : ''}`}
+                  className={`nav-link custom-nav-link dropdown-toggle ${pathname?.includes('/academics') ? 'active' : ''}`}
                   href="/academics"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
                   ACADEMICS
                 </Link>
+                <ul className="dropdown-menu">
+                  <li><Link className="dropdown-item" href="/academics">Academics Overview</Link></li>
+                  <li><hr className="dropdown-divider" /></li>
+                  
+                  <li><h6 className="dropdown-header">ACADEMIC AFFAIRS</h6></li>
+                  <li><Link className="dropdown-item" href="/academics/admissions">Admissions</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/graduation">Graduation Information</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/dean-of-students">Dean of Students Affairs</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/calendar">Academic Calendar</Link></li>
+                  <li><hr className="dropdown-divider" /></li>
+                  
+                  <li><h6 className="dropdown-header">SCHOOLS / FACULTIES</h6></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/ibbs">Institute of Basic and Biomedical Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/son">School of Nursing</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/soh">School of Health Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/somcs">School of Medicine and Clinical Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/sophes">School of Public Health and Environmental Sciences</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/schools/drpgs">Directorate of Research and Graduate Studies</Link></li>
+                </ul>
               </li>
               <li className="nav-item mx-3">
                 <Link 
