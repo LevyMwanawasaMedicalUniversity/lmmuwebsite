@@ -15,7 +15,7 @@ export default function UniversityPage(): React.ReactNode {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '300px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 8px 8px' }}>
           <Image 
-            src="/assets/images/university/page-banner.svg" 
+            src="/assets/images/university/main/page-banner.svg" 
             alt="The University" 
             fill
             priority
@@ -93,7 +93,7 @@ export default function UniversityPage(): React.ReactNode {
                 viewport={{ once: true }}
               >
                 <Image 
-                  src="/assets/images/university/about-university.jpg" 
+                  src="/assets/images/university/main/about-university.svg" 
                   alt="About Levy Mwanawasa Medical University" 
                   width={600} 
                   height={400}
@@ -237,7 +237,7 @@ export default function UniversityPage(): React.ReactNode {
               >
                 <div className="leadership-image mb-3">
                   <Image 
-                    src="/assets/images/university/placeholders/leadership.svg" 
+                    src="/assets/images/university/main/leadership.svg" 
                     alt="Vice Chancellor" 
                     width={180} 
                     height={180}
@@ -265,7 +265,7 @@ export default function UniversityPage(): React.ReactNode {
               >
                 <div className="leadership-image mb-3">
                   <Image 
-                    src="/assets/images/university/placeholders/leadership.svg" 
+                    src="/assets/images/university/main/leadership.svg" 
                     alt="Deputy Vice Chancellor" 
                     width={180} 
                     height={180}
@@ -293,7 +293,7 @@ export default function UniversityPage(): React.ReactNode {
               >
                 <div className="leadership-image mb-3">
                   <Image 
-                    src="/assets/images/university/placeholders/leadership.svg" 
+                    src="/assets/images/university/main/leadership.svg" 
                     alt="Registrar" 
                     width={180} 
                     height={180}
@@ -624,7 +624,7 @@ function ProgramsAutoScroll() {
       id: 1,
       title: "School of Medicine & Clinical Sciences",
       description: "Comprehensive medical programs including MBChB and specialized clinical training.",
-      icon: "/assets/images/all-icon/ctg-1.jpeg",
+      icon: "/assets/images/university/main/programs/medicine.svg",
       link: "/academics/schools/somcs",
       color: "#2a76dd"
     },
@@ -632,7 +632,7 @@ function ProgramsAutoScroll() {
       id: 2,
       title: "School of Health Sciences",
       description: "Programs in nursing, pharmacy, physiotherapy, and allied health professions.",
-      icon: "/assets/images/all-icon/ctg-2.jpg",
+      icon: "/assets/images/university/main/programs/health-sciences.svg",
       link: "/academics/schools/soh",
       color: "#17a2b8"
     },
@@ -640,7 +640,7 @@ function ProgramsAutoScroll() {
       id: 3,
       title: "School of Public Health & Environmental Sciences",
       description: "Focused on public health, epidemiology, and environmental health sciences.",
-      icon: "/assets/images/all-icon/ctg-3.jpg",
+      icon: "/assets/images/university/main/programs/public-health.svg",
       link: "/academics/schools/sophes",
       color: "#28a745"
     },
@@ -648,7 +648,7 @@ function ProgramsAutoScroll() {
       id: 4,
       title: "Institute of Basic and Biomedical Sciences",
       description: "Advanced research and education in basic and biomedical sciences.",
-      icon: "/assets/images/all-icon/ctg-4.jpg",
+      icon: "/assets/images/university/main/programs/biomedical.svg",
       link: "/academics/schools/ibbs",
       color: "#6f42c1"
     },
@@ -656,7 +656,7 @@ function ProgramsAutoScroll() {
       id: 5,
       title: "School of Nursing",
       description: "Programs in nursing education and research.",
-      icon: "/assets/images/all-icon/ctg-5.png",
+      icon: "/assets/images/university/main/programs/nursing.svg",
       link: "/academics/schools/son",
       color: "#dc3545"
     },
@@ -664,7 +664,7 @@ function ProgramsAutoScroll() {
       id: 6,
       title: "Directorate of Research and Postgraduate Studies",
       description: "Postgraduate studies and research.",
-      icon: "/assets/images/all-icon/ctg-5.png",
+      icon: "/assets/images/university/main/programs/research.svg",
       link: "/academics/schools/drpgs",
       color: "#dc3895"
     },
