@@ -253,8 +253,8 @@ export default function Header() {
                   <li><hr className="dropdown-divider" /></li>
                   
                   <li><h6 className="dropdown-header">Portals</h6></li>
-                  <li><a className="dropdown-item" href="https://edurole.lmmu.ac.zm" target="_blank" rel="noopener noreferrer">Student Portal</a></li>
-                  <li><a className="dropdown-item" href="https://staff.lmmu.ac.zm" target="_blank" rel="noopener noreferrer">Staff Portal</a></li>
+                  <li><Link className="dropdown-item" href="/portals/student">Student Portal</Link></li>
+                  <li><Link className="dropdown-item" href="/portals/staff">Staff Portal</Link></li>
                 </ul>
               </li>
               <li className="nav-item mx-3">
