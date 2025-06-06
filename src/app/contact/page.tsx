@@ -3,6 +3,13 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+
+// Animation variants
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
 interface FormData {
   name: string;
@@ -53,219 +60,372 @@ export default function ContactPage(): React.ReactNode {
 
   return (
     <main>
-      {/* Page Banner */}
-      <section className="page-banner pt-200 pb-100" style={{ backgroundImage: "url('/assets/images/page-banner-6.jpg')" }}>
-        <div className="container">
+      {/* Hero Section */}
+      <section className="hero-section position-relative">
+        <div className="hero-image-container" style={{ height: '300px', overflow: 'hidden', position: 'relative' }}>
+          <Image 
+            src="/assets/images/page-banner-6.jpg" 
+            alt="LMMU Contact Us" 
+            fill
+            priority
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+          />
+          <div className="overlay position-absolute w-100 h-100 top-0" 
+            style={{ background: 'linear-gradient(rgba(7, 41, 77, 0.8), rgba(7, 41, 77, 0.7))' }}>
+          </div>
+        </div>
+        <div className="container position-relative" style={{ marginTop: '-150px' }}>
           <div className="row">
-            <div className="col-lg-8">
-              <div className="page-banner-content">
-                <h2>Contact</h2>
-                <ul>
-                  <li><Link href="/">Home</Link></li>
-                  <li>Contact</li>
-                </ul>
-              </div>
+            <div className="col-12">
+              <motion.div 
+                className="hero-content bg-white shadow-lg rounded-3 p-4 p-md-5 text-center position-relative"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <h1 className="mb-2">Contact Us</h1>
+                <nav aria-label="breadcrumb">
+                  <ol className="breadcrumb justify-content-center mb-0">
+                    <li className="breadcrumb-item"><Link href="/">Home</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Contact</li>
+                  </ol>
+                </nav>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Info */}
-      <section className="contact-info pt-70 pb-40">
+      <section className="contact-info pt-40 pb-30">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-4 col-md-6">
-              <div className="contact-box text-center mt-30">
-                <div className="contact-icon">
-                  <i className="fa fa-map-marker"></i>
-                </div>
-                <div className="contact-content">
-                  <h4>Address</h4>
-                  <p>Plot L/Lusaka/3170151 <br /> P.O. Box 33991, Lusaka, Zambia</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="contact-box text-center mt-30">
-                <div className="contact-icon">
-                  <i className="fa fa-phone"></i>
-                </div>
-                <div className="contact-content">
-                  <h4>Phone</h4>
-                  <p>+260974330519 <br /> +260953821693</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="contact-box text-center mt-30">
-                <div className="contact-icon">
-                  <i className="fa fa-envelope"></i>
-                </div>
-                <div className="contact-content">
-                  <h4>Email</h4>
-                  <p>info@lmmu.ac.zm</p>
-                </div>
+          <div className="row mb-4">
+            <div className="col-12 text-center">
+              <div className="section-title">
+                <h2>Get In Touch</h2>
+                <p>Here's how you can reach us</p>
               </div>
             </div>
           </div>
+          <motion.div 
+            className="row"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.2
+                }
+              }
+            }}
+          >
+            <div className="col-lg-4 col-md-6">
+              <motion.div 
+                className="contact-box text-center p-4 mb-4 bg-white shadow-sm rounded-3"
+                variants={cardVariants}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="contact-icon mb-3">
+                  <i className="fa fa-map-marker fa-2x text-primary"></i>
+                </div>
+                <div className="contact-content">
+                  <h4 className="mb-2">Address</h4>
+                  <p className="mb-0">Plot L/Lusaka/3170151 <br /> P.O. Box 33991, Lusaka, Zambia</p>
+                </div>
+              </motion.div>
+            </div>
+            <div className="col-lg-4 col-md-6">
+              <motion.div 
+                className="contact-box text-center p-4 mb-4 bg-white shadow-sm rounded-3"
+                variants={cardVariants}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="contact-icon mb-3">
+                  <i className="fa fa-phone fa-2x text-primary"></i>
+                </div>
+                <div className="contact-content">
+                  <h4 className="mb-2">Phone</h4>
+                  <p className="mb-0">+260974330519 <br /> +260953821693</p>
+                </div>
+              </motion.div>
+            </div>
+            <div className="col-lg-4 col-md-6">
+              <motion.div 
+                className="contact-box text-center p-4 mb-4 bg-white shadow-sm rounded-3"
+                variants={cardVariants}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="contact-icon mb-3">
+                  <i className="fa fa-envelope fa-2x text-primary"></i>
+                </div>
+                <div className="contact-content">
+                  <h4 className="mb-2">Email</h4>
+                  <p className="mb-0">info@lmmu.ac.zm</p>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Contact Form & Map */}
-      <section className="contact-form-area pt-70 pb-120">
+      <section className="contact-form-area pt-40 pb-60 bg-light">
         <div className="container">
           <div className="row">
-            <div className="col-lg-6">
-              <div className="section-title pb-40">
-                <h2>Get In Touch</h2>
-                <p>Send us your inquiries and we'll get back to you as soon as possible.</p>
+            <div className="col-12 text-center mb-4">
+              <div className="section-title">
+                <h2>Send Us a Message</h2>
+                <p>Fill out the form below and we'll get back to you as soon as possible</p>
               </div>
-              <div className="contact-form">
+            </div>
+          </div>
+          <div className="row g-4">
+            <div className="col-lg-6">
+              <motion.div 
+                className="contact-form bg-white p-4 p-md-5 rounded-3 shadow-sm"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
                 <form onSubmit={handleSubmit}>
-                  <div className="row">
+                  <div className="row g-3">
                     <div className="col-md-6">
-                      <div className="form-group mb-4">
+                      <div className="form-floating mb-3">
                         <input 
                           type="text" 
                           name="name" 
+                          id="name"
                           value={formData.name}
                           onChange={handleChange}
                           className="form-control" 
                           placeholder="Your Name" 
                           required 
                         />
+                        <label htmlFor="name">Your Name</label>
                       </div>
                     </div>
                     <div className="col-md-6">
-                      <div className="form-group mb-4">
+                      <div className="form-floating mb-3">
                         <input 
                           type="email" 
                           name="email" 
+                          id="email"
                           value={formData.email}
                           onChange={handleChange}
                           className="form-control" 
                           placeholder="Your Email" 
                           required 
                         />
+                        <label htmlFor="email">Your Email</label>
                       </div>
                     </div>
                     <div className="col-md-12">
-                      <div className="form-group mb-4">
+                      <div className="form-floating mb-3">
                         <input 
                           type="text" 
                           name="subject" 
+                          id="subject"
                           value={formData.subject}
                           onChange={handleChange}
                           className="form-control" 
                           placeholder="Subject" 
                           required 
                         />
+                        <label htmlFor="subject">Subject</label>
                       </div>
                     </div>
                     <div className="col-md-12">
-                      <div className="form-group mb-4">
+                      <div className="form-floating mb-3">
                         <textarea 
                           name="message" 
+                          id="message"
                           value={formData.message}
                           onChange={handleChange}
                           className="form-control" 
                           placeholder="Your Message" 
-                          rows={6} 
+                          style={{ height: '150px' }}
                           required
                         ></textarea>
+                        <label htmlFor="message">Your Message</label>
                       </div>
                     </div>
                     <div className="col-md-12">
-                      <div className="form-group">
+                      <div className="d-grid gap-2">
                         <button 
                           type="submit" 
-                          className="main-btn" 
+                          className="btn btn-primary btn-lg"
                           disabled={formStatus.submitting}
                         >
                           {formStatus.submitting ? 'Sending...' : 'Send Message'}
                         </button>
                       </div>
                       {formStatus.success && (
-                        <div className="alert alert-success mt-4">
+                        <div className="alert alert-success mt-3">
+                          <i className="fa fa-check-circle me-2"></i>
                           Your message has been sent successfully!
                         </div>
                       )}
                       {formStatus.error && (
-                        <div className="alert alert-danger mt-4">
+                        <div className="alert alert-danger mt-3">
+                          <i className="fa fa-exclamation-circle me-2"></i>
                           There was an error sending your message. Please try again.
                         </div>
                       )}
                     </div>
                   </div>
-                </form>
-              </div>
+                </form>                            
+              </motion.div>
             </div>
             <div className="col-lg-6">
-              <div className="contact-map mt-5 mt-lg-0">
+              <motion.div 
+                className="contact-map h-100 rounded-3 overflow-hidden shadow-sm"
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3845.4837777061837!2d28.366906015200715!3d-15.44780566383655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1940fde8fffffffd%3A0x4a1d0b68f6e28ae2!2sLevy%20Mwanawasa%20Medical%20University!5e0!3m2!1sen!2szm!4v1650290571960!5m2!1sen!2szm" 
                   width="100%" 
-                  height="450" 
-                  style={{ border: 0 }} 
+                  height="100%" 
+                  style={{ border: 0, minHeight: '400px' }} 
                   allowFullScreen={true}
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Visit Us CTA */}
-      <section className="visit-cta py-5 bg-light">
+      <section className="visit-cta py-5 bg-white">
         <div className="container">
-          <div className="row text-center">
-            <div className="col-lg-12">
-              <h3>Visit Our Campus</h3>
-              <p className="mb-4">We invite you to visit our campus to learn more about our programs and facilities.</p>
-              <p><strong>Opening Hours:</strong> Monday to Saturday - 8 AM to 5 PM</p>
+          <motion.div 
+            className="row justify-content-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="col-lg-10 col-xl-8 text-center">
+              <div className="p-4 p-md-5 rounded-3 shadow-sm border border-light">
+                <h3 className="mb-3">Visit Our Campus</h3>
+                <p className="mb-4 lead">We invite you to visit our campus to learn more about our programs and facilities.</p>
+                <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mb-2">
+                  <div className="d-flex align-items-center">
+                    <i className="fa fa-calendar text-primary me-2"></i>
+                    <span><strong>Days:</strong> Monday to Saturday</span>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <i className="fa fa-clock-o text-primary me-2"></i>
+                    <span><strong>Hours:</strong> 8:00 AM to 5:00 PM</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Link href="/about" className="btn btn-outline-primary">
+                    Learn More About LMMU
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Social Media */}
-      <section className="social-connect pt-60 pb-60">
+      <section className="social-connect pt-60 pb-60 bg-light">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-12 text-center">
-              <div className="section-title pb-30">
-                <h3>Connect With Us</h3>
+          <div className="row justify-content-center mb-4">
+            <div className="col-lg-8 text-center">
+              <div className="section-title">
+                <h2>Connect With Us</h2>
+                <p>Follow us on social media to stay updated with the latest news and events</p>
               </div>
-              <ul className="social-links">
-                <li>
-                  <a href="https://www.facebook.com/LevyMwanawasaMedicalUniversity" target="_blank" rel="noopener noreferrer">
-                    <i className="fa fa-facebook-f"></i>
-                    <span>Facebook</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.linkedin.com/company/levy-mwanawasa-medical-univerisity" target="_blank" rel="noopener noreferrer">
-                    <i className="fa fa-linkedin"></i>
-                    <span>LinkedIn</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://youtube.com/@lmmuict?si=32-5IdcWMFGgmcFt" target="_blank" rel="noopener noreferrer">
-                    <i className="fa fa-youtube"></i>
-                    <span>YouTube</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.instagram.com/levymwanawasamedicauniversity/" target="_blank" rel="noopener noreferrer">
-                    <i className="fa fa-instagram"></i>
-                    <span>Instagram</span>
-                  </a>
-                </li>
-              </ul>
             </div>
           </div>
+          <motion.div 
+            className="row justify-content-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+          >
+            <div className="col-lg-8">
+              <div className="d-flex flex-wrap justify-content-center gap-3 gap-md-4">
+                <motion.a 
+                  href="https://www.facebook.com/LevyMwanawasaMedicalUniversity" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-item text-center p-3 rounded-circle bg-white shadow-sm"
+                  style={{ width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                  variants={cardVariants}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div>
+                    <i className="fa fa-facebook-f fa-2x text-primary mb-2"></i>
+                    <p className="small mb-0">Facebook</p>
+                  </div>
+                </motion.a>
+                
+                <motion.a 
+                  href="https://www.linkedin.com/company/levy-mwanawasa-medical-univerisity" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-item text-center p-3 rounded-circle bg-white shadow-sm"
+                  style={{ width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                  variants={cardVariants}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div>
+                    <i className="fa fa-linkedin fa-2x text-primary mb-2"></i>
+                    <p className="small mb-0">LinkedIn</p>
+                  </div>
+                </motion.a>
+                
+                <motion.a 
+                  href="https://youtube.com/@lmmuict?si=32-5IdcWMFGgmcFt" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-item text-center p-3 rounded-circle bg-white shadow-sm"
+                  style={{ width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                  variants={cardVariants}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div>
+                    <i className="fa fa-youtube fa-2x text-primary mb-2"></i>
+                    <p className="small mb-0">YouTube</p>
+                  </div>
+                </motion.a>
+                
+                <motion.a 
+                  href="https://www.instagram.com/levymwanawasamedicauniversity/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="social-item text-center p-3 rounded-circle bg-white shadow-sm"
+                  style={{ width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}
+                  variants={cardVariants}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div>
+                    <i className="fa fa-instagram fa-2x text-primary mb-2"></i>
+                    <p className="small mb-0">Instagram</p>
+                  </div>
+                </motion.a>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </main>
