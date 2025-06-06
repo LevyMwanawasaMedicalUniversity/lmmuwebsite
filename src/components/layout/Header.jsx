@@ -111,10 +111,11 @@ export default function Header() {
               </div>
             </div>
             <div className="col-lg-5 text-end">
-              <div className="text-white small">
+              <div className="text-white small d-inline-block me-3">
                 <i className="fa fa-clock me-2"></i>
                 <span>Opening Hours: Monday to Saturday - 8 Am to 5 Pm</span>
               </div>
+              <a href="/auth/signin" className="btn btn-outline-light btn-sm align-middle">Login</a>
             </div>
           </div>
         </div>
