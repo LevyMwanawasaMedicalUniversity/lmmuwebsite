@@ -1,22 +1,46 @@
 "use client";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!username || !password) {
+      setError("Username and password are required");
+      return;
+    }
+    
     setError("");
-    const res = await signIn("credentials", {
-      username,
-      password,
-      redirect: true,
-      callbackUrl: "/"
-    });
-    if (res?.error) setError("Invalid credentials");
+    setIsLoading(true);
+    
+    try {
+      const result = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
+      
+      if (result?.error) {
+        setError("Invalid username or password");
+      } else {
+        // Redirect to homepage on successful login
+        router.push("/");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred during login");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -30,9 +54,14 @@ export default function SignInForm() {
         <div className="mb-3">
           <label className="form-label">Password</label>
           <input type="password" className="form-control" value={password} onChange={e => setPassword(e.target.value)} required />
-        </div>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <button type="submit" className="btn btn-primary w-100">Sign In</button>
+        </div>        {error && <div className="alert alert-danger">{error}</div>}
+        <button 
+          type="submit" 
+          className="btn btn-primary w-100" 
+          disabled={isLoading}
+        >
+          {isLoading ? 'Signing in...' : 'Sign In'}
+        </button>
       </form>
     </div>
   );

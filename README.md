@@ -2,7 +2,24 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Database Setup
+
+This project uses MySQL for data storage. Before starting the application, you need to set up the database:
+
+1. Make sure you have MySQL installed and running
+2. Run the setup script:
+
+```bash
+npm run db:setup
+# or
+pnpm db:setup
+```
+
+For detailed instructions, see the [Database Documentation](./docs/DATABASE.md).
+
+### Running the Development Server
+
+After setting up the database, run the development server:
 
 ```bash
 npm run dev
