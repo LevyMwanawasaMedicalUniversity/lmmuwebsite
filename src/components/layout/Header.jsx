@@ -4,12 +4,21 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/react';
 
 export default function Header() {
   const pathname = usePathname();
   const [showSearch, setShowSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showUniversitySubmenu, setShowUniversitySubmenu] = useState(false);
+  
+  // useSession hook must be used within a SessionProvider
+  const { data: session, status } = useSession();
+  const isLoading = status === 'loading';
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: true, callbackUrl: '/' });
+  };
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -89,6 +98,43 @@ export default function Header() {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .user-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .user-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      min-width: 160px;
+      z-index: 1;
+      background-color: #fff;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      border-radius: 4px;
+      padding: 0.5rem 0;
+    }
+    .user-dropdown:hover .user-dropdown-content {
+      display: block;
+    }
+    .user-dropdown-item {
+      padding: 0.5rem 1rem;
+      display: block;
+      color: #212529;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+    }
+    .user-dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #0d6efd;
+    }
+    .btn-logout {
+      background: none;
+      border: none;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+    }
   `;
 
   return (
@@ -115,7 +161,27 @@ export default function Header() {
                 <i className="fa fa-clock me-2"></i>
                 <span>Opening Hours: Monday to Saturday - 8 Am to 5 Pm</span>
               </div>
-              <a href="/auth/signin" className="btn btn-outline-light btn-sm align-middle">Login</a>
+              {isLoading ? (
+                <span className="btn btn-outline-light btn-sm align-middle disabled">Loading...</span>
+              ) : session ? (
+                <div className="user-dropdown d-inline-block">
+                  <button className="btn btn-outline-light btn-sm align-middle">
+                    <i className="fas fa-user me-1"></i> {session.user.name || 'User'}
+                  </button>
+                  <div className="user-dropdown-content">
+                    {session.user.role === 'admin' && (
+                      <Link href="/admin" className="user-dropdown-item">
+                        <i className="fas fa-cog me-2"></i> Admin Panel
+                      </Link>
+                    )}
+                    <button onClick={handleSignOut} className="user-dropdown-item btn-logout">
+                      <i className="fas fa-sign-out-alt me-2"></i> Logout
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <Link href="/auth/signin" className="btn btn-outline-light btn-sm align-middle">Login</Link>
+              )}
             </div>
           </div>
         </div>
@@ -235,27 +301,20 @@ export default function Header() {
                    */}
                   <li><h6 className="dropdown-header">DEANS OF STUDENTS AFFAIRS</h6></li>
                   <li><Link className="dropdown-item" href="/academics/files/LMMU-2019-2022-Session-Dates-(2019).pdf">Unviersity Sessional Dates</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/files/council2024.pdf">Student Union Executive</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/files/SRC organogram.pdf">Student Representative Council</Link></li>
                 </ul>
               </li>
               <li className="nav-item dropdown mx-3">
-                <a 
+                <Link 
                   className={`nav-link custom-nav-link dropdown-toggle ${pathname?.includes('/portals') ? 'active' : ''}`}
-                  href="#"
+                  href="/portals"
                   role="button"
-                  data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   PORTALS
-                </a>
+                </Link>
                 <ul className="dropdown-menu">
-                  <li><Link className="dropdown-item" href="/portals">Student And Staff Resources</Link></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  
-                  <li><h6 className="dropdown-header">Portals</h6></li>
-                  <li><Link className="dropdown-item" href="/portals/student">Student Portal</Link></li>
-                  <li><Link className="dropdown-item" href="/portals/staff">Staff Portal</Link></li>
+                  <li><Link className="dropdown-item" href="/portals/staff">Student Portal</Link></li>
+                  <li><Link className="dropdown-item" href="/portals/student">Staff Portal</Link></li>                  
                 </ul>
               </li>
               <li className="nav-item mx-3">
@@ -275,23 +334,45 @@ export default function Header() {
                 </Link>
               </li>
             </ul>
+            
             <div className="ms-auto">
-              {/* <button className="btn btn-link" onClick={toggleSearch} style={{ border: 'none', padding: '0.75rem 1rem' }}>
-                <i className="fa fa-search search-icon"></i>
-              </button> */}
+              <a role="button" className="text-dark search-icon" onClick={toggleSearch}><i className="fa fa-search"></i></a>
             </div>
           </div>
           
           {/* Mobile menu */}
           <div className="d-lg-none">
-            <button 
-              className="navbar-toggler text-dark my-2 border-0" 
-              type="button" 
-              onClick={toggleMenu}
-              aria-label="Toggle navigation"
-            >
-              <i className="fa fa-bars"></i> MENU
-            </button>
+            <div className="d-flex justify-content-between align-items-center">
+              <button 
+                className="navbar-toggler text-dark my-2 border-0" 
+                type="button" 
+                onClick={toggleMenu}
+                aria-label="Toggle navigation"
+              >
+                <i className="fa fa-bars"></i> MENU
+              </button>
+              
+              {/* Mobile auth display */}
+              <div className="my-2">
+                {isLoading ? (
+                  <span className="btn btn-sm btn-outline-primary disabled">Loading...</span>
+                ) : session ? (
+                  <div className="dropdown">
+                    <button className="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i className="fas fa-user me-1"></i> {session.user.name?.split(' ')[0] || 'User'}
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      {session.user.role === 'admin' && (
+                        <li><Link className="dropdown-item" href="/admin"><i className="fas fa-cog me-2"></i> Admin Panel</Link></li>
+                      )}
+                      <li><button className="dropdown-item" onClick={handleSignOut}><i className="fas fa-sign-out-alt me-2"></i> Logout</button></li>
+                    </ul>
+                  </div>
+                ) : (
+                  <Link href="/auth/signin" className="btn btn-sm btn-outline-primary">Login</Link>
+                )}
+              </div>
+            </div>
             
             {isMenuOpen && (
               <div className="mobile-menu py-2">

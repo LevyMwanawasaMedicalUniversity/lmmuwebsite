@@ -2,6 +2,7 @@ import React from 'react';
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ClientSessionProvider from "@/components/providers/ClientSessionProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,6 +25,7 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps): React.ReactNode {
+  
   return (
     <html lang="en">
       <head>
@@ -42,9 +44,11 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactNo
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <ClientSessionProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ClientSessionProvider>
 
         {/* jQuery */}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" async></script>
