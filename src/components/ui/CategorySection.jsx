@@ -113,15 +113,18 @@ export default function CategorySection({ customTitle, customDescription }) {
       <div className="container">
         {/* Section Header */}
         <div className="row mb-5">
-          <div className="col-lg-6">
+          <div className="col-lg-8 mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="section-title">
-              <h5 className="text-primary mb-2">{customTitle || 'Our Schools'}</h5>
-              <h2>Academic Programs</h2>
-              <p>{customDescription || 'LMMU comprises several specialized schools and faculties, each focusing on different aspects of healthcare education and research.'}</p>
+            >
+              <div className="section-title">
+                <h6 className="text-primary text-uppercase fw-bold mb-2" style={{ letterSpacing: '2px' }}>Explore</h6>
+                <h2 className="display-5 fw-bold mb-3">{customTitle || "Our Academic Programs"}</h2>
+                <div className="title-underline mx-auto mb-4" style={{ width: '80px', height: '4px', backgroundColor: 'var(--bs-primary)' }}></div>
+                <p className="lead text-muted">{customDescription || "Discover our diverse range of academic programs designed to prepare you for a successful career in healthcare."}</p>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -142,20 +145,22 @@ export default function CategorySection({ customTitle, customDescription }) {
                     handleInteraction();
                   }}
                 >
-                  <Link href={program.link}>
-                    <div className="singel-category text-center" style={{ backgroundColor: program.color }}>
-                      <div className="icon">
+                  <Link href={program.link} className="text-decoration-none">
+                    <div className="singel-category text-center rounded-lg overflow-hidden shadow-lg" style={{ borderTop: `4px solid ${program.color}`, backgroundColor: '#fff' }}>
+                      <div className="icon p-4" style={{ backgroundColor: `${program.color}20` }}>
                         <Image 
                           src={program.icon} 
                           alt={program.title} 
-                          width={80} 
-                          height={80}
-                          className="img-fluid"
+                          width={100} 
+                          height={100}
+                          className="img-fluid rounded-circle shadow"
+                          style={{ border: `3px solid ${program.color}` }}
                         />
                       </div>
-                      <div className="cont">
-                        <h4>{program.title}</h4>
-                        <p>{program.description}</p>
+                      <div className="cont p-4">
+                        <h4 className="mb-3 fw-bold" style={{ color: program.color }}>{program.title}</h4>
+                        <p className="text-muted mb-3">{program.description}</p>
+                        <span className="btn btn-sm" style={{ backgroundColor: program.color, color: '#fff' }}>Learn More</span>
                       </div>
                     </div>
                   </Link>
@@ -177,63 +182,94 @@ export default function CategorySection({ customTitle, customDescription }) {
                 exit="exit"
                 className="category-slide"
               >
-                <Link href={academicPrograms[activeIndex].link}>
-                  <div className="singel-category text-center" style={{ backgroundColor: academicPrograms[activeIndex].color }}>
-                    <div className="icon">
+                <Link href={academicPrograms[activeIndex].link} className="text-decoration-none">
+                  <div className="singel-category text-center rounded-lg overflow-hidden shadow-lg" style={{ borderTop: `4px solid ${academicPrograms[activeIndex].color}`, backgroundColor: '#fff' }}>
+                    <div className="icon p-4" style={{ backgroundColor: `${academicPrograms[activeIndex].color}20` }}>
                       <Image 
                         src={academicPrograms[activeIndex].icon} 
                         alt={academicPrograms[activeIndex].title} 
-                        width={80} 
-                        height={80}
-                        className="img-fluid"
+                        width={100} 
+                        height={100}
+                        className="img-fluid rounded-circle shadow"
+                        style={{ border: `3px solid ${academicPrograms[activeIndex].color}` }}
                       />
                     </div>
-                    <div className="cont">
-                      <h4>{academicPrograms[activeIndex].title}</h4>
-                      <p>{academicPrograms[activeIndex].description}</p>
+                    <div className="cont p-4">
+                      <h4 className="mb-3 fw-bold" style={{ color: academicPrograms[activeIndex].color }}>{academicPrograms[activeIndex].title}</h4>
+                      <p className="text-muted mb-3">{academicPrograms[activeIndex].description}</p>
+                      <span className="btn btn-sm" style={{ backgroundColor: academicPrograms[activeIndex].color, color: '#fff' }}>Learn More</span>
                     </div>
                   </div>
                 </Link>
               </motion.div>
             </AnimatePresence>
             
-            {/* Navigation dots */}
-            <div className="slider-dots mt-4">
-              {academicPrograms.map((_, index) => (
+            {/* Navigation controls */}
+            <div className="navigation-controls mt-4 d-flex flex-column align-items-center">
+              {/* Navigation arrows */}
+              <div className="slider-nav-container d-flex justify-content-center mb-3">
                 <button 
-                  key={index}
-                  className={`dot ${index === activeIndex ? 'active' : ''}`}
+                  className="slider-nav prev me-2" 
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--bs-primary)',
+                    color: 'white',
+                    border: 'none',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }}
                   onClick={() => {
-                    setActiveIndex(index);
+                    setActiveIndex((prev) => (prev - 1 + academicPrograms.length) % academicPrograms.length);
                     handleInteraction();
                   }}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
-            
-            {/* Navigation arrows */}
-            <div className="slider-nav-container">
-              <button 
-                className="slider-nav prev" 
-                onClick={() => {
-                  setActiveIndex((prev) => (prev - 1 + academicPrograms.length) % academicPrograms.length);
-                  handleInteraction();
-                }}
-                aria-label="Previous slide"
-              >
-                <i className="fas fa-chevron-left"></i>
-              </button>
-              <button 
-                className="slider-nav next" 
-                onClick={() => {
-                  setActiveIndex((prev) => (prev + 1) % academicPrograms.length);
-                  handleInteraction();
-                }}
-                aria-label="Next slide"
-              >
-                <i className="fas fa-chevron-right"></i>
-              </button>
+                  aria-label="Previous slide"
+                >
+                  <i className="fas fa-chevron-left"></i>
+                </button>
+                <button 
+                  className="slider-nav next" 
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--bs-primary)',
+                    color: 'white',
+                    border: 'none',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                  }}
+                  onClick={() => {
+                    setActiveIndex((prev) => (prev + 1) % academicPrograms.length);
+                    handleInteraction();
+                  }}
+                  aria-label="Next slide"
+                >
+                  <i className="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              
+              {/* Navigation dots */}
+              <div className="slider-dots d-flex justify-content-center">
+                {academicPrograms.map((program, index) => (
+                  <button 
+                    key={index}
+                    className={`dot mx-1`}
+                    style={{
+                      width: '10px',
+                      height: '10px',
+                      borderRadius: '50%',
+                      backgroundColor: index === activeIndex ? program.color : '#ccc',
+                      border: 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onClick={() => {
+                      setActiveIndex(index);
+                      handleInteraction();
+                    }}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

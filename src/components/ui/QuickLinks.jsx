@@ -9,30 +9,30 @@ const quickLinks = [
   {
     icon: '/assets/icons/student.svg',
     iconColor: '#1e88e5',
-    title: 'Future Students',
-    description: "LMMU's unique approach rests on excellence, innovation, and social responsibility",
-    link: '/admissions'
+    title: 'The University',
+    description: "Learn about our history, mission and vision",
+    link: '/university'
   },
   {
     icon: '/assets/icons/academic.svg',
     iconColor: '#43a047',
     title: 'Academic Programs',
     description: 'Explore our diverse range of medical and health science programs',
-    link: '/programs'
+    link: '/academics/schools'
   },
   {
     icon: '/assets/icons/calendar.svg',
     iconColor: '#fb8c00',
-    title: 'Calendars & Key Dates',
+    title: 'Entry Requirements',
     description: 'Important academic dates, events and deadlines',
-    link: '/calendar'
+    link: '/entry-requirements'
   },
   {
     icon: '/assets/icons/tour.svg',
     iconColor: '#8e24aa',
-    title: 'Virtual Campus Tours',
-    description: 'Experience our state-of-the-art facilities virtually',
-    link: '/tour'
+    title: 'Portals',
+    description: 'Access student, staff and alumni resources',
+    link: '/portals/student'
   }
 ];
 

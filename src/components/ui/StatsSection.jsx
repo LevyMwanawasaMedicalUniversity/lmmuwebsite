@@ -121,8 +121,8 @@ export default function StatsSection() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-              >95%</motion.h3>
-              <p className="text-muted mb-0">Graduate Employment Rate</p>
+              >100+</motion.h3>
+              <p className="text-muted mb-0">Staff</p>
             </div>
           </motion.div>
         </motion.div>
