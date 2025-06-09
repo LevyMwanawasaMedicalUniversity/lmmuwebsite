@@ -1,0 +1,361 @@
+/**
+ * LMMU Website Unified Gradient System
+ * 
+ * This file defines a consistent set of gradient styles specifically tailored for
+ * LMMU's brand identity. The system is built around the institutional gold (#ffc600)
+ * with complementary blues and greys for a cohesive visual experience.
+ */
+
+/* ------------- CONTENT HIERARCHY SYSTEM ------------- */
+
+/* 
+ * CTA Gradients - Most vibrant, for call-to-action areas and high emphasis content 
+ * Based on LMMU's brand colors with gold #ffc600 as primary accent
+ */
+.gradient-cta-primary {
+  background: linear-gradient(135deg, #0046ad 0%, #00337f 100%); /* LMMU Deep Blue */
+  color: white;
+}
+
+.gradient-cta-accent {
+  background: linear-gradient(135deg, #ffc600 0%, #e6b400 100%); /* LMMU Gold to Darker Gold */
+  color: #333333; /* Dark text for contrast on gold */
+}
+
+.gradient-cta-success {
+  background: linear-gradient(135deg, #00896c 0%, #006b53 100%); /* Teal Green */
+  color: white;
+}
+
+/* Standard Gradients - Moderately vibrant, for featured content and statistics */
+.gradient-primary {
+  background: linear-gradient(135deg, #0070cc 0%, #0046ad 100%); /* Mid Blue to Deep Blue */
+  color: white;
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #ffd133 0%, #ffc600 100%); /* Light Gold to LMMU Gold */
+  color: #333333;
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #00b491 0%, #00896c 100%); /* Light Teal to Teal */
+  color: white;
+}
+
+.gradient-neutral {
+  background: linear-gradient(135deg, #58595B 0%, #3A3A3C 100%); /* Grey to Dark Grey */
+  color: white;
+}
+
+/* Subtle Gradients - Less vibrant, for informational sections */
+.gradient-subtle-primary {
+  background: linear-gradient(135deg, #e6f0ff 0%, #c5deff 100%); /* Light Blue Gradient */
+  color: #0046ad; /* Deep Blue text for contrast */
+}
+
+.gradient-subtle-accent {
+  background: linear-gradient(135deg, #fff5cc 0%, #ffebb3 100%); /* Light Gold Gradient */
+  color: #8f6900; /* Dark Gold for contrast */
+}
+
+.gradient-subtle-success {
+  background: linear-gradient(135deg, #e6f7f4 0%, #c5eee7 100%); /* Light Teal Gradient */
+  color: #00896c; /* Teal text for contrast */
+}
+
+/* Light Background - For visual relief and less important sections */
+.gradient-light {
+  background: linear-gradient(135deg, #FFFFFF 0%, #f5f5f5 100%); /* White to Light Grey */
+  color: #333333;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* LMMU Brand Gradients - Special combinations highlighting institutional colors */
+.gradient-lmmu-primary {
+  background: linear-gradient(135deg, #0046ad 0%, #0070cc 70%, #0097e6 100%); /* LMMU Blue Spectrum */
+  color: white;
+}
+
+.gradient-lmmu-gold {
+  background: linear-gradient(135deg, #ffc600 0%, #ffdf80 100%); /* LMMU Gold Spectrum */
+  color: #333333;
+}
+
+.gradient-lmmu-blue-gold {
+  background: linear-gradient(135deg, #0046ad 0%, #005dcb 50%, #ffc600 100%); /* Blue to Gold Transition */
+  color: white;
+}
+
+.gradient-lmmu-gold-blue {
+  background: linear-gradient(135deg, #ffc600 0%, #ffb700 50%, #0046ad 100%); /* Gold to Blue Transition */
+  color: white;
+}
+
+/* ==================== PATTERN SYSTEM ==================== */
+/* A consistent system of decorative elements that follows the same rules across sections */
+
+/* Base Pattern Container */
+.pattern-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pattern Types */
+.pattern-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pattern-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pattern-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Gold accent patterns - special patterns showcasing the LMMU brand color */
+.pattern-gold-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle, rgba(255,198,0,0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pattern-gold-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(45deg, rgba(255,198,0,0.1) 25%, transparent 25%, transparent 50%, rgba(255,198,0,0.1) 50%, rgba(255,198,0,0.1) 75%, transparent 75%, transparent);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Decorative Element System */
+.decorative-system {
+  position: relative;
+}
+
+/* Circle Size System - Unified sizing across components */
+.circle-decoration {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 0;
+}
+
+/* Gold circle decorations */
+.circle-gold {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 198, 0, 0.15);
+  z-index: 0;
+}
+
+.circle-xlarge {
+  width: 400px;
+  height: 400px;
+  opacity: 0.08;
+}
+
+.circle-large {
+  width: 300px;
+  height: 300px;
+  opacity: 0.10;
+}
+
+.circle-medium {
+  width: 200px;
+  height: 200px;
+  opacity: 0.12;
+}
+
+.circle-small {
+  width: 100px;
+  height: 100px;
+  opacity: 0.15;
+}
+
+.circle-tiny {
+  width: 50px;
+  height: 50px;
+  opacity: 0.2;
+}
+
+/* Positioning System - Standard positions for decorative elements */
+.pos-top-right {
+  top: -20%;
+  right: -10%;
+}
+
+.pos-top-left {
+  top: -20%;
+  left: -10%;
+}
+
+.pos-bottom-right {
+  bottom: -20%;
+  right: -10%;
+}
+
+.pos-bottom-left {
+  bottom: -20%;
+  left: -10%;
+}
+
+.pos-center-right {
+  top: 40%;
+  right: -10%;
+  transform: translateY(-50%);
+}
+
+.pos-center-left {
+  top: 40%;
+  left: -10%;
+  transform: translateY(-50%);
+}
+
+/* Additional shape decorations */
+.triangle-decoration {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+/* Gold triangle decorations */
+.triangle-gold {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  opacity: 0.15;
+  z-index: 0;
+  border-color: transparent transparent rgba(255,198,0,0.3) transparent;
+}
+
+.triangle-large {
+  border-width: 0 100px 150px 100px;
+  border-color: transparent transparent rgba(255,255,255,0.2) transparent;
+}
+
+.triangle-medium {
+  border-width: 0 60px 100px 60px;
+  border-color: transparent transparent rgba(255,255,255,0.2) transparent;
+}
+
+.triangle-small {
+  border-width: 0 30px 50px 30px;
+  border-color: transparent transparent rgba(255,255,255,0.2) transparent;
+}
+
+/* ==================== ACCESSIBILITY ENHANCEMENTS ==================== */
+/* Text classes with guaranteed WCAG AA compliance (4.5:1 for normal, 3:1 for large text) */
+
+/* For dark backgrounds */
+.text-on-dark {
+  color: rgba(255, 255, 255, 0.95); /* Higher opacity for better contrast */
+  font-weight: 500;
+}
+
+.text-secondary-on-dark {
+  color: rgba(255, 255, 255, 0.85); /* Still passes AA with dark backgrounds */
+  font-weight: 400;
+}
+
+.text-muted-on-dark {
+  color: rgba(255, 255, 255, 0.75); /* Passes AA for large text (18pt+) */
+  font-weight: 500;
+}
+
+/* For light backgrounds */
+.text-on-light {
+  color: rgba(33, 37, 41, 0.95);
+  font-weight: 500;
+}
+
+.text-secondary-on-light {
+  color: rgba(33, 37, 41, 0.85);
+  font-weight: 400;
+}
+
+.text-muted-on-light {
+  color: rgba(33, 37, 41, 0.75);
+  font-weight: 500;
+}
+
+/* For gold backgrounds - special case for LMMU brand color */
+.text-on-gold {
+  color: rgba(51, 51, 51, 0.95); /* Dark grey for contrast on gold */
+  font-weight: 600;
+}
+
+.text-secondary-on-gold {
+  color: rgba(51, 51, 51, 0.85);
+  font-weight: 500;
+}
+
+/* For primary gradient backgrounds */
+.text-on-primary {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+}
+
+/* For accent gradient backgrounds */
+.text-on-accent {
+  color: rgba(51, 51, 51, 0.95);
+  font-weight: 500;
+}
+
+/* For success gradient backgrounds */
+.text-on-success {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+}
+
+/* For subtle gradient backgrounds */
+.text-on-subtle {
+  color: rgba(0, 70, 173, 0.95); /* LMMU deep blue text on light backgrounds */
+  font-weight: 500;
+}

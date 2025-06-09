@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ClientSessionProvider from "@/components/providers/ClientSessionProvider";
+import LoadingProvider from "@/components/providers/LoadingProvider";
 import "./globals.css";
+import "@/styles/gradients.css"; // Import our unified gradient system
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,9 +47,11 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactNo
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClientSessionProvider>
-          <Header />
-          {children}
-          <Footer />
+          <LoadingProvider>
+            <Header />
+            {children}
+            <Footer />
+          </LoadingProvider>
         </ClientSessionProvider>
 
         {/* jQuery */}

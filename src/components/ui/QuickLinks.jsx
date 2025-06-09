@@ -9,7 +9,7 @@ const quickLinks = [
   {
     icon: '/assets/icons/student.svg',
     iconColor: '#1e88e5',
-    gradient: 'linear-gradient(135deg, #1a3a8f 0%, #0f2557 100%)',
+    gradientClass: 'gradient-primary',
     title: 'The University',
     description: "Learn about our history, mission and vision",
     link: '/university'
@@ -17,23 +17,23 @@ const quickLinks = [
   {
     icon: '/assets/icons/academic.svg',
     iconColor: '#43a047',
-    gradient: 'linear-gradient(135deg, #28a745 0%, #1e7e34 100%)',
+    gradientClass: 'gradient-success',
     title: 'Academic Programs',
     description: 'Explore our diverse range of medical and health science programs',
     link: '/academics/schools'
   },
   {
     icon: '/assets/icons/calendar.svg',
-    iconColor: '#fb8c00',
-    gradient: 'linear-gradient(135deg, #fd7e14 0%, #e65c00 100%)',
+    iconColor: '#00896c', // Updated to match our green gradient-success color
+    gradientClass: 'gradient-neutral',
     title: 'Entry Requirements',
     description: 'Important academic dates, events and deadlines',
     link: '/entry-requirements'
   },
   {
     icon: '/assets/icons/tour.svg',
-    iconColor: '#8e24aa',
-    gradient: 'linear-gradient(135deg, #c41230 0%, #8a0c22 100%)',
+    iconColor: '#ffc600', // Updated to match LMMU's institutional gold color
+    gradientClass: 'gradient-accent',
     title: 'Portals',
     description: 'Access student, staff and alumni resources',
     link: '/portals/student'
@@ -81,7 +81,8 @@ export default function QuickLinks() {
               custom={index}
             >
               <Link href={link.link} className="quick-link-card text-decoration-none mb-4">
-                <div className="card h-100 border-0 shadow" style={{ background: link.gradient, borderRadius: '12px', overflow: 'hidden' }}>
+                <div className={`card h-100 border-0 shadow gradient-container ${link.gradientClass}`} style={{ borderRadius: '12px' }}>
+                  <div className="circle-decoration circle-small top-right-corner"></div>
                   <div className="card-body d-flex flex-column p-3 p-md-4">
                     <div className="d-flex align-items-center mb-3">
                       <div 
@@ -105,11 +106,11 @@ export default function QuickLinks() {
                           style={{ filter: 'brightness(0) invert(1)' }}
                         />
                       </div>
-                      <h3 className="h6 mb-0 fw-bold text-white" style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1rem)' }}>{link.title}</h3>
+                      <h3 className="h6 mb-0 fw-bold gradient-text-primary" style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1rem)' }}>{link.title}</h3>
                     </div>
-                    <p className="text-white small mb-1 mb-md-2" style={{ fontSize: 'clamp(0.7rem, 1.3vw, 0.8rem)', lineHeight: '1.3' }}>{link.description}</p>
+                    <p className="gradient-text-primary small mb-1 mb-md-2" style={{ fontSize: 'clamp(0.7rem, 1.3vw, 0.8rem)', lineHeight: '1.3' }}>{link.description}</p>
                     <div className="mt-auto text-end">
-                      <span className="small fw-bold text-white" style={{ fontSize: 'clamp(0.7rem, 1.3vw, 0.8rem)' }}>Learn More →</span>
+                      <span className="small fw-bold gradient-text-primary" style={{ fontSize: 'clamp(0.7rem, 1.3vw, 0.8rem)' }}>Learn More →</span>
                     </div>
                   </div>
                 </div>

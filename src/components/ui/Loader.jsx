@@ -3,21 +3,27 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function Loader() {
+export default function Loader({ forceShow = false }) {
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
+  // Listen for route changes to trigger the loader
   useEffect(() => {
-    // Simulate loading time (you can remove this in production)
+    setLoading(true);
+    
+    // Hide loader after a short delay
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname, searchParams]);
 
-  // If not loading, don't render anything
-  if (!loading) return null;
+  // If not loading and not forced to show, don't render anything
+  if (!loading && !forceShow) return null;
 
   return (
     <motion.div
@@ -75,7 +81,7 @@ export default function Loader() {
           right: 0;
           bottom: 0;
           border-radius: 50%;
-          background: rgba(29, 113, 184, 0.2);
+          background: rgba(255, 198, 0, 0.3); /* LMMU gold color with opacity */
           animation: heartbeat 1.5s ease-in-out infinite;
         }
 
@@ -88,8 +94,8 @@ export default function Loader() {
         .loading-text {
           margin-top: 20px;
           font-size: 18px;
-          color: #1d71b8;
-          font-weight: 500;
+          color: #ffc600; /* LMMU gold color */
+          font-weight: 600;
         }
 
         @keyframes heartbeat {

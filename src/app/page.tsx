@@ -292,52 +292,35 @@ export default function HomePage(): React.ReactNode {
         </div>
       </motion.div>
 
-      {/* Stats Section - Inspired by Muhlenberg */}
-      <motion.div
-        className="bg-blue-gradient py-5 bg-pattern position-relative"
+      {/* Stats Section - Using Unified Gradient System */}
+      {/* <motion.div
+        className="gradient-primary pattern-overlay py-5 gradient-container mb-4"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        style={{ overflow: 'hidden' }}
       >
-        {/* Decorative circles */}
-        <div className="position-absolute" style={{ top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
-          <div className="position-absolute" style={{ 
-            width: '300px', 
-            height: '300px', 
-            borderRadius: '50%', 
-            background: 'rgba(255,255,255,0.1)', 
-            top: '-100px', 
-            right: '-50px' 
-          }}></div>
-          <div className="position-absolute" style={{ 
-            width: '200px', 
-            height: '200px', 
-            borderRadius: '50%', 
-            background: 'rgba(255,255,255,0.1)', 
-            bottom: '-80px', 
-            left: '10%' 
-          }}></div>
-        </div>
+        
+        <div className="circle-decoration circle-large top-right-corner"></div>
+        <div className="circle-decoration circle-medium bottom-left-corner"></div>
         
         <div className="container position-relative" style={{ zIndex: 1 }}>
           <div className="row mb-5">
             <div className="col-lg-8 mx-auto text-center">
               <motion.h6 
-                className="text-white text-uppercase fw-bold" 
+                className="gradient-text-primary text-uppercase fw-bold" 
                 style={{ letterSpacing: "2px" }}
                 variants={fadeIn}
               >
                 By the Numbers
               </motion.h6>
-              <h2 className="display-5 fw-bold mb-4 text-white">LMMU Impact</h2>
-              <p className="lead text-white-50 mb-0">Discover how LMMU is making a difference in medical education and healthcare</p>
+              <h2 className="display-5 fw-bold mb-4 gradient-text-primary">LMMU Impact</h2>
+              <p className="lead gradient-text-secondary mb-0">Discover how LMMU is making a difference in medical education and healthcare</p>
             </div>
           </div>
           <StatsSection />
         </div>
-      </motion.div>
+      </motion.div> */}
       
      
       
@@ -354,7 +337,7 @@ export default function HomePage(): React.ReactNode {
           top: "-100px", 
           right: "-150px", 
           opacity: 0.03, 
-          borderRadius: "50%" 
+          borderRadius: "0%" 
         }}></div>
         <div className="decorative-shape" style={{ 
           width: "300px", 
@@ -363,7 +346,7 @@ export default function HomePage(): React.ReactNode {
           bottom: "-50px", 
           left: "-100px", 
           opacity: 0.03, 
-          borderRadius: "50%" 
+          borderRadius: "0%" 
         }}></div>
         <CategorySection 
           customTitle="Academic Programs" 
@@ -372,7 +355,7 @@ export default function HomePage(): React.ReactNode {
       </motion.section>
       {/* Application Section with Enhanced Gradient Background */}
       <motion.div 
-        className="bg-red-gradient py-4 my-0 position-relative bg-pattern"
+        className="gradient-lmmu-blue-gold pattern-container pattern-gold-dots py-4 my-0 position-relative"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -380,33 +363,24 @@ export default function HomePage(): React.ReactNode {
       >
         <ApplySection />
         
-        {/* Modern decorative elements */}
-        <div className="position-absolute" style={{ 
-          top: "20px", 
-          left: "5%", 
-          width: "40px", 
-          height: "40px", 
-          borderRadius: "50%", 
-          background: "rgba(255,255,255,0.1)" 
-        }}></div>
-        <div className="position-absolute" style={{ 
-          bottom: "30px", 
-          right: "10%", 
-          width: "60px", 
-          height: "60px", 
-          borderRadius: "50%", 
-          background: "rgba(255,255,255,0.1)" 
-        }}></div>
+        {/* Standardized decorative elements */}
+        <div className="circle-decoration circle-tiny pos-top-left"></div>
+        <div className="circle-gold circle-medium pos-bottom-right"></div>
+        <div className="triangle-gold triangle-small pos-center-right"></div>
       </motion.div>
         {/* News and Events Section - Modernized */}
       <motion.section 
-        className="bg-green-gradient py-5 my-5 bg-pattern"
+        className="py-5 my-5"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
       >
         <div className="container">
+          <div className="gradient-success p-4 p-md-5 rounded-4 shadow-lg pattern-container pattern-gold-dots position-relative overflow-hidden">
+            <div className="circle-decoration circle-large pos-top-right opacity-10"></div>
+            <div className="circle-gold circle-medium pos-bottom-left"></div>
+            <div className="triangle-gold triangle-small pos-center-right"></div>
           <div className="row mb-5 align-items-end">
             <motion.div className="col-lg-8" variants={fadeIn}>
               <motion.h6 
@@ -419,13 +393,13 @@ export default function HomePage(): React.ReactNode {
               >
                 Stay Informed
               </motion.h6>
-              <h2 className="display-5 fw-bold position-relative text-white">
+              <h2 className="display-5 fw-bold position-relative text-dark">
                 Latest News & Events
                 <motion.span 
                   className="position-absolute"
                   style={{ 
                     height: "4px", 
-                    background: "#ffffff", 
+                    background: "#ffc600", 
                     borderRadius: "2px", 
                     bottom: "-10px", 
                     left: 0
@@ -443,15 +417,15 @@ export default function HomePage(): React.ReactNode {
             >
               <Link href="/news" passHref>
                 <motion.span 
-                  className="btn btn-light px-4 py-2"
+                  className="btn gradient-lmmu-gold text-on-gold px-4 py-2"
                   style={{ borderRadius: "30px", borderWidth: "2px", cursor: 'pointer' }}
                   whileHover={{ 
                     scale: 1.05, 
-                    boxShadow: "0 5px 15px rgba(0,0,0,0.1)" 
+                    boxShadow: "0 5px 15px rgba(0,0,0,0.2)" 
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  View All News
+                  View All News <i className="fa fa-arrow-right ms-2"></i>
                 </motion.span>
               </Link>
             </motion.div>
@@ -462,6 +436,7 @@ export default function HomePage(): React.ReactNode {
           >
             <NewsSection />
           </motion.div>
+          </div>
         </div>
       </motion.section>
       

@@ -55,7 +55,7 @@ export default function NewsSection() {
     <div className="row g-4">
       {/* Featured News (Larger Column) */}
       <div className="col-lg-6">
-        <div className="featured-news-card h-100 rounded overflow-hidden shadow-sm">
+        <div className="featured-news-card h-100 rounded-4 overflow-hidden shadow bg-white">
           <div className="position-relative">
             <Image 
               src={featuredNews.image} 
@@ -65,8 +65,8 @@ export default function NewsSection() {
               className="img-fluid w-100 object-cover"
               style={{ height: '350px' }}
             />
-            <div className="position-absolute top-0 start-0 bg-primary text-white px-3 py-2 m-3">
-              <small>Featured</small>
+            <div className="position-absolute top-0 start-0 gradient-success text-white px-3 py-2 m-3 rounded-pill">
+              <small className="fw-bold">Featured</small>
             </div>
           </div>
           <div className="p-4">
@@ -84,8 +84,8 @@ export default function NewsSection() {
               <h3 className="mb-3 fw-bold text-dark">{featuredNews.title}</h3>
             </Link>
             <p className="text-muted mb-3">{featuredNews.excerpt}</p>
-            <Link href={featuredNews.link} className="btn btn-outline-primary rounded-pill px-4">
-              Read More
+            <Link href={featuredNews.link} className="btn gradient-success text-white rounded-pill px-4">
+              Read More <i className="fa fa-arrow-right ms-1"></i>
             </Link>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function NewsSection() {
       <div className="col-lg-6">
         {otherNews.map(newsItem => (
           <div className="news-item mb-4" key={newsItem.id}>
-            <div className="card border-0 shadow-sm">
+            <div className="card border-0 shadow bg-white rounded-3 h-100">
               <div className="row g-0">
                 <div className="col-md-4">
                   <Image 
@@ -118,7 +118,7 @@ export default function NewsSection() {
                       <h5 className="card-title mb-2 fw-bold text-dark">{newsItem.title}</h5>
                     </Link>
                     <p className="card-text text-muted small mb-2">{newsItem.excerpt}</p>
-                    <Link href={newsItem.link} className="btn btn-link text-primary p-0">
+                    <Link href={newsItem.link} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
                       Read More <i className="fa fa-arrow-right ms-1"></i>
                     </Link>
                   </div>
