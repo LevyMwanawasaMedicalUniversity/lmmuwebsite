@@ -1,94 +1,135 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import useLoading from '@/hooks/useLoading';
 
 export default function NewsSection() {
-  const news = [
-    {
-      id: 1,
-      title: "2024 Trade Fair",
-      excerpt: "LMMU and LMMU-UTH Stand at the 2024 Trade Fair held in Ndola, Zambia at the Trade Fair Grounds.",
-      image: "/assets/images/news/n-1.jpeg",
-      date: "June 12, 2024",
-      author: "Admin",
-      link: "/tradefair",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Graduation Ceremony",
-      excerpt: "LMMU hosted its 4th Graduation Ceremony celebrating the achievements of graduates and sending forth trained professionals into the workforce.",
-      image: "/assets/images/news/ns-1.jpg",
-      date: "June 5, 2024",
-      author: "Admin",
-      link: "/graduation",
-      featured: false
-    },
-    {
-      id: 3,
-      title: "Induction Ceremony",
-      excerpt: "LMMU hosted its first ever induction ceremony for The Bachelor of Medicine and The Bachelor of Surgery program in The School of Medicine and Clinical Sciences.",
-      image: "/assets/images/news/ns-2.jpeg",
-      date: "May 20, 2024",
-      author: "Admin",
-      link: "/induction",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "International Labour Day",
-      excerpt: "LMMU joined the rest of the world in commemorating the annual Labour Day celebration.",
-      image: "/assets/images/news/ns-3.jpeg",
-      date: "May 1, 2024",
-      author: "Admin",
-      link: "/labour",
-      featured: false
-    }
-  ];
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { withLoading } = useLoading();
 
-  // Filter featured news item
-  const featuredNews = news.find(item => item.featured);
-  const otherNews = news.filter(item => !item.featured);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/posts?published=true&limit=4');
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+        const data = await response.json();
+        setNews(data.posts || data); // Handle both formats: {posts, total} or just posts array
+      } catch (err) {
+        console.error('Error fetching blog posts:', err);
+        setError(err.message);
+        
+        // Fallback to static data if API fails
+        setNews([
+          {
+            id: 1,
+            title: "2024 Trade Fair",
+            summary: "LMMU and LMMU-UTH Stand at the 2024 Trade Fair held in Ndola, Zambia at the Trade Fair Grounds.",
+            image: "/assets/images/news/n-1.jpeg",
+            createdAt: "2024-06-12T00:00:00.000Z",
+            author: { name: "Admin" },
+            slug: "tradefair",
+          },
+          {
+            id: 2,
+            title: "Graduation Ceremony",
+            summary: "LMMU hosted its 4th Graduation Ceremony celebrating the achievements of graduates and sending forth trained professionals into the workforce.",
+            image: "/assets/images/news/ns-1.jpg",
+            createdAt: "2024-06-05T00:00:00.000Z",
+            author: { name: "Admin" },
+            slug: "graduation",
+          },
+          {
+            id: 3,
+            title: "Induction Ceremony",
+            summary: "LMMU hosted its first ever induction ceremony for The Bachelor of Medicine and The Bachelor of Surgery program in The School of Medicine and Clinical Sciences.",
+            image: "/assets/images/news/ns-2.jpeg",
+            createdAt: "2024-05-20T00:00:00.000Z",
+            author: { name: "Admin" },
+            slug: "induction",
+          },
+          {
+            id: 4,
+            title: "International Labour Day",
+            summary: "LMMU joined the rest of the world in commemorating the annual Labour Day celebration.",
+            image: "/assets/images/news/ns-3.jpeg",
+            createdAt: "2024-05-01T00:00:00.000Z",
+            author: { name: "Admin" },
+            slug: "labour",
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    withLoading(fetchPosts);
+  }, []); // Remove withLoading from dependency array to prevent infinite loop
+
+  // If loading, show a loading spinner
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Filter featured news item (first post is featured)
+  const featuredNews = news.length > 0 ? news[0] : null;
+  const otherNews = news.length > 0 ? news.slice(1) : [];
 
   return (
     <div className="row g-4">
       {/* Featured News (Larger Column) */}
       <div className="col-lg-6">
-        <div className="featured-news-card h-100 rounded-4 overflow-hidden shadow bg-white">
-          <div className="position-relative">
-            <Image 
-              src={featuredNews.image} 
-              alt={featuredNews.title} 
-              width={600}
-              height={400}
-              className="img-fluid w-100 object-cover"
-              style={{ height: '350px' }}
-            />
-            <div className="position-absolute top-0 start-0 gradient-success text-white px-3 py-2 m-3 rounded-pill">
-              <small className="fw-bold">Featured</small>
+        {featuredNews && (
+          <div className="featured-news-card h-100 rounded-4 overflow-hidden shadow bg-white">
+            <div className="position-relative">
+              <Image 
+                src={featuredNews.image || '/assets/images/news/default-blog.jpg'} 
+                alt={featuredNews.title} 
+                width={600}
+                height={400}
+                className="img-fluid w-100 object-cover"
+                style={{ height: '350px' }}
+              />
+              <div className="position-absolute top-0 start-0 gradient-success text-white px-3 py-2 m-3 rounded-pill">
+                <small className="fw-bold">Featured</small>
+              </div>
+            </div>
+            <div className="p-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <span className="text-muted">
+                  <i className="fa fa-calendar me-2"></i>
+                  {new Date(featuredNews.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
+                <span className="text-muted">
+                  <i className="fa fa-user me-2"></i>
+                  {featuredNews.author?.name || 'LMMU Staff'}
+                </span>
+              </div>
+              <Link href={`/blog/${featuredNews.slug}`} className="text-decoration-none">
+                <h3 className="mb-3 fw-bold text-dark">{featuredNews.title}</h3>
+              </Link>
+              <p className="text-muted mb-3">{featuredNews.summary}</p>
+              <Link href={`/blog/${featuredNews.slug}`} className="btn gradient-success text-white rounded-pill px-4">
+                Read More <i className="fa fa-arrow-right ms-1"></i>
+              </Link>
             </div>
           </div>
-          <div className="p-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <span className="text-muted">
-                <i className="fa fa-calendar me-2"></i>
-                {featuredNews.date}
-              </span>
-              <span className="text-muted">
-                <i className="fa fa-user me-2"></i>
-                {featuredNews.author}
-              </span>
-            </div>
-            <Link href={featuredNews.link} className="text-decoration-none">
-              <h3 className="mb-3 fw-bold text-dark">{featuredNews.title}</h3>
-            </Link>
-            <p className="text-muted mb-3">{featuredNews.excerpt}</p>
-            <Link href={featuredNews.link} className="btn gradient-success text-white rounded-pill px-4">
-              Read More <i className="fa fa-arrow-right ms-1"></i>
-            </Link>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Other News (Right Column) */}
@@ -99,7 +140,7 @@ export default function NewsSection() {
               <div className="row g-0">
                 <div className="col-md-4">
                   <Image 
-                    src={newsItem.image} 
+                    src={newsItem.image || '/assets/images/news/default-blog.jpg'} 
                     alt={newsItem.title}
                     width={200}
                     height={140}
@@ -111,14 +152,18 @@ export default function NewsSection() {
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <small className="text-muted">
                         <i className="fa fa-calendar me-2"></i>
-                        {newsItem.date}
+                        {new Date(newsItem.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
                       </small>
                     </div>
-                    <Link href={newsItem.link} className="text-decoration-none">
+                    <Link href={`/blog/${newsItem.slug}`} className="text-decoration-none">
                       <h5 className="card-title mb-2 fw-bold text-dark">{newsItem.title}</h5>
                     </Link>
-                    <p className="card-text text-muted small mb-2">{newsItem.excerpt}</p>
-                    <Link href={newsItem.link} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
+                    <p className="card-text text-muted small mb-2">{newsItem.summary}</p>
+                    <Link href={`/blog/${newsItem.slug}`} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
                       Read More <i className="fa fa-arrow-right ms-1"></i>
                     </Link>
                   </div>
@@ -127,6 +172,12 @@ export default function NewsSection() {
             </div>
           </div>
         ))}
+        
+        {otherNews.length === 0 && (
+          <div className="alert alert-info">
+            No additional news posts available.
+          </div>
+        )}
       </div>
     </div>
   );

@@ -11,13 +11,20 @@ function createSlug(title: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-// GET all posts with optional filtering
+// GET all posts with optional filtering, search, and pagination
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const published = url.searchParams.get('published');
     const category = url.searchParams.get('category');
-    const limit = parseInt(url.searchParams.get('limit') || '10');
+    const search = url.searchParams.get('search');
+    const pageParam = url.searchParams.get('page');
+    const limitParam = url.searchParams.get('limit');
+    
+    // Parse pagination parameters
+    const page = pageParam ? parseInt(pageParam) : 1;
+    const limit = limitParam ? parseInt(limitParam) : 10;
+    const skip = (page - 1) * limit;
     
     // Build the where clause based on query parameters
     const where: any = {};
@@ -31,7 +38,21 @@ export async function GET(req: NextRequest) {
         contains: category
       };
     }
+    
+    // Add search functionality
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { summary: { contains: search, mode: 'insensitive' } },
+        { content: { contains: search, mode: 'insensitive' } },
+        { tags: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
+    // Get total count for pagination
+    const total = await prisma.post.count({ where });
+
+    // Get posts with pagination
     const posts = await prisma.post.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -44,10 +65,17 @@ export async function GET(req: NextRequest) {
           } 
         } 
       },
+      skip,
       take: limit
     });
     
-    return NextResponse.json(posts);
+    return NextResponse.json({
+      posts,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    });
   } catch (error) {
     console.error("Error fetching posts:", error);
     return NextResponse.json(

@@ -415,7 +415,7 @@ export default function HomePage(): React.ReactNode {
               className="col-lg-4 d-flex align-items-center justify-content-lg-end"
               variants={fadeIn}
             >
-              <Link href="/news" passHref>
+              <Link href="/blog" passHref>
                 <motion.span 
                   className="btn gradient-lmmu-gold text-on-gold px-4 py-2"
                   style={{ borderRadius: "30px", borderWidth: "2px", cursor: 'pointer' }}

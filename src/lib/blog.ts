@@ -1,0 +1,117 @@
+import { prisma } from './prisma';
+
+// Get all published blog posts
+export async function getAllPosts(limit = 10) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      },
+      take: limit
+    });
+    
+    return posts;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+}
+
+// Get a single post by slug
+export async function getPostBySlug(slug: string) {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { slug },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      }
+    });
+    
+    if (!post) return null;
+    
+    // Increment view count
+    await prisma.post.update({
+      where: { id: post.id },
+      data: { viewCount: { increment: 1 } }
+    });
+    
+    return post;
+  } catch (error) {
+    console.error('Error fetching post by slug:', error);
+    return null;
+  }
+}
+
+// Get featured posts
+export async function getFeaturedPosts(limit = 5) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: { 
+        published: true,
+      },
+      orderBy: [
+        { viewCount: 'desc' },
+        { createdAt: 'desc' }
+      ],
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      },
+      take: limit
+    });
+    
+    return posts;
+  } catch (error) {
+    console.error('Error fetching featured posts:', error);
+    return [];
+  }
+}
+
+// Get posts by category
+export async function getPostsByCategory(category: string, limit = 10) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        published: true,
+        categories: {
+          contains: category
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      },
+      take: limit
+    });
+    
+    return posts;
+  } catch (error) {
+    console.error(`Error fetching posts by category ${category}:`, error);
+    return [];
+  }
+}
