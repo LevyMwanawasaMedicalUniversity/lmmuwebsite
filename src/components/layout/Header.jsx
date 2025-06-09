@@ -428,6 +428,9 @@ export default function Header() {
                     <Link className={`nav-link custom-nav-link ${pathname?.includes('/academics') ? 'active' : ''}`} href="/academics">ACADEMICS</Link>
                   </li>
                   <li className="nav-item">
+                    <Link className={`nav-link custom-nav-link ${pathname?.includes('/blog') ? 'active' : ''}`} href="/blog">NEWS & BLOG</Link>
+                  </li>
+                  <li className="nav-item">
                     <Link className={`nav-link custom-nav-link ${pathname?.includes('/portals') ? 'active' : ''}`} href="/portals">PORTALS</Link>
                   </li>
                   <li className="nav-item">
