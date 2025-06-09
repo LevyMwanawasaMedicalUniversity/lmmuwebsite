@@ -10,6 +10,8 @@ import StatsSection from '@/components/ui/StatsSection.jsx';
 import TestimonialsSection from '@/components/ui/TestimonialsSection.jsx';
 import UpcomingEventsSection from '@/components/ui/UpcomingEventsSection.jsx';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
 
 // Metadata moved to layout.tsx since it can't be exported from a client component
 
@@ -39,8 +41,7 @@ const staggerContainer = {
 
 export default function HomePage(): React.ReactNode {
   // Add global styles for the page
-  React.useEffect(() => {
-    const style = document.createElement('style');
+  React.useEffect(() => {    const style = document.createElement('style');
     style.innerHTML = `
       .home-page {
         scroll-behavior: smooth;
@@ -96,6 +97,113 @@ export default function HomePage(): React.ReactNode {
         background: url('/assets/images/pattern-dots.png');
         opacity: 0.05;
       }
+
+      .mission-banner {
+        background: linear-gradient(rgba(7, 41, 77, 0.85), rgba(7, 41, 77, 0.9)), url('/images/campus-life.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 5rem 2rem;
+        text-align: center;
+      }
+
+      .quick-link-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .quick-link-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      }
+
+      .quick-link-img {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .stats-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .campus-highlight {
+        position: relative;
+        height: 600px;
+        overflow: hidden;
+      }
+
+      .campus-highlight img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .campus-highlight-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 4rem 2rem;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        color: white;
+      }
+
+      .testimonial-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        margin: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .impact-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--bs-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .news-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+      }
+
+      .news-card:hover {
+        transform: translateY(-8px);
+      }
+
+      .cta-button {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
     `;
     document.head.appendChild(style);
     
@@ -103,21 +211,178 @@ export default function HomePage(): React.ReactNode {
       document.head.removeChild(style);
     };
   }, []);
-
   return (
     <main className="home-page overflow-hidden">
       {/* Hero Slider Section */}
       <Slider />
       
-      {/* Quick Links/Stats Section */}
-      {/* <motion.div
+      {/* Mission Banner - Inspired by Zaytuna */}
+      <motion.div 
+        className="mission-banner"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true }}
       >
-        <StatsSection />
-      </motion.div> */}
+        <div className="container">
+          <h2 className="display-4 fw-bold mb-4">Educating Tomorrow's Healthcare Leaders</h2>
+          <p className="university-motto mb-5">Let no one be left behind</p>
+          <p className="lead mb-5" style={{ maxWidth: "800px", margin: "0 auto" }}>
+            To educate and train health professionals using hands-on and competence-based training that is administered 
+            through a distributed network of academic health complexes in order to contribute towards 
+            Universal Health Coverage in Zambia.
+          </p>
+          <motion.button 
+            className="btn btn-light btn-lg px-4"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Learn About LMMU
+          </motion.button>
+        </div>
+      </motion.div>
+
+      {/* Quick Links Panel - Inspired by Muhlenberg */}
+      <motion.section 
+        className="container py-5 my-5"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+      >
+        <div className="row mb-4">
+          <div className="col-12 text-center">
+            <motion.h6 
+              className="text-primary text-uppercase fw-bold" 
+              style={{ letterSpacing: "2px" }}
+              variants={fadeIn}
+            >
+              Discover
+            </motion.h6>
+            <motion.h2 
+              className="display-5 fw-bold mb-5 section-heading"
+              variants={fadeIn}
+            >
+              Explore LMMU
+            </motion.h2>
+          </div>
+        </div>
+
+        <div className="row g-4">
+          <motion.div 
+            className="col-md-6 col-lg-3"
+            variants={fadeIn}
+          >
+            <div className="quick-link-card h-100">
+              <Image 
+                src="/images/about/about-3.jpg" 
+                alt="The University" 
+                width={400}
+                height={300}
+                className="quick-link-img"
+              />
+              <div className="p-4">
+                <h4>The University</h4>
+                <p>Learn about our history, mission and vision</p>
+                <Link href="/university" className="text-primary text-decoration-none">
+                  Explore More →
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="col-md-6 col-lg-3"
+            variants={fadeIn}
+          >
+            <div className="quick-link-card h-100">
+              <Image 
+                src="/images/graduation.jpg" 
+                alt="Academics" 
+                width={400}
+                height={300}
+                className="quick-link-img"
+              />
+              <div className="p-4">
+                <h4>Academics</h4>
+                <p>Discover our programs and academic resources</p>
+                <Link href="/academics" className="text-primary text-decoration-none">
+                  Explore More →
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="col-md-6 col-lg-3"
+            variants={fadeIn}
+          >
+            <div className="quick-link-card h-100">
+              <Image 
+                src="/images/schools.jpg" 
+                alt="Schools" 
+                width={400}
+                height={300}
+                className="quick-link-img"
+              />
+              <div className="p-4">
+                <h4>Schools</h4>
+                <p>Explore our schools and faculties</p>
+                <Link href="/schools" className="text-primary text-decoration-none">
+                  Explore More →
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="col-md-6 col-lg-3"
+            variants={fadeIn}
+          >
+            <div className="quick-link-card h-100">
+              <Image 
+                src="/images/portals.jpg" 
+                alt="Portals" 
+                width={400}
+                height={300}
+                className="quick-link-img"
+              />
+              <div className="p-4">
+                <h4>Portals</h4>
+                <p>Access student, staff and alumni resources</p>
+                <Link href="/Portals" className="text-primary text-decoration-none">
+                  Explore More →
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* Stats Section - Inspired by Alverno */}
+      <motion.div
+        className="bg-light py-5"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <div className="container">
+          <div className="row mb-4">
+            <div className="col-lg-8 mx-auto text-center">
+              <motion.h6 
+                className="text-primary text-uppercase fw-bold" 
+                style={{ letterSpacing: "2px" }}
+                variants={fadeIn}
+              >
+                By the Numbers
+              </motion.h6>
+              <h2 className="display-5 fw-bold mb-4 section-heading">LMMU Impact</h2>
+            </div>
+          </div>
+          <StatsSection />
+        </div>
+      </motion.div>
       
       {/* Academic Programs Section - Modern Header */}
       <motion.section 
@@ -211,8 +476,7 @@ export default function HomePage(): React.ReactNode {
           background: "rgba(255,255,255,0.1)" 
         }}></div>
       </motion.div>
-      
-      {/* News and Events Section - Modernized */}
+        {/* News and Events Section - Modernized */}
       <motion.section 
         className="container py-5 my-5"
         initial="hidden"
@@ -254,18 +518,19 @@ export default function HomePage(): React.ReactNode {
             className="col-lg-4 d-flex align-items-center justify-content-lg-end"
             variants={fadeIn}
           >
-            <motion.a 
-              href="/news" 
-              className="btn btn-outline-primary px-4 py-2"
-              style={{ borderRadius: "30px", borderWidth: "2px" }}
-              whileHover={{ 
-                scale: 1.05, 
-                boxShadow: "0 5px 15px rgba(0,0,0,0.1)" 
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View All News
-            </motion.a>
+            <Link href="/news" passHref>
+              <motion.span 
+                className="btn btn-outline-primary px-4 py-2"
+                style={{ borderRadius: "30px", borderWidth: "2px", cursor: 'pointer' }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: "0 5px 15px rgba(0,0,0,0.1)" 
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View All News
+              </motion.span>
+            </Link>
           </motion.div>
         </div>
         <motion.div 
