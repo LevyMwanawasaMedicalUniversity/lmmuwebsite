@@ -1,17 +1,30 @@
 "use client";
 
 import React from 'react';
-import Slider from '@/components/ui/Slider';
+import dynamic from 'next/dynamic';
 import CategorySection from '@/components/ui/CategorySection';
 import NewsSection from '@/components/ui/NewsSection';
 import ApplySection from '@/components/ui/ApplySection';
-// Import the new UI components we created
 import StatsSection from '@/components/ui/StatsSection.jsx';
 import TestimonialsSection from '@/components/ui/TestimonialsSection.jsx';
 import UpcomingEventsSection from '@/components/ui/UpcomingEventsSection.jsx';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// Dynamically import the Slider component to avoid hydration issues
+const Slider = dynamic(() => import('@/components/ui/Slider'), {
+  ssr: false,
+  loading: () => (
+    <div className="hero-section position-relative vh-100 bg-primary">
+      <div className="container h-100 d-flex align-items-center justify-content-center">
+        <div className="spinner-border text-light" role="status">
+          <span className="visually-hidden"></span>
+        </div>
+      </div>
+    </div>
+  ),
+});
 
 // Metadata moved to layout.tsx since it can't be exported from a client component
 
