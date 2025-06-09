@@ -119,6 +119,43 @@ export default function HomePage(): React.ReactNode {
         padding: 5rem 2rem;
         text-align: center;
       }
+      
+      /* Colorful section backgrounds inspired by Muhlenberg */
+      .bg-red-gradient {
+        background: linear-gradient(135deg, #c41230 0%, #8a0c22 100%);
+        color: white;
+      }
+      
+      .bg-blue-gradient {
+        background: linear-gradient(135deg, #1a3a8f 0%, #0f2557 100%);
+        color: white;
+      }
+      
+      .bg-gray-gradient {
+        background: linear-gradient(135deg, #5d5d5d 0%, #333333 100%);
+        color: white;
+      }
+      
+      .bg-green-gradient {
+        background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        color: white;
+      }
+      
+      .bg-pattern {
+        position: relative;
+      }
+      
+      .bg-pattern:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/assets/images/pattern-dots.png');
+        opacity: 0.05;
+        pointer-events: none;
+      }
 
       .quick-link-card {
         background: white;
@@ -255,65 +292,54 @@ export default function HomePage(): React.ReactNode {
         </div>
       </motion.div>
 
-      {/* Stats Section - Inspired by Alverno */}
+      {/* Stats Section - Inspired by Muhlenberg */}
       <motion.div
-        className="bg-light py-5"
+        className="bg-blue-gradient py-5 bg-pattern position-relative"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
+        style={{ overflow: 'hidden' }}
       >
-        <div className="container">
-          <div className="row mb-4">
+        {/* Decorative circles */}
+        <div className="position-absolute" style={{ top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
+          <div className="position-absolute" style={{ 
+            width: '300px', 
+            height: '300px', 
+            borderRadius: '50%', 
+            background: 'rgba(255,255,255,0.1)', 
+            top: '-100px', 
+            right: '-50px' 
+          }}></div>
+          <div className="position-absolute" style={{ 
+            width: '200px', 
+            height: '200px', 
+            borderRadius: '50%', 
+            background: 'rgba(255,255,255,0.1)', 
+            bottom: '-80px', 
+            left: '10%' 
+          }}></div>
+        </div>
+        
+        <div className="container position-relative" style={{ zIndex: 1 }}>
+          <div className="row mb-5">
             <div className="col-lg-8 mx-auto text-center">
               <motion.h6 
-                className="text-primary text-uppercase fw-bold" 
+                className="text-white text-uppercase fw-bold" 
                 style={{ letterSpacing: "2px" }}
                 variants={fadeIn}
               >
                 By the Numbers
               </motion.h6>
-              <h2 className="display-5 fw-bold mb-4 section-heading">LMMU Impact</h2>
+              <h2 className="display-5 fw-bold mb-4 text-white">LMMU Impact</h2>
+              <p className="lead text-white-50 mb-0">Discover how LMMU is making a difference in medical education and healthcare</p>
             </div>
           </div>
           <StatsSection />
         </div>
       </motion.div>
       
-      {/* Academic Programs Section - Modern Header */}
-      <motion.section 
-        className="container py-5 my-md-4"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={staggerContainer}
-      >
-        <div className="row mb-4">
-          <div className="col-lg-8 mx-auto text-center">
-            <motion.div variants={fadeIn}>
-              <motion.h6 
-                className="text-primary text-uppercase fw-bold" 
-                style={{ letterSpacing: "2px" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                Excellence in Education
-              </motion.h6>
-              
-              <h2 className="display-5 fw-bold mb-4 section-heading">Academic Excellence at LMMU</h2>
-              
-              <motion.p 
-                className="lead text-muted"
-                style={{ maxWidth: "800px", margin: "30px auto 0" }}
-              >
-                Discover our comprehensive range of programs designed to prepare healthcare professionals 
-                for the challenges of modern medicine.
-              </motion.p>
-            </motion.div>
-          </div>
-        </div>
-      </motion.section>
+     
       
       <motion.section 
         className="position-relative py-2"
@@ -346,7 +372,7 @@ export default function HomePage(): React.ReactNode {
       </motion.section>
       {/* Application Section with Enhanced Gradient Background */}
       <motion.div 
-        className="bg-gradient-primary-to-secondary py-4 my-0 position-relative"
+        className="bg-red-gradient py-4 my-0 position-relative bg-pattern"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -374,67 +400,69 @@ export default function HomePage(): React.ReactNode {
       </motion.div>
         {/* News and Events Section - Modernized */}
       <motion.section 
-        className="container py-5 my-5"
+        className="bg-green-gradient py-5 my-5 bg-pattern"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={staggerContainer}
       >
-        <div className="row mb-5 align-items-end">
-          <motion.div className="col-lg-8" variants={fadeIn}>
-            <motion.h6 
-              className="text-primary text-uppercase fw-bold"
-              style={{ letterSpacing: "2px" }}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              Stay Informed
-            </motion.h6>
-            <h2 className="display-5 fw-bold position-relative">
-              Latest News & Events
-              <motion.span 
-                className="position-absolute"
-                style={{ 
-                  height: "4px", 
-                  background: "var(--bs-primary)", 
-                  borderRadius: "2px", 
-                  bottom: "-10px", 
-                  left: 0
-                }}
-                initial={{ width: 0 }}
-                whileInView={{ width: "80px" }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+        <div className="container">
+          <div className="row mb-5 align-items-end">
+            <motion.div className="col-lg-8" variants={fadeIn}>
+              <motion.h6 
+                className="text-white text-uppercase fw-bold"
+                style={{ letterSpacing: "2px" }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
-              />
-            </h2>
-          </motion.div>
-          <motion.div 
-            className="col-lg-4 d-flex align-items-center justify-content-lg-end"
-            variants={fadeIn}
-          >
-            <Link href="/news" passHref>
-              <motion.span 
-                className="btn btn-outline-primary px-4 py-2"
-                style={{ borderRadius: "30px", borderWidth: "2px", cursor: 'pointer' }}
-                whileHover={{ 
-                  scale: 1.05, 
-                  boxShadow: "0 5px 15px rgba(0,0,0,0.1)" 
-                }}
-                whileTap={{ scale: 0.95 }}
               >
-                View All News
-              </motion.span>
-            </Link>
+                Stay Informed
+              </motion.h6>
+              <h2 className="display-5 fw-bold position-relative text-white">
+                Latest News & Events
+                <motion.span 
+                  className="position-absolute"
+                  style={{ 
+                    height: "4px", 
+                    background: "#ffffff", 
+                    borderRadius: "2px", 
+                    bottom: "-10px", 
+                    left: 0
+                  }}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "80px" }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  viewport={{ once: true }}
+                />
+              </h2>
+            </motion.div>
+            <motion.div 
+              className="col-lg-4 d-flex align-items-center justify-content-lg-end"
+              variants={fadeIn}
+            >
+              <Link href="/news" passHref>
+                <motion.span 
+                  className="btn btn-light px-4 py-2"
+                  style={{ borderRadius: "30px", borderWidth: "2px", cursor: 'pointer' }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    boxShadow: "0 5px 15px rgba(0,0,0,0.1)" 
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  View All News
+                </motion.span>
+              </Link>
+            </motion.div>
+          </div>
+          <motion.div 
+            variants={fadeIn}
+            className="modern-container p-4"
+          >
+            <NewsSection />
           </motion.div>
         </div>
-        <motion.div 
-          variants={fadeIn}
-          className="modern-container p-4"
-        >
-          <NewsSection />
-        </motion.div>
       </motion.section>
       
       {/* Upcoming Events Section */}
