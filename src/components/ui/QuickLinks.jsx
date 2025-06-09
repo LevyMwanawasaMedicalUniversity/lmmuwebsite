@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 const quickLinks = [
   {
-    icon: '/assets/icons/academic.svg', // Temporarily using academic icon until student icon is fixed
+    icon: '/assets/icons/student.svg',
     iconColor: '#1e88e5',
     title: 'Future Students',
     description: "LMMU's unique approach rests on excellence, innovation, and social responsibility",

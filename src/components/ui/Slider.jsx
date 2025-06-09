@@ -243,6 +243,7 @@ export default function Slider() {
 
         .quick-link-card {
           background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
           border-radius: 8px;
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           border-top: 4px solid var(--bs-primary);
