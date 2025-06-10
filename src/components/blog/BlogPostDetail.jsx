@@ -250,13 +250,13 @@ export default function BlogPostDetail({ post }) {
                           })}
                         </small>
                       </div>
-                      <Link href={`/blog/${relatedPost.slug}`} className="text-decoration-none">
+                      <Link href={`/blog/${relatedPost.id}`} className="text-decoration-none">
                         <h5 className="card-title mb-3 fw-bold text-dark">{relatedPost.title}</h5>
                       </Link>
                       <p className="card-text text-muted mb-3">
                         {relatedPost.summary?.substring(0, 100)}...
                       </p>
-                      <Link href={`/blog/${relatedPost.slug}`} className="btn btn-sm gradient-gold text-white rounded-pill px-4">
+                      <Link href={`/blog/${relatedPost.id}`} className="btn btn-sm gradient-gold text-white rounded-pill px-4">
                         Read More <i className="fa fa-arrow-right ms-1"></i>
                       </Link>
                     </div>

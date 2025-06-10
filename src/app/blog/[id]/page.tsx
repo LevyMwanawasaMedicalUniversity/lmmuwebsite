@@ -1,15 +1,24 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getPostBySlug } from '@/lib/blog';
+import { getPostById } from '@/lib/blog';
 import BlogPostDetail from '@/components/blog/BlogPostDetail';
 
 type Props = {
-  params: { slug: string }
+  params: { id: string }
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const postId = parseInt(params.id);
+  
+  if (isNaN(postId)) {
+    return {
+      title: 'Post Not Found | LMMU Blog',
+      description: 'The requested blog post could not be found.',
+    };
+  }
+  
+  const post = await getPostById(postId);
   
   if (!post) {
     return {
@@ -25,7 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = await getPostBySlug(params.slug);
+  const postId = parseInt(params.id);
+  
+  if (isNaN(postId)) {
+    notFound();
+  }
+  
+  const post = await getPostById(postId);
   
   if (!post) {
     notFound();

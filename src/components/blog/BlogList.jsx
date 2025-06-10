@@ -234,11 +234,11 @@ export default function BlogList() {
                       {featuredPost.author?.name || 'LMMU Staff'}
                     </span>
                   </div>
-                  <Link href={`/blog/${featuredPost.slug}`} className="text-decoration-none">
+                  <Link href={`/blog/${featuredPost.id}`} className="text-decoration-none">
                     <h2 className="card-title mb-3 fw-bold text-dark">{featuredPost.title}</h2>
                   </Link>
                   <p className="card-text text-muted mb-4">{featuredPost.summary}</p>
-                  <Link href={`/blog/${featuredPost.slug}`} className="btn gradient-success text-white rounded-pill px-4 py-2">
+                  <Link href={`/blog/${featuredPost.id}`} className="btn gradient-success text-white rounded-pill px-4 py-2">
                     Read More <i className="fa fa-arrow-right ms-1"></i>
                   </Link>
                 </div>
@@ -271,13 +271,13 @@ export default function BlogList() {
                   })}
                 </small>
               </div>
-              <Link href={`/blog/${post.slug}`} className="text-decoration-none">
+              <Link href={`/blog/${post.id}`} className="text-decoration-none">
                 <h5 className="card-title mb-3 fw-bold text-dark">{post.title}</h5>
               </Link>
               <p className="card-text text-muted mb-3">{post.summary}</p>
             </div>
             <div className="card-footer bg-white border-0 p-4 pt-0">
-              <Link href={`/blog/${post.slug}`} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
+              <Link href={`/blog/${post.id}`} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
                 Read More <i className="fa fa-arrow-right ms-1"></i>
               </Link>
             </div>

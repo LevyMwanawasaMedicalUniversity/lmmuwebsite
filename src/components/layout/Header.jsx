@@ -16,8 +16,16 @@ export default function Header() {
   const { data: session, status } = useSession();
   const isLoading = status === 'loading';
 
-  const handleSignOut = async () => {
-    await signOut({ redirect: true, callbackUrl: '/' });
+  const handleSignOut = async (e) => {
+    e.preventDefault();
+    try {
+      await signOut({ redirect: false });
+      // Force a page reload after signOut to ensure all state is cleared
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Logout failed. Please try again.');
+    }
   };
 
   const toggleSearch = () => {
@@ -170,11 +178,24 @@ export default function Header() {
                   </button>
                   <div className="user-dropdown-content">
                     {session.user.role === 'admin' && (
-                      <Link href="/admin" className="user-dropdown-item">
-                        <i className="fas fa-cog me-2"></i> Admin Panel
-                      </Link>
+                      <>
+                        <Link href="/admin" className="user-dropdown-item">
+                          <i className="fas fa-tachometer-alt me-2"></i> Dashboard
+                        </Link>
+                        <Link href="/admin/blog" className="user-dropdown-item">
+                          <i className="fas fa-newspaper me-2"></i> Manage Blog
+                        </Link>
+                        <Link href="/admin/blog/create" className="user-dropdown-item">
+                          <i className="fas fa-plus-circle me-2"></i> New Post
+                        </Link>
+                        <hr className="my-1" />
+                      </>
                     )}
-                    <button onClick={handleSignOut} className="user-dropdown-item btn-logout">
+                    <button 
+                      onClick={handleSignOut} 
+                      className="user-dropdown-item btn-logout"
+                      aria-label="Sign out"
+                    >
                       <i className="fas fa-sign-out-alt me-2"></i> Logout
                     </button>
                   </div>
@@ -363,7 +384,12 @@ export default function Header() {
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
                       {session.user.role === 'admin' && (
-                        <li><Link className="dropdown-item" href="/admin"><i className="fas fa-cog me-2"></i> Admin Panel</Link></li>
+                        <>
+                          <li><Link className="dropdown-item" href="/admin"><i className="fas fa-cog me-2"></i> Admin Dashboard</Link></li>
+                          <li><Link className="dropdown-item" href="/admin/blog"><i className="fas fa-list me-2"></i> Manage Blog</Link></li>
+                          <li><Link className="dropdown-item" href="/admin/blog/create"><i className="fas fa-plus me-2"></i> New Post</Link></li>
+                          <li><hr className="dropdown-divider" /></li>
+                        </>
                       )}
                       <li><button className="dropdown-item" onClick={handleSignOut}><i className="fas fa-sign-out-alt me-2"></i> Logout</button></li>
                     </ul>

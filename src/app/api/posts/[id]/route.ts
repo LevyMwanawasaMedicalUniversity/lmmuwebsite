@@ -116,6 +116,37 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || session.user.role !== 'admin') {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    
+    const data = await req.json();
+    const postId = Number(params.id);
+    
+    // For PATCH, we only update the fields that are provided
+    const updateData: any = {};
+    
+    // Handle specific fields that can be updated via PATCH
+    if (data.published !== undefined) updateData.published = data.published;
+    if (data.featured !== undefined) updateData.featured = data.featured;
+    if (data.categories !== undefined) updateData.categories = data.categories;
+    if (data.tags !== undefined) updateData.tags = data.tags;
+    
+    const post = await prisma.post.update({
+      where: { id: postId },
+      data: updateData,
+    });
+    
+    return NextResponse.json(post);
+  } catch (error) {
+    console.error("Error patching post:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
