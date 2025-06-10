@@ -6,6 +6,21 @@ import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import AdminLayout from '@/components/layout/AdminLayout';
 import Image from 'next/image';
+// Import admin styles
+import '@/styles/admin.css';
+
+// Custom styles for this page
+const styles = {
+  gradientGoldButton: {
+    background: 'linear-gradient(135deg, #ffd133 0%, #ffc600 100%)',
+    color: '#333333',
+    border: 'none',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+    minWidth: '120px',
+    position: 'relative' as const,  /* Ensure button is visible */
+    zIndex: 1              /* Ensure button is above other elements */
+  }
+};
 
 // Alert component for notifications
 const Alert = ({ message, type, onClose }: { message: string, type: 'success' | 'error', onClose: () => void }) => {
@@ -40,7 +55,7 @@ const BlogEditor = dynamic(() => import('@/components/blog/TipTapEditor'), {
     <div className="p-3 border rounded">
       <div className="d-flex justify-content-center align-items-center py-5">
         <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading editor...</span>
+          <span className="visually-hidden"></span>
         </div>
       </div>
     </div>
@@ -138,7 +153,6 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
       reader.readAsDataURL(file);
     }
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
@@ -149,6 +163,11 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
     // Create a data object from FormData
     const formDataObj: Record<string, any> = {};
     formData.forEach((value, key) => {
+      // Skip the image input field - we'll handle image separately
+      if (key === 'image') {
+        return;
+      }
+      
       // Handle checkboxes
       if (key === 'published') {
         formDataObj[key] = value === 'on' || value === 'true';
@@ -158,9 +177,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
     });
     
     // Add content from the editor
-    formDataObj.content = content;
-    
-    // Add image if selected
+    formDataObj.content = content;    // Add image if selected
     if (imageFile) {
       // Create a new FormData for the image upload
       const imageFormData = new FormData();
@@ -185,10 +202,17 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
         setIsSubmitting(false);
         return;
       }
+    } else if (!imagePreview) {
+      // If no new image selected and no existing image preview, set image to null
+      formDataObj.image = null;
+    } else if (imagePreview === post.image) {
+      // If using the existing image, don't send image in the update
+      // This prevents us from sending the image field at all
+      delete formDataObj.image;
     }
 
     try {
-      console.log('Sending data:', formDataObj); // Debug log
+      console.log('Sending data:', JSON.stringify(formDataObj, null, 2)); // Debug log in formatted JSON
       const response = await fetch(`/api/posts/${post.id}`, {
         method: 'PUT',
         headers: {
@@ -395,21 +419,21 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
                       defaultChecked={post.published} 
                     />
                     <label className="form-check-label" htmlFor="published">Published</label>
-                  </div>
-
-                  <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                  </div>                  <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                     <button 
                       type="button" 
-                      className="btn btn-outline-secondary px-4" 
+                      className="btn btn-outline-secondary px-4 py-2" 
                       onClick={() => router.back()}
                       disabled={isSubmitting}
+                      style={{ minWidth: '120px' }}
                     >
                       Cancel
                     </button>
                     <button 
                       type="submit" 
-                      className="btn gradient-gold text-white px-4" 
+                      className="btn px-4 py-2" 
                       disabled={isSubmitting}
+                      style={styles.gradientGoldButton}
                     >
                       {isSubmitting ? (
                         <>

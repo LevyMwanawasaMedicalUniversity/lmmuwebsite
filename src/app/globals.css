@@ -445,3 +445,29 @@ body {
 .hidden {
   display: none;
 }
+
+/* Custom button styles */
+.gradient-gold {
+  background: linear-gradient(135deg, #ffd133 0%, #ffc600 100%) !important;
+  color: #333333 !important;
+  border: none !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+}
+
+.gradient-gold:hover {
+  background: linear-gradient(135deg, #ffc600 0%, #e6b400 100%) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+  transform: translateY(-1px);
+}
+
+.gradient-gold:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1) !important;
+}
+
+/* Ensure buttons are consistently visible */
+.btn {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}

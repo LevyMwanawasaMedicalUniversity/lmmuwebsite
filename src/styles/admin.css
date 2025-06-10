@@ -1,0 +1,42 @@
+/* Admin styles for LMMU website */
+
+/* Gradient Gold Button Style */
+.gradient-gold {
+  background: linear-gradient(135deg, #ffd133 0%, #ffc600 100%) !important;
+  color: #333333 !important;
+  border: none !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+  position: relative;
+  z-index: 1;
+}
+
+.gradient-gold:hover {
+  background: linear-gradient(135deg, #ffc600 0%, #e6b400 100%) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+  transform: translateY(-1px);
+}
+
+.gradient-gold:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1) !important;
+}
+
+/* Ensure buttons are consistently visible */
+.btn {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Admin card styles */
+.admin-card {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow: visible; /* Ensure content doesn't get clipped */
+}
+
+.admin-card .card-header,
+.admin-card .card-body,
+.admin-card .card-footer {
+  position: relative;
+  z-index: 1;
+}

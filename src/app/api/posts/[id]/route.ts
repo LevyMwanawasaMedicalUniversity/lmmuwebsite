@@ -66,6 +66,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
     
     const data = await req.json();
+    console.log('PUT request data:', JSON.stringify(data, null, 2));
     const postId = Number(id);
     
     // Generate slug from title if provided and different from existing
@@ -95,15 +96,24 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         );
       }
     }
-    
-    const updateData: any = {};
+      const updateData: any = {};
     
     // Only include fields that are provided in the request
     if (data.title !== undefined) updateData.title = data.title;
     if (slug !== undefined) updateData.slug = slug;
     if (data.summary !== undefined) updateData.summary = data.summary;
     if (data.content !== undefined) updateData.content = data.content;
-    if (data.image !== undefined) updateData.image = data.image;
+    
+    // Properly handle image field
+    if (data.image !== undefined) {
+      // If image is null, empty string, or object but not a proper URL string, set to null
+      if (data.image === null || data.image === '' || (typeof data.image === 'object')) {
+        updateData.image = null;
+      } else {
+        updateData.image = data.image;
+      }
+    }
+    
     if (data.published !== undefined) updateData.published = data.published;
     if (data.categories !== undefined) updateData.categories = data.categories;
     if (data.tags !== undefined) updateData.tags = data.tags;
