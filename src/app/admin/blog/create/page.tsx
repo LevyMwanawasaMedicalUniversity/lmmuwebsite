@@ -83,10 +83,12 @@ export default function CreateBlogPost() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      console.log('Selected new image file:', file.name, 'Size:', (file.size / 1024).toFixed(2), 'KB');
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
+        console.log('Image preview generated');
       };
       reader.readAsDataURL(file);
     }
@@ -99,8 +101,23 @@ export default function CreateBlogPost() {
     setIsSubmitting(true);
     const formData = new FormData(formRef.current);
     
+    // Get the title for slug generation
+    const title = formData.get('title') as string;
+    
     // Add content from the editor
     formData.append('content', content);
+    
+    // Generate a slug based on title and timestamp
+    const timestamp = new Date().getTime().toString().slice(-6); // Last 6 digits of timestamp
+    const titleSlug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    const uniqueSlug = `${titleSlug}-${timestamp}`;
+    
+    // Replace any manually entered slug with our auto-generated one
+    formData.delete('slug');
+    formData.append('slug', uniqueSlug);
     
     // Add image if selected
     if (imageFile) {
@@ -109,6 +126,7 @@ export default function CreateBlogPost() {
       imageFormData.append('file', imageFile);
       
       try {
+        console.log('Uploading new image for blog post');
         // First upload the image
         const imageResponse = await fetch('/api/upload', {
           method: 'POST',
@@ -116,10 +134,13 @@ export default function CreateBlogPost() {
         });
         
         if (!imageResponse.ok) {
+          const errorText = await imageResponse.text();
+          console.error('Image upload error:', errorText);
           throw new Error('Failed to upload image');
         }
         
         const imageData = await imageResponse.json();
+        console.log('Image uploaded successfully:', imageData);
         formData.append('image', imageData.url);
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -130,17 +151,46 @@ export default function CreateBlogPost() {
     }
 
     try {
+      // Convert formData to a regular object
+      const formDataObj: Record<string, any> = {};
+      formData.forEach((value, key) => {
+        // Handle checkbox for published field - convert from string to boolean
+        if (key === 'published') {
+          formDataObj[key] = value === 'on' || value === 'true';
+        } else {
+          formDataObj[key] = value;
+        }
+      });
+      
+      console.log('Sending post data:', JSON.stringify(formDataObj, null, 2));
+      
       const response = await fetch('/api/posts', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(Object.fromEntries(formData)),
+        body: JSON.stringify(formDataObj),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create blog post');
+        const errorText = await response.text();
+        console.error('API Error Response:', response.status, errorText);
+        
+        let errorMessage = `Failed to create blog post (${response.status} ${response.statusText})`;
+        try {
+          const errorData = JSON.parse(errorText);
+          if (errorData && typeof errorData === 'object' && 'error' in errorData) {
+            errorMessage = errorData.error as string;
+          }
+        } catch (e) {
+          // If not valid JSON, use the text as is
+          if (errorText) {
+            errorMessage += `: ${errorText}`;
+          }
+        }
+        
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -186,18 +236,7 @@ export default function CreateBlogPost() {
                     />
                   </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="slug" className="form-label fw-bold">Slug</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      id="slug" 
-                      name="slug" 
-                      required 
-                      placeholder="enter-url-friendly-slug"
-                    />
-                    <small className="text-muted">URL-friendly version of the title (e.g., my-blog-post)</small>
-                  </div>
+                  {/* Slug is auto-generated from title and timestamp */}
 
                   <div className="mb-3">
                     <label htmlFor="summary" className="form-label fw-bold">Summary</label>

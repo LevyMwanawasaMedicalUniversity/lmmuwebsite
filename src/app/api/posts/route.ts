@@ -92,11 +92,15 @@ export async function POST(req: NextRequest) {
     if (!session || session.user.role !== 'admin') {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+      const data = await req.json();
     
-    const data = await req.json();
-    
-    // Generate slug from title if not provided
-    const slug = data.slug || createSlug(data.title);
+    // Use provided slug or generate one with timestamp for uniqueness
+    let slug = data.slug;
+    if (!slug) {
+      const timestamp = new Date().getTime().toString().slice(-6);
+      const titleSlug = createSlug(data.title);
+      slug = `${titleSlug}-${timestamp}`;
+    }
     
     // Check if slug is unique
     const existingPost = await prisma.post.findUnique({

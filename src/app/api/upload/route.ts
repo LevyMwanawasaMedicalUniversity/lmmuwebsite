@@ -1,30 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { writeFile, mkdir } from 'fs/promises';
+import { authOptions } from '@/lib/auth';
+import { writeFile, mkdir, unlink, access } from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { constants } from 'fs';
 
 export async function POST(req: NextRequest) {
   try {
     // Check authentication and authorization
     const session = await getServerSession(authOptions);
     
+    console.log('Upload request from user:', session?.user);
+    
     if (!session || !session.user || session.user.role !== 'admin') {
+      console.log('Unauthorized upload attempt');
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized - You must be an admin to upload files' },
         { status: 401 }
       );
     }
 
     const formData = await req.formData();
     const file = formData.get('file') as File;
+    const oldImagePath = formData.get('oldImagePath') as string;
 
     if (!file) {
       return NextResponse.json(
         { error: 'No file uploaded' },
         { status: 400 }
       );
+    }
+    
+    // If there's an old image and it's in the uploads directory, try to delete it
+    if (oldImagePath && oldImagePath.startsWith('/uploads/')) {
+      try {
+        // Get just the filename part from the path
+        const oldFileName = oldImagePath.split('/').pop();
+        if (oldFileName) {
+          const oldFilePath = path.join(process.cwd(), 'public', 'uploads', oldFileName);
+          // Check if file exists before trying to delete it
+          try {
+            await access(oldFilePath, constants.F_OK);
+            await unlink(oldFilePath);
+            console.log(`Deleted old image: ${oldFilePath}`);
+          } catch (accessErr) {
+            console.log(`Old file doesn't exist or can't be accessed: ${oldFilePath}`);
+          }
+        }
+      } catch (err) {
+        console.error('Error deleting old image:', err);
+        // Continue with the upload even if deletion fails
+      }
     }
 
     // Validate file type
@@ -64,10 +91,20 @@ export async function POST(req: NextRequest) {
     
     // Write file to disk
     const filePath = path.join(uploadsDir, fileName);
-    await writeFile(filePath, buffer);
+    try {
+      await writeFile(filePath, buffer);
+      console.log(`File successfully written to ${filePath}`);
+    } catch (writeError) {
+      console.error('Error writing file:', writeError);
+      return NextResponse.json(
+        { error: `Error writing file: ${writeError.message}` },
+        { status: 500 }
+      );
+    }
     
     // Return the URL to the uploaded file
     const fileUrl = `/uploads/${fileName}`;
+    console.log('File uploaded successfully:', fileUrl);
     
     return NextResponse.json({ 
       success: true,

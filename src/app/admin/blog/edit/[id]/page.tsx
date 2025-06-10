@@ -141,19 +141,19 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
       </AdminLayout>
     );
   }
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      console.log('Selected new image file:', file.name, 'Size:', (file.size / 1024).toFixed(2), 'KB');
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
+        console.log('Image preview generated');
       };
       reader.readAsDataURL(file);
     }
-  };
-  const handleSubmit = async (e: React.FormEvent) => {
+  };const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
 
@@ -173,7 +173,22 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
       } else {
         formDataObj[key] = value;
       }
-    });    // Always include the published status from our controlled state
+    });
+    
+    // Update slug only if title has changed
+    const currentTitle = formDataObj.title;
+    if (currentTitle && currentTitle !== post.title) {
+      // Generate a new slug based on the updated title and timestamp
+      const timestamp = new Date().getTime().toString().slice(-6); // Last 6 digits of timestamp
+      const titleSlug = currentTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+      const uniqueSlug = `${titleSlug}-${timestamp}`;
+      
+      formDataObj.slug = uniqueSlug;
+      console.log('Title changed - generating new slug:', uniqueSlug);
+    }// Always include the published status from our controlled state
     // This ensures it's included whether checkbox is checked or not
     // The isPublished state contains the current publication status
     // This approach fixes the HTML form issue where unchecked checkboxes don't submit values
@@ -181,13 +196,19 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
     console.log('Saving post with publication status:', isPublished);
     
     // Add content from the editor
-    formDataObj.content = content;// Add image if selected
+    formDataObj.content = content;    // Add image if selected
     if (imageFile) {
       // Create a new FormData for the image upload
       const imageFormData = new FormData();
       imageFormData.append('file', imageFile);
       
+      // Include the old image path so it can be deleted if needed
+      if (post.image) {
+        imageFormData.append('oldImagePath', post.image);
+      }
+      
       try {
+        console.log('Uploading new image for post:', post.id);
         // First upload the image
         const imageResponse = await fetch('/api/upload', {
           method: 'POST',
@@ -195,10 +216,13 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
         });
         
         if (!imageResponse.ok) {
+          const errorText = await imageResponse.text();
+          console.error('Image upload error:', errorText);
           throw new Error('Failed to upload image');
         }
         
         const imageData = await imageResponse.json();
+        console.log('Image uploaded successfully:', imageData);
         formDataObj.image = imageData.url;
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -213,7 +237,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
       // If using the existing image, don't send image in the update
       // This prevents us from sending the image field at all
       delete formDataObj.image;
-    }    try {
+    }try {
       console.log('Sending data:', JSON.stringify(formDataObj, null, 2)); // Debug log in formatted JSON
       console.log('Published status:', formDataObj.published);
       const response = await fetch(`/api/posts/${post.id}`, {
@@ -313,8 +337,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
               </div>
               <div className="card-body p-4">
                 <form ref={formRef} onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="title" className="form-label fw-bold">Title</label>
+                  <div className="mb-3">                    <label htmlFor="title" className="form-label fw-bold">Title</label>
                     <input 
                       type="text" 
                       className="form-control" 
@@ -324,21 +347,16 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
                       defaultValue={post.title}
                       placeholder="Enter blog post title"
                     />
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="slug" className="form-label fw-bold">Slug</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      id="slug" 
-                      name="slug" 
-                      required 
-                      defaultValue={post.slug}
-                      placeholder="enter-url-friendly-slug"
-                    />
-                    <small className="text-muted">URL-friendly version of the title (e.g., my-blog-post)</small>
-                  </div>
+                    <small className="text-muted">
+                      Note: Changing the title will automatically generate a new URL slug.
+                    </small>
+                  </div>{/* Hidden slug field - slug is auto-generated */}
+                  <input 
+                    type="hidden" 
+                    id="slug" 
+                    name="slug" 
+                    value={post.slug}
+                  />
 
                   <div className="mb-3">
                     <label htmlFor="summary" className="form-label fw-bold">Summary</label>
@@ -465,13 +483,12 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
                         <>
                           <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                           Saving...
-                        </>
-                      ) : (                        <>
+                        </>                      ) : (                        <>
                           Update Post 
-                          {/* {isPublished ? 
+                          {isPublished ? 
                             <span className="ms-1 badge bg-success" style={{fontSize: '0.7em'}}>Published</span> : 
                             <span className="ms-1 badge bg-secondary" style={{fontSize: '0.7em'}}>Unpublished</span>
-                          } */}
+                          }
                         </>
                       )}
                     </button>
