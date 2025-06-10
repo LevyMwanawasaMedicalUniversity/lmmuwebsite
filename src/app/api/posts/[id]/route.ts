@@ -64,9 +64,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     if (!session || session.user.role !== 'admin') {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
-    const data = await req.json();
+      const data = await req.json();
     console.log('PUT request data:', JSON.stringify(data, null, 2));
+    console.log('Published status received:', data.published);
     const postId = Number(id);
     
     // Generate slug from title if provided and different from existing
@@ -113,16 +113,22 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         updateData.image = data.image;
       }
     }
+      // Explicitly handle published status, ensuring it's always processed as a boolean
+    if (data.published !== undefined) {
+      updateData.published = Boolean(data.published);
+      console.log('Setting published to:', updateData.published);
+    }
     
-    if (data.published !== undefined) updateData.published = data.published;
     if (data.categories !== undefined) updateData.categories = data.categories;
     if (data.tags !== undefined) updateData.tags = data.tags;
     
+    console.log('Final update data:', JSON.stringify(updateData, null, 2));
     const post = await prisma.post.update({
       where: { id: postId },
       data: updateData,
     });
     
+    console.log('Updated post published status:', post.published);
     return NextResponse.json(post);
   } catch (error) {
     console.error("Error updating post:", error);

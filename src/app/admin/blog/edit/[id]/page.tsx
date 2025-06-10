@@ -62,19 +62,18 @@ const BlogEditor = dynamic(() => import('@/components/blog/TipTapEditor'), {
   ),
 });
 
-export default function EditBlogPost({ params }: { params: { id: string } }) {
-  // Properly unwrap params using React.use()
-  const unwrappedParams = React.use(params);
+export default function EditBlogPost({ params }: { params: { id: string } }) {  // Properly unwrap params using React.use()
+  const unwrappedParams = React.use(params as any) as { id: string };
   const postId = parseInt(unwrappedParams.id);
   
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [post, setPost] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);  const [post, setPost] = useState<any>(null);
   const [content, setContent] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isPublished, setIsPublished] = useState(false);
   const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -85,10 +84,11 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
         const response = await fetch(`/api/posts/${postId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch post');
-        }
-        const data = await response.json();
+        }        const data = await response.json();
         setPost(data);
         setContent(data.content || '');
+        setIsPublished(Boolean(data.published));
+        console.log('Fetched post published status:', data.published);
         if (data.image) {
           setImagePreview(data.image);
         }
@@ -159,8 +159,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
 
     setIsSubmitting(true);
     const formData = new FormData(formRef.current);
-    
-    // Create a data object from FormData
+      // Create a data object from FormData
     const formDataObj: Record<string, any> = {};
     formData.forEach((value, key) => {
       // Skip the image input field - we'll handle image separately
@@ -174,10 +173,15 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
       } else {
         formDataObj[key] = value;
       }
-    });
+    });    // Always include the published status from our controlled state
+    // This ensures it's included whether checkbox is checked or not
+    // The isPublished state contains the current publication status
+    // This approach fixes the HTML form issue where unchecked checkboxes don't submit values
+    formDataObj.published = isPublished;
+    console.log('Saving post with publication status:', isPublished);
     
     // Add content from the editor
-    formDataObj.content = content;    // Add image if selected
+    formDataObj.content = content;// Add image if selected
     if (imageFile) {
       // Create a new FormData for the image upload
       const imageFormData = new FormData();
@@ -209,10 +213,9 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
       // If using the existing image, don't send image in the update
       // This prevents us from sending the image field at all
       delete formDataObj.image;
-    }
-
-    try {
+    }    try {
       console.log('Sending data:', JSON.stringify(formDataObj, null, 2)); // Debug log in formatted JSON
+      console.log('Published status:', formDataObj.published);
       const response = await fetch(`/api/posts/${post.id}`, {
         method: 'PUT',
         headers: {
@@ -408,18 +411,42 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
                         />
                       </div>
                     )}
+                  </div>                  <div className="mb-4 p-3 border rounded bg-light">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 className="mb-0">Publication Status</h5>
+                        <p className="text-muted mb-0 small">Control whether this post is visible to visitors</p>
+                      </div>                      <div className="d-flex align-items-center">
+                        <div className="form-check form-switch">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="published"
+                            name="published"
+                            checked={isPublished}
+                            onChange={(e) => {
+                              setIsPublished(e.target.checked);
+                              console.log("Published status toggled to:", e.target.checked);
+                            }}
+                            style={{ width: '3em', height: '1.5em' }}
+                          />
+                          <label className="form-check-label ms-3" htmlFor="published">
+                            {isPublished ? 
+                              <span className="badge bg-success">Published</span> : 
+                              <span className="badge bg-secondary">Unpublished</span>
+                            }
+                            <small className="d-block text-muted mt-1">
+                              {isPublished ? 
+                                "This post is visible to all visitors" : 
+                                "This post is only visible to admins"
+                              }
+                            </small>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="mb-3 form-check">
-                    <input 
-                      type="checkbox" 
-                      className="form-check-input" 
-                      id="published" 
-                      name="published" 
-                      defaultChecked={post.published} 
-                    />
-                    <label className="form-check-label" htmlFor="published">Published</label>
-                  </div>                  <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                  <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                     <button 
                       type="button" 
                       className="btn btn-outline-secondary px-4 py-2" 
@@ -428,8 +455,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
                       style={{ minWidth: '120px' }}
                     >
                       Cancel
-                    </button>
-                    <button 
+                    </button>                    <button 
                       type="submit" 
                       className="btn px-4 py-2" 
                       disabled={isSubmitting}
@@ -440,7 +466,14 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
                           <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                           Saving...
                         </>
-                      ) : 'Update Post'}
+                      ) : (                        <>
+                          Update Post 
+                          {/* {isPublished ? 
+                            <span className="ms-1 badge bg-success" style={{fontSize: '0.7em'}}>Published</span> : 
+                            <span className="ms-1 badge bg-secondary" style={{fontSize: '0.7em'}}>Unpublished</span>
+                          } */}
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
