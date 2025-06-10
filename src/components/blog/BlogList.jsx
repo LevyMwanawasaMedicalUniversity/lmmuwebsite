@@ -47,6 +47,7 @@ export default function BlogList() {
         const params = new URLSearchParams();
         params.append('page', page);
         params.append('limit', postsPerPage);
+        params.append('published', 'true'); // Only fetch published posts
         
         if (searchTerm) {
           params.append('search', searchTerm);
@@ -62,26 +63,35 @@ export default function BlogList() {
         }
         
         const data = await response.json();
-        setPosts(data.posts || data); // Handle both formats: {posts, total} or just posts array
         
-        // Calculate total pages if total is provided
-        if (data.total) {
+        // Ensure we're using the correct data format
+        if (data.posts && Array.isArray(data.posts)) {
+          setPosts(data.posts);
           setTotalPages(Math.ceil(data.total / postsPerPage));
-        } else {
+        } else if (Array.isArray(data)) {
+          setPosts(data);
           // Estimate based on current data
           setTotalPages(Math.max(page, data.length < postsPerPage ? page : page + 1));
+        } else {
+          // If data is in unexpected format, set empty array
+          console.error('Unexpected data format:', data);
+          setPosts([]);
+          setTotalPages(1);
         }
       } catch (err) {
         console.error('Error fetching posts:', err);
         setError(err.message);
+        setPosts([]);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     };
 
     setLoading(true);
-    withLoading(fetchPosts);
-  }, [page, searchTerm, selectedCategory]); // Removed withLoading from dependencies
+    // Call directly instead of using withLoading
+    fetchPosts();
+  }, [page, searchTerm, selectedCategory, postsPerPage]);
   
   // Handle search input change
   const handleSearchChange = (e) => {

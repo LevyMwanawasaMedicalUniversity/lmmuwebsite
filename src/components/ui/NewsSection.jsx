@@ -23,53 +23,15 @@ export default function NewsSection() {
       } catch (err) {
         console.error('Error fetching blog posts:', err);
         setError(err.message);
-        
-        // Fallback to static data if API fails
-        setNews([
-          {
-            id: 1,
-            title: "2024 Trade Fair",
-            summary: "LMMU and LMMU-UTH Stand at the 2024 Trade Fair held in Ndola, Zambia at the Trade Fair Grounds.",
-            image: "/assets/images/news/n-1.jpeg",
-            createdAt: "2024-06-12T00:00:00.000Z",
-            author: { name: "Admin" },
-            slug: "tradefair",
-          },
-          {
-            id: 2,
-            title: "Graduation Ceremony",
-            summary: "LMMU hosted its 4th Graduation Ceremony celebrating the achievements of graduates and sending forth trained professionals into the workforce.",
-            image: "/assets/images/news/ns-1.jpg",
-            createdAt: "2024-06-05T00:00:00.000Z",
-            author: { name: "Admin" },
-            slug: "graduation",
-          },
-          {
-            id: 3,
-            title: "Induction Ceremony",
-            summary: "LMMU hosted its first ever induction ceremony for The Bachelor of Medicine and The Bachelor of Surgery program in The School of Medicine and Clinical Sciences.",
-            image: "/assets/images/news/ns-2.jpeg",
-            createdAt: "2024-05-20T00:00:00.000Z",
-            author: { name: "Admin" },
-            slug: "induction",
-          },
-          {
-            id: 4,
-            title: "International Labour Day",
-            summary: "LMMU joined the rest of the world in commemorating the annual Labour Day celebration.",
-            image: "/assets/images/news/ns-3.jpeg",
-            createdAt: "2024-05-01T00:00:00.000Z",
-            author: { name: "Admin" },
-            slug: "labour",
-          }
-        ]);
+        // Don't set fallback data, just show the error message
+        setNews([]);
       } finally {
         setLoading(false);
       }
     };
 
-    withLoading(fetchPosts);
-  }, []); // Remove withLoading from dependency array to prevent infinite loop
+    fetchPosts(); // Call directly instead of using withLoading to prevent infinite loop
+  }, []);
 
   // If loading, show a loading spinner
   if (loading) {

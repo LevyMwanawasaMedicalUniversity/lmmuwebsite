@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -10,12 +10,14 @@ import { usePathname } from 'next/navigation';
 export default function BlogPostDetail({ post }) {
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fullUrl, setFullUrl] = useState('');
   const { withLoading } = useLoading();
   const pathname = usePathname();
   
-  // Get the full URL for sharing
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const fullUrl = `${baseUrl}${pathname}`;
+  // Set up the full URL for sharing after component mounts (client-side only)
+  useEffect(() => {
+    setFullUrl(window.location.origin + pathname);
+  }, [pathname]);
   
   // Format the date
   const formattedDate = new Date(post.createdAt).toLocaleDateString('en-US', {
@@ -24,16 +26,25 @@ export default function BlogPostDetail({ post }) {
     day: 'numeric'
   });
 
-  // Parse categories and tags if they exist
-  const categories = post.categories ? post.categories.split(',').map(cat => cat.trim()) : [];
-  const tags = post.tags ? post.tags.split(',').map(tag => tag.trim()) : [];
+  // Parse categories and tags if they exist - memoize to prevent unnecessary recalculations
+  const categories = useMemo(() => {
+    return post.categories ? post.categories.split(',').map(cat => cat.trim()) : [];
+  }, [post.categories]);
+  
+  const tags = useMemo(() => {
+    return post.tags ? post.tags.split(',').map(tag => tag.trim()) : [];
+  }, [post.tags]);
   
   // Fetch related posts based on category
   useEffect(() => {
+    // Skip if no categories
+    if (!post.categories || categories.length === 0) {
+      setLoading(false);
+      return;
+    }
+    
     const fetchRelatedPosts = async () => {
-      try {
-        if (!post.categories) return;
-        
+      try {        
         // Get the first category to find related posts
         const mainCategory = categories[0];
         if (!mainCategory) return;
@@ -56,8 +67,9 @@ export default function BlogPostDetail({ post }) {
     };
     
     setLoading(true);
-    withLoading(fetchRelatedPosts);
-  }, [post.id, post.categories, categories]); // Removed withLoading from dependencies
+    // Call the function directly instead of using withLoading
+    fetchRelatedPosts();
+  }, [post.id, categories]); // Removed withLoading and post.categories (already in categories dependency)
 
   return (
     <div className="container py-5">
@@ -155,50 +167,54 @@ export default function BlogPostDetail({ post }) {
           <div className="mb-5">
             <h5 className="mb-3">Share This Post:</h5>
             <div className="d-flex flex-wrap">
-              <a 
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-facebook me-2 mb-2"
-                aria-label="Share on Facebook"
-              >
-                <i className="fab fa-facebook-f me-2"></i> Facebook
-              </a>
-              <a 
-                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(fullUrl)}&text=${encodeURIComponent(post.title)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-twitter me-2 mb-2"
-                aria-label="Share on Twitter"
-              >
-                <i className="fab fa-twitter me-2"></i> Twitter
-              </a>
-              <a 
-                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(fullUrl)}&title=${encodeURIComponent(post.title)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-linkedin me-2 mb-2"
-                aria-label="Share on LinkedIn"
-              >
-                <i className="fab fa-linkedin-in me-2"></i> LinkedIn
-              </a>
-              <a 
-                href={`mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(`Check out this article: ${fullUrl}`)}`}
-                className="btn btn-secondary me-2 mb-2"
-                aria-label="Share via Email"
-              >
-                <i className="fa fa-envelope me-2"></i> Email
-              </a>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(fullUrl);
-                  alert('Link copied to clipboard!');
-                }}
-                className="btn btn-outline-dark mb-2"
-                aria-label="Copy Link"
-              >
-                <i className="fa fa-link me-2"></i> Copy Link
-              </button>
+              {fullUrl && (
+                <>
+                  <a 
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-facebook me-2 mb-2"
+                    aria-label="Share on Facebook"
+                  >
+                    <i className="fab fa-facebook-f me-2"></i> Facebook
+                  </a>
+                  <a 
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(fullUrl)}&text=${encodeURIComponent(post.title)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-twitter me-2 mb-2"
+                    aria-label="Share on Twitter"
+                  >
+                    <i className="fab fa-twitter me-2"></i> Twitter
+                  </a>
+                  <a 
+                    href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(fullUrl)}&title=${encodeURIComponent(post.title)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-linkedin me-2 mb-2"
+                    aria-label="Share on LinkedIn"
+                  >
+                    <i className="fab fa-linkedin-in me-2"></i> LinkedIn
+                  </a>
+                  <a 
+                    href={`mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(`Check out this article: ${fullUrl}`)}`}
+                    className="btn btn-secondary me-2 mb-2"
+                    aria-label="Share via Email"
+                  >
+                    <i className="fa fa-envelope me-2"></i> Email
+                  </a>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(fullUrl);
+                      alert('Link copied to clipboard!');
+                    }}
+                    className="btn btn-outline-dark mb-2"
+                    aria-label="Copy Link"
+                  >
+                    <i className="fa fa-link me-2"></i> Copy Link
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
