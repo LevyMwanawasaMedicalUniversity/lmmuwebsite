@@ -9,7 +9,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const postId = parseInt(params.id);
+  const unwrappedParams = React.use(params);
+  const postId = parseInt(unwrappedParams.id);
   
   if (isNaN(postId)) {
     return {
@@ -34,7 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const postId = parseInt(params.id);
+  const unwrappedParams = React.use(params);
+  const postId = parseInt(unwrappedParams.id);
   
   if (isNaN(postId)) {
     notFound();

@@ -48,8 +48,9 @@ const BlogEditor = dynamic(() => import('@/components/blog/TipTapEditor'), {
 });
 
 export default function EditBlogPost({ params }: { params: { id: string } }) {
-  // Access id directly from params using React.use() to handle future Next.js requirements
-  const postId = parseInt(params.id);
+  // Properly unwrap params using React.use()
+  const unwrappedParams = React.use(params);
+  const postId = parseInt(unwrappedParams.id);
   
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -98,7 +99,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
       <AdminLayout>
         <div className="d-flex justify-content-center py-5">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden"></span>
           </div>
         </div>
       </AdminLayout>

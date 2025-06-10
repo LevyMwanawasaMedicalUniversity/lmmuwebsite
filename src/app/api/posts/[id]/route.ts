@@ -13,28 +13,27 @@ function createSlug(title: string): string {
 
 // GET, UPDATE, DELETE a single post by id
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     // Check if id is numeric (assume it's DB id)
-    if (!isNaN(Number(params.id))) {
+    if (!isNaN(Number(id))) {
       const post = await prisma.post.findUnique({
-        where: { id: Number(params.id) },
+        where: { id: Number(id) },
         include: { author: { select: { id: true, name: true, email: true } } },
       });
       
       if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
-      
-      // Increment view count
+        // Increment view count
       await prisma.post.update({
-        where: { id: Number(params.id) },
+        where: { id: Number(id) },
         data: { viewCount: { increment: 1 } }
       });
       
       return NextResponse.json(post);
-    } 
-    // Otherwise assume it's a slug
+    }    // Otherwise assume it's a slug
     else {
       const post = await prisma.post.findUnique({
-        where: { slug: params.id },
+        where: { slug: id },
         include: { author: { select: { id: true, name: true, email: true } } },
       });
       
@@ -55,6 +54,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'admin') {
@@ -62,7 +62,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
     
     const data = await req.json();
-    const postId = Number(params.id);
+    const postId = Number(id);
     
     // Generate slug from title if provided and different from existing
     let slug = data.slug;
@@ -117,6 +117,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'admin') {
@@ -124,7 +125,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }
     
     const data = await req.json();
-    const postId = Number(params.id);
+    const postId = Number(id);
     
     // For PATCH, we only update the fields that are provided
     const updateData: any = {};
@@ -148,13 +149,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'admin') {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     
-    await prisma.post.delete({ where: { id: Number(params.id) } });
+    await prisma.post.delete({ where: { id: Number(id) } });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting post:", error);

@@ -6,13 +6,14 @@ import { hashPassword } from "@/lib/auth/password";
 
 // GET a single user by ID (admin only, or self)
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = parseInt(params.id);
+    const userId = parseInt(id);
     const isAdmin = session.user.role === "admin";
     const isSelf = parseInt(session.user.id) === userId;
 
@@ -65,13 +66,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 // UPDATE a user (admin only, or self for limited fields)
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = parseInt(params.id);
+    const userId = parseInt(id);
     const isAdmin = session.user.role === "admin";
     const isSelf = parseInt(session.user.id) === userId;
 
@@ -133,13 +135,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
 // DELETE a user (admin only)
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = parseInt(params.id);
+    const userId = parseInt(id);
     
     // Don't allow admins to delete themselves
     if (parseInt(session.user.id) === userId) {

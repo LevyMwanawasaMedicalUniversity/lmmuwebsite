@@ -46,7 +46,7 @@ export default function AdminDashboard() {
       <AdminLayout>
         <div className="d-flex justify-content-center py-5">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden"></span>
           </div>
         </div>
       </AdminLayout>
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
                     <h2 className="mb-0 fw-bold">
                       {isLoading ? (
                         <div className="spinner-border spinner-border-sm text-primary" role="status">
-                          <span className="visually-hidden">Loading...</span>
+                          <span className="visually-hidden"></span>
                         </div>
                       ) : stats.totalPosts}
                     </h2>
@@ -103,7 +103,7 @@ export default function AdminDashboard() {
                     <h2 className="mb-0 fw-bold">
                       {isLoading ? (
                         <div className="spinner-border spinner-border-sm text-success" role="status">
-                          <span className="visually-hidden">Loading...</span>
+                          <span className="visually-hidden"></span>
                         </div>
                       ) : stats.publishedPosts}
                     </h2>
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
                     <h2 className="mb-0 fw-bold">
                       {isLoading ? (
                         <div className="spinner-border spinner-border-sm text-warning" role="status">
-                          <span className="visually-hidden">Loading...</span>
+                          <span className="visually-hidden"></span>
                         </div>
                       ) : stats.draftPosts}
                     </h2>
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
                 {isLoading ? (
                   <div className="d-flex justify-content-center py-5">
                     <div className="spinner-border text-primary" role="status">
-                      <span className="visually-hidden">Loading...</span>
+                      <span className="visually-hidden"></span>
                     </div>
                   </div>
                 ) : stats.recentPosts && stats.recentPosts.length > 0 ? (
