@@ -9,8 +9,9 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const unwrappedParams = React.use(params);
-  const postId = parseInt(unwrappedParams.id);
+  // For server components, we should await params instead of using React.use()
+  const paramsObj = await params;
+  const postId = parseInt(paramsObj.id);
   
   if (isNaN(postId)) {
     return {
@@ -35,8 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const unwrappedParams = React.use(params);
-  const postId = parseInt(unwrappedParams.id);
+  // For server components, we should await params instead of using React.use()
+  const paramsObj = await params;
+  const postId = parseInt(paramsObj.id);
   
   if (isNaN(postId)) {
     notFound();

@@ -146,8 +146,19 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
     setIsSubmitting(true);
     const formData = new FormData(formRef.current);
     
+    // Create a data object from FormData
+    const formDataObj: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      // Handle checkboxes
+      if (key === 'published') {
+        formDataObj[key] = value === 'on' || value === 'true';
+      } else {
+        formDataObj[key] = value;
+      }
+    });
+    
     // Add content from the editor
-    formData.append('content', content);
+    formDataObj.content = content;
     
     // Add image if selected
     if (imageFile) {
@@ -167,7 +178,7 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
         }
         
         const imageData = await imageResponse.json();
-        formData.append('image', imageData.url);
+        formDataObj.image = imageData.url;
       } catch (error) {
         console.error('Error uploading image:', error);
         setAlert({ message: 'Failed to upload image. Please try again.', type: 'error' });
@@ -177,17 +188,34 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {
     }
 
     try {
+      console.log('Sending data:', formDataObj); // Debug log
       const response = await fetch(`/api/posts/${post.id}`, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(Object.fromEntries(formData)),
+        body: JSON.stringify(formDataObj),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update blog post');
+        const errorText = await response.text();
+        console.error('API Error Response:', response.status, errorText);
+        
+        let errorMessage = `Failed to update blog post (${response.status} ${response.statusText})`;
+        try {
+          const errorData = JSON.parse(errorText);
+          if (errorData && typeof errorData === 'object' && 'error' in errorData) {
+            errorMessage = errorData.error as string;
+          }
+        } catch (e) {
+          // If not valid JSON, use the text as is
+          if (errorText) {
+            errorMessage += `: ${errorText}`;
+          }
+        }
+        
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

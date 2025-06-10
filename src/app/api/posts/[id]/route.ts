@@ -13,7 +13,9 @@ function createSlug(title: string): string {
 
 // GET, UPDATE, DELETE a single post by id
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+  // Await params in Next.js 15.3+
+  const paramsObj = await params;
+  const { id } = paramsObj;
   try {
     // Check if id is numeric (assume it's DB id)
     if (!isNaN(Number(id))) {
@@ -54,7 +56,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+  // Await params in Next.js 15.3+
+  const paramsObj = await params;
+  const { id } = paramsObj;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'admin') {
@@ -117,7 +121,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+  // Await params in Next.js 15.3+
+  const paramsObj = await params;
+  const { id } = paramsObj;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'admin') {
@@ -149,7 +155,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+  // Await params in Next.js 15.3+
+  const paramsObj = await params;
+  const { id } = paramsObj;
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== 'admin') {
