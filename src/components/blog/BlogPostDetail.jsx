@@ -40,7 +40,9 @@ export default function BlogPostDetail({ post }) {
   
   // Get all images for the post
   const postImages = useMemo(() => {
-    return getPostImages(post);
+    const images = getPostImages(post);
+    console.log(`BlogPostDetail: Retrieved ${images.length} images for post ID ${post.id}`);
+    return images;
   }, [post]);
   
   // Fetch related posts based on category

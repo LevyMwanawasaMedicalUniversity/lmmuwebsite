@@ -13,6 +13,12 @@ export async function getAllPosts(limit = 10) {
             name: true,
             email: true
           }
+        },
+        images: {
+          orderBy: {
+            order: 'asc'
+          },
+          take: 1 // Just get the first image for previews
         }
       },
       take: limit
@@ -36,6 +42,21 @@ export async function getPostBySlug(slug: string) {
             id: true,
             name: true,
             email: true
+          }
+        },
+        images: {
+          orderBy: {
+            order: 'asc'
+          }
+        },
+        categoryRelations: {
+          include: {
+            category: true
+          }
+        },
+        tagRelations: {
+          include: {
+            tag: true
           }
         }
       }
@@ -67,6 +88,21 @@ export async function getPostById(id: number) {
             id: true,
             name: true,
             email: true
+          }
+        },
+        images: {
+          orderBy: {
+            order: 'asc'
+          }
+        },
+        categoryRelations: {
+          include: {
+            category: true
+          }
+        },
+        tagRelations: {
+          include: {
+            tag: true
           }
         }
       }
@@ -105,6 +141,12 @@ export async function getFeaturedPosts(limit = 5) {
             name: true,
             email: true
           }
+        },
+        images: {
+          orderBy: {
+            order: 'asc'
+          },
+          take: 1 // Just get the first image for previews
         }
       },
       take: limit
@@ -135,6 +177,12 @@ export async function getPostsByCategory(category: string, limit = 10) {
             name: true,
             email: true
           }
+        },
+        images: {
+          orderBy: {
+            order: 'asc'
+          },
+          take: 1 // Just get the first image for previews
         }
       },
       take: limit

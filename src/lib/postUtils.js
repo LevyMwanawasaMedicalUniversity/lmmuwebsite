@@ -37,20 +37,33 @@ export function getPostImages(post) {
   
   // First try the new images relation structure
   if (post?.images && Array.isArray(post.images) && post.images.length > 0) {
+    // Log successful finding of images
+    console.log(`Found ${post.images.length} images for post ${post.id || post.title}`);
+    
     // Sort by order field
     const sortedImages = [...post.images].sort((a, b) => (a.order || 0) - (b.order || 0));
     return sortedImages.map(img => ({
       url: img.url,
-      caption: img.caption || ''
+      caption: img.caption || '',
+      id: img.id || null,
+      order: img.order || 0
     }));
   }
   
   // If no images in relation but we have a legacy image, use that
   if (post?.image) {
+    console.log(`Using legacy image field for post ${post.id || post.title}`);
     images.push({
       url: post.image,
-      caption: ''
+      caption: '',
+      id: null,
+      order: 0
     });
+  }
+  
+  // If no images were found
+  if (images.length === 0) {
+    console.log(`No images found for post ${post.id || post.title}`);
   }
   
   return images;
