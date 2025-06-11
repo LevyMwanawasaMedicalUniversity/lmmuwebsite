@@ -148,47 +148,69 @@ export default function AdminDashboard() {
               </div>
               <div className="card-body">
                 <div className="row g-3">
-                  <div className="col-md-3">
+                  <div className="col-md-4 col-lg-2">
                     <Link href="/admin/blog/create" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
                       <div className="card-body py-4">
                         <div className="mb-3">
                           <i className="fas fa-plus-circle fa-3x text-primary"></i>
                         </div>
-                        <h5>Create New Post</h5>
-                        <p className="text-muted small mb-0">Add a new blog post or news article</p>
+                        <h5>New Post</h5>
+                        <p className="text-muted small mb-0">Add a new blog post</p>
                       </div>
                     </Link>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-md-4 col-lg-2">
                     <Link href="/admin/blog" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
                       <div className="card-body py-4">
                         <div className="mb-3">
                           <i className="fas fa-list fa-3x text-success"></i>
                         </div>
                         <h5>Manage Posts</h5>
-                        <p className="text-muted small mb-0">Edit, delete or publish existing posts</p>
+                        <p className="text-muted small mb-0">Edit or publish posts</p>
                       </div>
                     </Link>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-md-4 col-lg-2">
+                    <Link href="/admin/categories" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
+                      <div className="card-body py-4">
+                        <div className="mb-3">
+                          <i className="fas fa-folder fa-3x text-warning"></i>
+                        </div>
+                        <h5>Categories</h5>
+                        <p className="text-muted small mb-0">Manage post categories</p>
+                      </div>
+                    </Link>
+                  </div>
+                  <div className="col-md-4 col-lg-2">
+                    <Link href="/admin/tags" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
+                      <div className="card-body py-4">
+                        <div className="mb-3">
+                          <i className="fas fa-tags fa-3x text-info"></i>
+                        </div>
+                        <h5>Tags</h5>
+                        <p className="text-muted small mb-0">Manage post tags</p>
+                      </div>
+                    </Link>
+                  </div>
+                  <div className="col-md-4 col-lg-2">
                     <Link href="/admin/users" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
                       <div className="card-body py-4">
                         <div className="mb-3">
-                          <i className="fas fa-users fa-3x text-info"></i>
+                          <i className="fas fa-users fa-3x text-violet"></i>
                         </div>
-                        <h5>Manage Users</h5>
-                        <p className="text-muted small mb-0">Add or edit user accounts</p>
+                        <h5>Users</h5>
+                        <p className="text-muted small mb-0">Manage user accounts</p>
                       </div>
                     </Link>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-md-4 col-lg-2">
                     <Link href="/admin/settings" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
                       <div className="card-body py-4">
                         <div className="mb-3">
                           <i className="fas fa-cog fa-3x text-secondary"></i>
                         </div>
                         <h5>Settings</h5>
-                        <p className="text-muted small mb-0">Configure website settings</p>
+                        <p className="text-muted small mb-0">Configure site settings</p>
                       </div>
                     </Link>
                   </div>

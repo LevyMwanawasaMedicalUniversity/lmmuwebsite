@@ -79,6 +79,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link href="/admin/categories" className="nav-link text-dark">
+                    <i className="fas fa-folder me-2"></i>
+                    Categories
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/admin/tags" className="nav-link text-dark">
+                    <i className="fas fa-tags me-2"></i>
+                    Tags
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link href="/admin/users" className="nav-link text-dark">
                     <i className="fas fa-users me-2"></i>
                     Users
