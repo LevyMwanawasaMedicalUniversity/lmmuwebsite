@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
 }
 
 // Helper function to process categories for a post
-export async function processCategories(categoryData: any[], postId: number) {
+async function processCategories(categoryData: any[], postId: number) {
   if (!categoryData || !Array.isArray(categoryData)) return;
 
   // Delete existing category relations for this post
@@ -176,7 +176,7 @@ export async function processCategories(categoryData: any[], postId: number) {
 }
 
 // Helper function to process tags for a post
-export async function processTags(tagData: any[], postId: number) {
+async function processTags(tagData: any[], postId: number) {
   if (!tagData || !Array.isArray(tagData)) return;
 
   // Delete existing tag relations for this post

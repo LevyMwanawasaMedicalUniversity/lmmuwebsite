@@ -3,6 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
+// Import helper functions from main posts route
+import { processCategories, processTags } from "../route";
+
 // Helper function to create a URL-friendly slug from title
 function createSlug(title: string): string {
   return title
@@ -16,12 +19,16 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   // Await params in Next.js 15.3+
   const paramsObj = await params;
   const { id } = paramsObj;
-  try {
-    // Check if id is numeric (assume it's DB id)
+  try {    // Check if id is numeric (assume it's DB id)
     if (!isNaN(Number(id))) {
       const post = await prisma.post.findUnique({
         where: { id: Number(id) },
-        include: { author: { select: { id: true, name: true, email: true } } },
+        include: { 
+          author: { select: { id: true, name: true, email: true } },
+          images: { orderBy: { order: "asc" } },
+          categoryRelations: { include: { category: true } },
+          tagRelations: { include: { tag: true } }
+        },
       });
       
       if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
@@ -36,7 +43,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     else {
       const post = await prisma.post.findUnique({
         where: { slug: id },
-        include: { author: { select: { id: true, name: true, email: true } } },
+        include: { 
+          author: { select: { id: true, name: true, email: true } },
+          images: { orderBy: { order: "asc" } },
+          categoryRelations: { include: { category: true } },
+          tagRelations: { include: { tag: true } }
+        },
       });
       
       if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
@@ -95,8 +107,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
           { status: 400 }
         );
       }
-    }
-      const updateData: any = {};
+    }    const updateData: any = {};
     
     // Only include fields that are provided in the request
     if (data.title !== undefined) updateData.title = data.title;
@@ -119,8 +130,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       console.log('Setting published to:', updateData.published);
     }
     
+    // For backward compatibility
     if (data.categories !== undefined) updateData.categories = data.categories;
     if (data.tags !== undefined) updateData.tags = data.tags;
+    
+    // Extract and handle relations
+    const { categoryIds, tagIds, images, ...restData } = data;
     
     console.log('Final update data:', JSON.stringify(updateData, null, 2));
     const post = await prisma.post.update({
@@ -128,8 +143,66 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       data: updateData,
     });
     
+    // Process categories if provided
+    if (categoryIds) {
+      await processCategories(categoryIds, postId);
+    }
+    
+    // Process tags if provided
+    if (tagIds) {
+      await processTags(tagIds, postId);
+    }
+    
+    // Process images if provided
+    if (images && Array.isArray(images)) {
+      // Delete existing images
+      await prisma.postImage.deleteMany({
+        where: { postId }
+      });
+      
+      // Add new images
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        await prisma.postImage.create({
+          data: {
+            id: image.id && !isNaN(parseInt(image.id)) ? parseInt(image.id) : undefined,
+            url: image.url,
+            caption: image.caption || null,
+            order: i,
+            postId
+          }
+        });
+      }
+    }
+      // Fetch the complete post with all relations
+    const completePost = await prisma.post.findUnique({
+      where: { id: postId },
+      include: {
+        author: { 
+          select: { 
+            id: true, 
+            name: true, 
+            email: true 
+          } 
+        },
+        images: {
+          orderBy: { order: "asc" }
+        },
+        categoryRelations: {
+          include: {
+            category: true
+          }
+        },
+        tagRelations: {
+          include: {
+            tag: true
+          }
+        }
+      }
+    });
+    
     console.log('Updated post published status:', post.published);
-    return NextResponse.json(post);
+    return NextResponse.json(completePost);
   } catch (error) {
     console.error("Error updating post:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

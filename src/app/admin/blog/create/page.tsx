@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import AdminLayout from '@/components/layout/AdminLayout';
+import CategorySelector from '@/components/blog/CategorySelector';
+import TagSelector from '@/components/blog/TagSelector';
+import MultiImageUpload from '@/components/blog/MultiImageUpload';
 
 // Alert component for notifications
 const Alert = ({ message, type, onClose }: { message: string, type: 'success' | 'error', onClose: () => void }) => {
@@ -51,8 +54,9 @@ export default function CreateBlogPost() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [images, setImages] = useState<any[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
+  const [selectedTags, setSelectedTags] = useState<any[]>([]);
   const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -80,18 +84,9 @@ export default function CreateBlogPost() {
     );
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      console.log('Selected new image file:', file.name, 'Size:', (file.size / 1024).toFixed(2), 'KB');
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-        console.log('Image preview generated');
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImagesChange = (updatedImages: any[]) => {
+    setImages(updatedImages);
+    console.log('Images updated:', updatedImages);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -119,48 +114,108 @@ export default function CreateBlogPost() {
     formData.delete('slug');
     formData.append('slug', uniqueSlug);
     
-    // Add image if selected
-    if (imageFile) {
-      // Create a new FormData for the image upload
-      const imageFormData = new FormData();
-      imageFormData.append('file', imageFile);
-      
+    // Convert formData to a regular object
+    const formDataObj: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      // Handle checkbox for published field - convert from string to boolean
+      if (key === 'published') {
+        formDataObj[key] = value === 'on' || value === 'true';
+      } else {
+        formDataObj[key] = value;
+      }
+    });
+    
+    // Process all images
+    const uploadedImages = [];
+    
+    // Iterate through images that have files to upload
+    const imagesToUpload = images.filter(img => img.file);
+    
+    if (imagesToUpload.length > 0) {
       try {
-        console.log('Uploading new image for blog post');
-        // First upload the image
-        const imageResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: imageFormData,
-        });
-        
-        if (!imageResponse.ok) {
-          const errorText = await imageResponse.text();
-          console.error('Image upload error:', errorText);
-          throw new Error('Failed to upload image');
+        // Upload each image with a file
+        for (const image of imagesToUpload) {
+          const imageFormData = new FormData();
+          imageFormData.append('file', image.file);
+          
+          console.log(`Uploading image: ${image.id}`);
+          const imageResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: imageFormData,
+          });
+          
+          if (!imageResponse.ok) {
+            const errorText = await imageResponse.text();
+            console.error('Image upload error:', errorText);
+            throw new Error('Failed to upload image');
+          }
+          
+          const imageData = await imageResponse.json();
+          console.log('Image uploaded successfully:', imageData);
+          
+          // Add to our array of processed images
+          uploadedImages.push({
+            id: image.id,
+            url: imageData.url,
+            caption: image.caption || '',
+            order: image.order || 0
+          });
         }
         
-        const imageData = await imageResponse.json();
-        console.log('Image uploaded successfully:', imageData);
-        formData.append('image', imageData.url);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        setAlert({ message: 'Failed to upload image. Please try again.', type: 'error' });
+        // Add already uploaded images (those without files)
+        images.filter(img => !img.file && img.url).forEach(image => {
+          uploadedImages.push({
+            id: image.id,
+            url: image.url,
+            caption: image.caption || '',
+            order: image.order || 0
+          });
+        });
+        
+        // Sort images by order
+        uploadedImages.sort((a, b) => (a.order || 0) - (b.order || 0));
+        
+        // Add images to form data object
+        formDataObj.images = uploadedImages;
+        
+        // For backward compatibility, use the first image as the featured image
+        if (uploadedImages.length > 0) {
+          formDataObj.featuredImage = uploadedImages[0].url;
+        }
+      } catch (error: any) {
+        setAlert({ message: error.message || 'Error uploading images', type: 'error' });
         setIsSubmitting(false);
         return;
       }
     }
-
+      
+    // Add categories and tags from our selectors
+    formDataObj.categoryIds = selectedCategories.map(category => category.id);
+    formDataObj.tagIds = selectedTags.map(tag => tag.id);
+    
+    // For backward compatibility, also include comma-separated strings
+    if (selectedCategories.length > 0) {
+      formDataObj.categories = selectedCategories.map(c => c.name).join(',');
+    }
+    
+    if (selectedTags.length > 0) {
+      formDataObj.tags = selectedTags.map(t => t.name).join(',');
+    }
+    
     try {
-      // Convert formData to a regular object
-      const formDataObj: Record<string, any> = {};
-      formData.forEach((value, key) => {
-        // Handle checkbox for published field - convert from string to boolean
-        if (key === 'published') {
-          formDataObj[key] = value === 'on' || value === 'true';
-        } else {
-          formDataObj[key] = value;
-        }
-      });
+      
+      // Add categories and tags from our selectors
+      formDataObj.categoryIds = selectedCategories.map(category => category.id);
+      formDataObj.tagIds = selectedTags.map(tag => tag.id);
+      
+      // For backward compatibility, also include comma-separated strings
+      if (selectedCategories.length > 0) {
+        formDataObj.categories = selectedCategories.map(c => c.name).join(',');
+      }
+      
+      if (selectedTags.length > 0) {
+        formDataObj.tags = selectedTags.map(t => t.name).join(',');
+      }
       
       console.log('Sending post data:', JSON.stringify(formDataObj, null, 2));
       
@@ -263,49 +318,24 @@ export default function CreateBlogPost() {
 
                   <div className="row mb-3">
                     <div className="col-md-6">
-                      <label htmlFor="categories" className="form-label fw-bold">Categories</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="categories" 
-                        name="categories" 
-                        placeholder="Events, News, Academic (comma separated)"
+                      <CategorySelector 
+                        selectedCategories={selectedCategories} 
+                        onChange={setSelectedCategories} 
                       />
-                      <small className="text-muted">Separate categories with commas</small>
                     </div>
                     <div className="col-md-6">
-                      <label htmlFor="tags" className="form-label fw-bold">Tags</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="tags" 
-                        name="tags" 
-                        placeholder="university, medicine, research (comma separated)"
+                      <TagSelector 
+                        selectedTags={selectedTags} 
+                        onChange={setSelectedTags} 
                       />
-                      <small className="text-muted">Separate tags with commas</small>
                     </div>
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="image" className="form-label fw-bold">Featured Image</label>
-                    <input 
-                      type="file" 
-                      className="form-control" 
-                      id="image" 
-                      name="image" 
-                      accept="image/*"
-                      onChange={handleImageChange}
+                    <MultiImageUpload 
+                      onChange={handleImagesChange}
+                      maxImages={5}
                     />
-                    {imagePreview && (
-                      <div className="mt-2">
-                        <img 
-                          src={imagePreview} 
-                          alt="Preview" 
-                          className="img-thumbnail" 
-                          style={{ maxHeight: '200px' }} 
-                        />
-                      </div>
-                    )}
                   </div>
 
                   <div className="mb-3 form-check">
