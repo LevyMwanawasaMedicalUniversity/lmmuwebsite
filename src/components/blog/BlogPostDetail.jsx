@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import useLoading from '@/hooks/useLoading';
 import { usePathname } from 'next/navigation';
+import ImageCarousel from './ImageCarousel';
 import { getPostMainImage, getPostUrl, getPostCategories, getPostTags, getPostImages, getCategoriesString, getTagsString } from '@/lib/postUtils';
 
 export default function BlogPostDetail({ post }) {
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fullUrl, setFullUrl] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { withLoading } = useLoading();
   const pathname = usePathname();
   
@@ -117,16 +119,15 @@ export default function BlogPostDetail({ post }) {
             </div>
           </div>
           
-          {/* Featured Image */}
-          <div className="position-relative rounded-4 overflow-hidden mb-5" style={{ height: '500px' }}>
-            <Image 
-              src={getPostMainImage(post)} 
-              alt={post.title}
-              fill
-              className="img-fluid object-cover"
-              priority
-            />
-          </div>
+          {/* Featured Image Carousel */}
+          <ImageCarousel 
+            images={postImages}
+            height={500}
+            autoPlay={true}
+            interval={5000}
+            currentIndex={currentImageIndex}
+            onIndexChange={setCurrentImageIndex}
+          />
           
           {/* Post Content */}
           <div className="blog-content mb-5">
@@ -136,7 +137,7 @@ export default function BlogPostDetail({ post }) {
               </div>
             )}
             
-            {/* Image Gallery - Show if there are multiple images */}
+            {/* Image Gallery Thumbnails - Show if there are multiple images */}
             {postImages.length > 1 && (
               <div className="image-gallery mb-5">
                 <h4 className="mb-3 fw-bold">
@@ -144,25 +145,69 @@ export default function BlogPostDetail({ post }) {
                   Image Gallery
                 </h4>
                 <div className="gradient-container gradient-light p-4 rounded-4">
-                  <div className="row g-4">
+                  <div className="d-flex mb-3 align-items-center">
+                    <span className="text-muted me-3"><i className="fas fa-info-circle"></i> Click on thumbnails to navigate</span>
+                    <button 
+                      className="btn btn-sm btn-outline-primary rounded-pill" 
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    >
+                      <i className="fas fa-arrow-up me-1"></i> Back to carousel
+                    </button>
+                  </div>
+                  <div className="row g-3">
                     {postImages.map((image, index) => (
-                      <div className="col-lg-4 col-md-6" key={index}>
+                      <div className="col-6 col-md-4 col-lg-2" key={index}>
                         <motion.div 
-                          className="card border-0 shadow-sm rounded-4 overflow-hidden h-100"
-                          whileHover={{ scale: 1.03 }}
-                          transition={{ duration: 0.3 }}
+                          className={`card overflow-hidden h-100 ${
+                            currentImageIndex === index 
+                              ? 'border-primary shadow' 
+                              : 'border-0 shadow-sm'
+                          }`}
+                          whileHover={{ scale: 1.05, y: -5 }}
+                          transition={{ duration: 0.2 }}
                         >
-                          <div className="position-relative" style={{ height: '200px' }}>
+                          <div 
+                            className="position-relative" 
+                            style={{ height: '120px', cursor: 'pointer' }}
+                            onClick={() => {
+                              setCurrentImageIndex(index);
+                              // Scroll to top where carousel is
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            title={`View image ${index + 1}${image.caption ? `: ${image.caption}` : ''}`}
+                          >
                             <Image
                               src={image.url}
                               alt={image.caption || `Image ${index + 1}`}
                               fill
-                              className="img-fluid object-cover"
+                              className={`img-fluid object-cover ${
+                                currentImageIndex === index ? 'brightness-110' : ''
+                              }`}
+                              sizes="(max-width: 768px) 50vw, 16vw"
                             />
+                            <div 
+                              className={`position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center ${
+                                currentImageIndex === index 
+                                  ? 'bg-primary bg-opacity-10' 
+                                  : 'hover:bg-dark hover:bg-opacity-25'
+                              }`}
+                            >
+                              <span className={`badge ${
+                                currentImageIndex === index 
+                                  ? 'bg-primary' 
+                                  : 'bg-dark bg-opacity-50'
+                              } rounded-pill px-2 py-1 shadow-sm`}>
+                                {index + 1}
+                              </span>
+                            </div>
                           </div>
                           {image.caption && (
-                            <div className="card-body p-3 bg-light">
-                              <small className="text-muted">{image.caption}</small>
+                            <div className={`card-body p-2 ${
+                              currentImageIndex === index ? 'bg-primary bg-opacity-10' : 'bg-light'
+                            }`}>
+                              <small className="text-truncate d-block" style={{fontSize: '0.7rem'}} title={image.caption}>
+                                {image.caption}
+                              </small>
                             </div>
                           )}
                         </motion.div>
