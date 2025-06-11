@@ -184,9 +184,9 @@ export default function BlogPostDetail({ post }) {
                   <h5 className="mb-2">Categories:</h5>
                   <div>
                     {categories.map((category, index) => (
-                      <Link href={`/blog?category=${encodeURIComponent(category)}`} key={index}>
+                      <Link href={`/blog?category=${encodeURIComponent(category.name)}`} key={category.id || index}>
                         <span className="badge gradient-primary text-white me-2 mb-2 py-2 px-3 rounded-pill">
-                          {category}
+                          {category.name}
                         </span>
                       </Link>
                     ))}
@@ -199,9 +199,9 @@ export default function BlogPostDetail({ post }) {
                   <h5 className="mb-2">Tags:</h5>
                   <div>
                     {tags.map((tag, index) => (
-                      <Link href={`/blog?search=${encodeURIComponent(tag)}`} key={index}>
+                      <Link href={`/blog?search=${encodeURIComponent(tag.name)}`} key={tag.id || index}>
                         <span className="badge bg-light text-dark me-2 mb-2 py-2 px-3 rounded-pill">
-                          #{tag}
+                          #{tag.name}
                         </span>
                       </Link>
                     ))}

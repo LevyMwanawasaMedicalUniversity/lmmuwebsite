@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import Image from 'next/image';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -79,15 +80,17 @@ const DraggableImageItem = ({
       ref={refCombiner} 
       className={`position-relative border rounded p-2 mb-2 ${isDragging ? 'opacity-50 bg-light' : ''}`}
       style={{ cursor: 'move' }}
-    >
-      <div className="d-flex">
+    >      <div className="d-flex">
         <div className="me-3 text-center" style={{ minWidth: '100px' }}>
-          <img 
-            src={image.previewUrl || image.url} 
-            alt="Preview" 
-            className="img-thumbnail mb-1" 
-            style={{ maxHeight: '100px', maxWidth: '100px', objectFit: 'cover' }} 
-          />
+          <div className="position-relative" style={{ width: '100px', height: '100px' }}>
+            <Image 
+              src={image.previewUrl || image.url || '/assets/images/news/default-blog.jpg'} 
+              alt="Preview" 
+              fill
+              sizes="100px"
+              className="img-thumbnail mb-1 object-cover" 
+            />
+          </div>
           {index === 0 && (
             <span className="badge bg-warning text-dark">Featured</span>
           )}

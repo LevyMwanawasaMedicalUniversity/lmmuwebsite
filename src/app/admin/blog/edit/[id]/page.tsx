@@ -234,10 +234,12 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
       reader.readAsDataURL(file);
     }
   };
-  
-  const handleImagesChange = (updatedImages: any[]) => {
-    setImages(updatedImages);
-    console.log('Images updated:', updatedImages.length);
+    const handleImagesChange = (updatedImages: any[]) => {
+    // Use functional state update to avoid React warnings about updates during render
+    setTimeout(() => {
+      setImages(updatedImages);
+      console.log('Images updated:', updatedImages.length);
+    }, 0);
   };const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;

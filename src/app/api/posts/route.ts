@@ -14,7 +14,8 @@ function createSlug(title: string): string {
 
 // GET all posts with optional filtering, search, and pagination
 export async function GET(req: NextRequest) {
-  // Define variables at function scope to make them available in catch block  const url = new URL(req.url);
+  // Define variables at function scope to make them available in catch block  
+  const url = new URL(req.url);
   const published = url.searchParams.get('published');
   const categoryId = url.searchParams.get('categoryId');
   const categoryName = url.searchParams.get('category'); // Legacy category parameter
@@ -29,8 +30,7 @@ export async function GET(req: NextRequest) {
   const page = pageParam ? parseInt(pageParam) : 1;
   const limit = limitParam ? parseInt(limitParam) : 10;
   const skip = (page - 1) * limit;
-  
-  // Define where clause outside the try block to make it available in catch
+    // Define where clause outside the try block to make it available in catch
   let where: any = {};
   let total = 0;
   
@@ -46,7 +46,6 @@ export async function GET(req: NextRequest) {
     }
     
     // Build the where clause based on query parameters
-    const where: any = {};
     
     if (published !== null) {
       where.published = published === 'true';

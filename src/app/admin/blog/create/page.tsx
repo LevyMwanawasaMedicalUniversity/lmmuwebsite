@@ -85,8 +85,11 @@ export default function CreateBlogPost() {
   }
 
   const handleImagesChange = (updatedImages: any[]) => {
-    setImages(updatedImages);
-    console.log('Images updated:', updatedImages);
+    // Use functional state update to avoid React warnings about updates during render
+    setTimeout(() => {
+      setImages(updatedImages);
+      console.log('Images updated:', updatedImages.length);
+    }, 0);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
