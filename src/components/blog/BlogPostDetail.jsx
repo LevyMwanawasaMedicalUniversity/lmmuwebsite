@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import useLoading from '@/hooks/useLoading';
 import { usePathname } from 'next/navigation';
+import { getPostMainImage, getPostUrl, getPostCategories, getPostTags, getPostImages, getCategoriesString, getTagsString } from '@/lib/postUtils';
 
 export default function BlogPostDetail({ post }) {
   const [relatedPosts, setRelatedPosts] = useState([]);
@@ -26,19 +27,24 @@ export default function BlogPostDetail({ post }) {
     day: 'numeric'
   });
 
-  // Parse categories and tags if they exist - memoize to prevent unnecessary recalculations
+  // Parse categories and tags using utility functions - memoize to prevent unnecessary recalculations
   const categories = useMemo(() => {
-    return post.categories ? post.categories.split(',').map(cat => cat.trim()) : [];
-  }, [post.categories]);
+    return getPostCategories(post);
+  }, [post]);
   
   const tags = useMemo(() => {
-    return post.tags ? post.tags.split(',').map(tag => tag.trim()) : [];
-  }, [post.tags]);
+    return getPostTags(post);
+  }, [post]);
+  
+  // Get all images for the post
+  const postImages = useMemo(() => {
+    return getPostImages(post);
+  }, [post]);
   
   // Fetch related posts based on category
   useEffect(() => {
     // Skip if no categories
-    if (!post.categories || categories.length === 0) {
+    if (categories.length === 0) {
       setLoading(false);
       return;
     }
@@ -49,7 +55,12 @@ export default function BlogPostDetail({ post }) {
         const mainCategory = categories[0];
         if (!mainCategory) return;
         
-        const response = await fetch(`/api/posts?category=${encodeURIComponent(mainCategory)}&limit=3`);
+        // Use categoryId if available, otherwise use name for legacy support
+        const categoryParam = mainCategory.id ? 
+          `categoryId=${encodeURIComponent(mainCategory.id)}` : 
+          `category=${encodeURIComponent(mainCategory.name)}`;
+          
+        const response = await fetch(`/api/posts?${categoryParam}&limit=3`);
         if (!response.ok) throw new Error('Failed to fetch related posts');
         
         const data = await response.json();
@@ -109,7 +120,7 @@ export default function BlogPostDetail({ post }) {
           {/* Featured Image */}
           <div className="position-relative rounded-4 overflow-hidden mb-5" style={{ height: '500px' }}>
             <Image 
-              src={post.image || '/assets/images/news/default-blog.jpg'} 
+              src={getPostMainImage(post)} 
               alt={post.title}
               fill
               className="img-fluid object-cover"
@@ -122,6 +133,43 @@ export default function BlogPostDetail({ post }) {
             {post.summary && (
               <div className="lead mb-4 p-4 bg-light rounded-3 border-start border-5 border-primary">
                 {post.summary}
+              </div>
+            )}
+            
+            {/* Image Gallery - Show if there are multiple images */}
+            {postImages.length > 1 && (
+              <div className="image-gallery mb-5">
+                <h4 className="mb-3 fw-bold">
+                  <i className="fas fa-images me-2 text-primary"></i> 
+                  Image Gallery
+                </h4>
+                <div className="gradient-container gradient-light p-4 rounded-4">
+                  <div className="row g-4">
+                    {postImages.map((image, index) => (
+                      <div className="col-lg-4 col-md-6" key={index}>
+                        <motion.div 
+                          className="card border-0 shadow-sm rounded-4 overflow-hidden h-100"
+                          whileHover={{ scale: 1.03 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="position-relative" style={{ height: '200px' }}>
+                            <Image
+                              src={image.url}
+                              alt={image.caption || `Image ${index + 1}`}
+                              fill
+                              className="img-fluid object-cover"
+                            />
+                          </div>
+                          {image.caption && (
+                            <div className="card-body p-3 bg-light">
+                              <small className="text-muted">{image.caption}</small>
+                            </div>
+                          )}
+                        </motion.div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
             
@@ -233,11 +281,18 @@ export default function BlogPostDetail({ post }) {
                   >
                     <div className="position-relative" style={{ height: '200px' }}>
                       <Image 
-                        src={relatedPost.image || '/assets/images/news/default-blog.jpg'} 
+                        src={getPostMainImage(relatedPost)} 
                         alt={relatedPost.title}
                         fill
                         className="card-img-top object-cover"
                       />
+                      {relatedPost.images && relatedPost.images.length > 1 && (
+                        <div className="position-absolute top-0 end-0 bg-dark bg-opacity-50 px-2 py-1 m-2 rounded">
+                          <small className="text-white">
+                            <i className="fas fa-images me-1"></i> {relatedPost.images.length}
+                          </small>
+                        </div>
+                      )}
                     </div>
                     <div className="card-body">
                       <div className="d-flex justify-content-between align-items-center mb-2">
@@ -250,13 +305,13 @@ export default function BlogPostDetail({ post }) {
                           })}
                         </small>
                       </div>
-                      <Link href={`/blog/${relatedPost.id}`} className="text-decoration-none">
+                      <Link href={getPostUrl(relatedPost)} className="text-decoration-none">
                         <h5 className="card-title mb-3 fw-bold text-dark">{relatedPost.title}</h5>
                       </Link>
                       <p className="card-text text-muted mb-3">
                         {relatedPost.summary?.substring(0, 100)}...
                       </p>
-                      <Link href={`/blog/${relatedPost.id}`} className="btn btn-sm gradient-gold text-white rounded-pill px-4">
+                      <Link href={getPostUrl(relatedPost)} className="btn btn-sm gradient-gold text-white rounded-pill px-4">
                         Read More <i className="fa fa-arrow-right ms-1"></i>
                       </Link>
                     </div>

@@ -19,12 +19,19 @@ export async function GET(req: NextRequest) {
       orderBy: { name: "asc" }
     });
     
+    // Ensure we're returning an array even if the query fails in some way
+    if (!Array.isArray(tags)) {
+      console.error("Tag query did not return an array:", tags);
+      return NextResponse.json([], { status: 200 });
+    }
+    
     return NextResponse.json(tags);
   } catch (error) {
     console.error("Error fetching tags:", error);
+    // Return an empty array in case of error, so clients can still work
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      [], 
+      { status: 500, headers: { 'X-Error': 'Failed to fetch tags' } }
     );
   }
 }

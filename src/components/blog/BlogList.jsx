@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import useLoading from '@/hooks/useLoading';
+import { getPostMainImage, getPostUrl, getPostCategories, getPostTags, getCategoriesString, getTagsString } from '@/lib/postUtils';
 
 export default function BlogList() {
   const [posts, setPosts] = useState([]);
@@ -22,17 +23,15 @@ export default function BlogList() {
   useEffect(() => {
     if (posts.length > 0) {
       const allCategories = posts.reduce((acc, post) => {
-        if (post.categories) {
-          const postCategories = typeof post.categories === 'string' 
-            ? post.categories.split(',').map(cat => cat.trim()) 
-            : post.categories;
-          
-          postCategories.forEach(category => {
-            if (category && !acc.includes(category)) {
-              acc.push(category);
-            }
-          });
-        }
+        // Get categories for each post using our utility function
+        const postCategories = getPostCategories(post);
+        
+        postCategories.forEach(category => {
+          // Check if this category name is already in our accumulator
+          if (category && category.name && !acc.includes(category.name)) {
+            acc.push(category.name);
+          }
+        });
         return acc;
       }, []);
       setCategories(allCategories);
@@ -208,7 +207,7 @@ export default function BlogList() {
               <div className="col-md-6">
                 <div className="position-relative h-100" style={{ minHeight: '350px' }}>
                   <Image 
-                    src={featuredPost.image || '/assets/images/news/default-blog.jpg'} 
+                    src={getPostMainImage(featuredPost)} 
                     alt={featuredPost.title} 
                     fill
                     className="img-fluid object-cover"
@@ -216,6 +215,13 @@ export default function BlogList() {
                   <div className="position-absolute top-0 start-0 gradient-success text-white px-3 py-2 m-3 rounded-pill">
                     <small className="fw-bold">Featured</small>
                   </div>
+                  {featuredPost.images && featuredPost.images.length > 1 && (
+                    <div className="position-absolute top-0 end-0 bg-dark bg-opacity-50 px-2 py-1 m-3 rounded">
+                      <small className="text-white">
+                        <i className="fas fa-images me-1"></i> {featuredPost.images.length}
+                      </small>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6">
@@ -234,11 +240,31 @@ export default function BlogList() {
                       {featuredPost.author?.name || 'LMMU Staff'}
                     </span>
                   </div>
-                  <Link href={`/blog/${featuredPost.id}`} className="text-decoration-none">
+                  
+                  {/* Display categories if available */}
+                  {getCategoriesString(featuredPost) && (
+                    <div className="mb-2">
+                      <small className="text-muted">
+                        <i className="fa fa-folder me-1"></i> 
+                        {getCategoriesString(featuredPost)}
+                      </small>
+                    </div>
+                  )}
+                  
+                  {/* Display tags if available */}
+                  {getTagsString(featuredPost) && (
+                    <div className="mb-2">
+                      <small className="text-muted">
+                        <i className="fa fa-tags me-1"></i> 
+                        {getTagsString(featuredPost)}
+                      </small>
+                    </div>
+                  )}
+                  <Link href={getPostUrl(featuredPost)} className="text-decoration-none">
                     <h2 className="card-title mb-3 fw-bold text-dark">{featuredPost.title}</h2>
                   </Link>
                   <p className="card-text text-muted mb-4">{featuredPost.summary}</p>
-                  <Link href={`/blog/${featuredPost.id}`} className="btn gradient-success text-white rounded-pill px-4 py-2">
+                  <Link href={getPostUrl(featuredPost)} className="btn gradient-success text-white rounded-pill px-4 py-2">
                     Read More <i className="fa fa-arrow-right ms-1"></i>
                   </Link>
                 </div>
@@ -251,15 +277,21 @@ export default function BlogList() {
       {/* Other Posts */}
       {otherPosts.map((post) => (
         <motion.div className="col-md-6 col-lg-4" key={post.id} variants={itemVariants}>
-          <div className="card h-100 border-0 shadow-sm rounded-4 bg-white">
-            <div className="position-relative" style={{ height: '200px' }}>
-              <Image 
-                src={post.image || '/assets/images/news/default-blog.jpg'} 
-                alt={post.title} 
-                fill
-                className="card-img-top object-cover rounded-top-4"
-              />
-            </div>
+          <div className="card h-100 border-0 shadow-sm rounded-4 bg-white">              <div className="position-relative" style={{ height: '200px' }}>
+                <Image 
+                  src={getPostMainImage(post)} 
+                  alt={post.title} 
+                  fill
+                  className="card-img-top object-cover rounded-top-4"
+                />
+                {post.images && post.images.length > 1 && (
+                  <div className="position-absolute top-0 end-0 bg-dark bg-opacity-50 px-2 py-1 m-2 rounded">
+                    <small className="text-white">
+                      <i className="fas fa-images me-1"></i> {post.images.length}
+                    </small>
+                  </div>
+                )}
+              </div>
             <div className="card-body p-4">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <small className="text-muted">
@@ -271,13 +303,33 @@ export default function BlogList() {
                   })}
                 </small>
               </div>
-              <Link href={`/blog/${post.id}`} className="text-decoration-none">
+              
+              {/* Display categories if available */}
+              {getCategoriesString(post) && (
+                <div className="mb-2">
+                  <small className="text-muted">
+                    <i className="fa fa-folder me-1"></i> 
+                    {getCategoriesString(post)}
+                  </small>
+                </div>
+              )}
+              
+              {/* Display tags if available */}
+              {getTagsString(post) && (
+                <div className="mb-2">
+                  <small className="text-muted">
+                    <i className="fa fa-tags me-1"></i> 
+                    {getTagsString(post)}
+                  </small>
+                </div>
+              )}
+              <Link href={getPostUrl(post)} className="text-decoration-none">
                 <h5 className="card-title mb-3 fw-bold text-dark">{post.title}</h5>
               </Link>
               <p className="card-text text-muted mb-3">{post.summary}</p>
             </div>
             <div className="card-footer bg-white border-0 p-4 pt-0">
-              <Link href={`/blog/${post.id}`} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
+              <Link href={getPostUrl(post)} className="btn btn-sm gradient-success text-white rounded-pill px-3 py-1">
                 Read More <i className="fa fa-arrow-right ms-1"></i>
               </Link>
             </div>

@@ -37,9 +37,14 @@ export default function TagSelector({
         if (!response.ok) {
           throw new Error('Failed to fetch tags');
         }
-        
-        const data = await response.json();
-        setTags(data);
+          const data = await response.json();
+        if (Array.isArray(data)) {
+          setTags(data);
+        } else {
+          console.error("Expected tags to be an array but got:", data);
+          setTags([]);
+          throw new Error('Received invalid data format for tags');
+        }
       } catch (error) {
         console.error('Error fetching tags:', error);
         setError('Failed to load tags');

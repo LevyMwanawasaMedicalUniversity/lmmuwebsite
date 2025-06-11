@@ -19,12 +19,19 @@ export async function GET(req: NextRequest) {
       orderBy: { name: "asc" }
     });
     
+    // Ensure we're returning an array even if the query fails in some way
+    if (!Array.isArray(categories)) {
+      console.error("Category query did not return an array:", categories);
+      return NextResponse.json([], { status: 200 });
+    }
+    
     return NextResponse.json(categories);
   } catch (error) {
     console.error("Error fetching categories:", error);
+    // Return an empty array in case of error, so clients can still work
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      [], 
+      { status: 500, headers: { 'X-Error': 'Failed to fetch categories' } }
     );
   }
 }

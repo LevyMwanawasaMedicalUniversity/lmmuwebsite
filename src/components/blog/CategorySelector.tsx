@@ -37,9 +37,14 @@ export default function CategorySelector({
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }
-        
-        const data = await response.json();
-        setCategories(data);
+          const data = await response.json();
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.error("Expected categories to be an array but got:", data);
+          setCategories([]);
+          throw new Error('Received invalid data format for categories');
+        }
       } catch (error) {
         console.error('Error fetching categories:', error);
         setError('Failed to load categories');

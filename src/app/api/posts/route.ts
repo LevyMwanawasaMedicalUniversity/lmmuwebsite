@@ -14,19 +14,36 @@ function createSlug(title: string): string {
 
 // GET all posts with optional filtering, search, and pagination
 export async function GET(req: NextRequest) {
+  // Define variables at function scope to make them available in catch block  const url = new URL(req.url);
+  const published = url.searchParams.get('published');
+  const categoryId = url.searchParams.get('categoryId');
+  const categoryName = url.searchParams.get('category'); // Legacy category parameter
+  const tagId = url.searchParams.get('tagId');
+  const search = url.searchParams.get('search');
+  const pageParam = url.searchParams.get('page');
+  const limitParam = url.searchParams.get('limit');
+  const isRetry = url.searchParams.get('retry') === 'true';
+  const basicInfoOnly = url.searchParams.get('basicInfo') === 'true';
+  
+  // Parse pagination parameters
+  const page = pageParam ? parseInt(pageParam) : 1;
+  const limit = limitParam ? parseInt(limitParam) : 10;
+  const skip = (page - 1) * limit;
+  
+  // Define where clause outside the try block to make it available in catch
+  let where: any = {};
+  let total = 0;
+  
   try {
-    const url = new URL(req.url);
-    const published = url.searchParams.get('published');
-    const categoryId = url.searchParams.get('categoryId');
-    const tagId = url.searchParams.get('tagId');
-    const search = url.searchParams.get('search');
-    const pageParam = url.searchParams.get('page');
-    const limitParam = url.searchParams.get('limit');
+    // If this is a retry request, log it for monitoring
+    if (isRetry) {
+      console.log(`Retry request received at ${new Date().toISOString()}`);
+    }
     
-    // Parse pagination parameters
-    const page = pageParam ? parseInt(pageParam) : 1;
-    const limit = limitParam ? parseInt(limitParam) : 10;
-    const skip = (page - 1) * limit;
+    // If basic info is requested, this is for fallback fetching of post IDs
+    if (basicInfoOnly) {
+      console.log(`Basic info request received for fallback mechanism`);
+    }
     
     // Build the where clause based on query parameters
     const where: any = {};
@@ -34,14 +51,40 @@ export async function GET(req: NextRequest) {
     if (published !== null) {
       where.published = published === 'true';
     }
-    
-    // Filter by category ID (using relations)
+      // Filter by category ID (using relations)
     if (categoryId && !isNaN(parseInt(categoryId))) {
       where.categoryRelations = {
         some: {
           categoryId: parseInt(categoryId)
         }
       };
+    }
+    
+    // Legacy support - Filter by category name
+    if (categoryName) {
+      where.OR = [
+        ...(where.OR || []),
+        // Check in new relation structure by category name
+        {
+          categoryRelations: {
+            some: {
+              category: {
+                name: {
+                  contains: categoryName,
+                  mode: 'insensitive'
+                }
+              }
+            }
+          }
+        },
+        // Check in legacy categories field for compatibility
+        {
+          categories: {
+            contains: categoryName,
+            mode: 'insensitive'
+          }
+        }
+      ];
     }
     
     // Filter by tag ID (using relations)
@@ -65,38 +108,42 @@ export async function GET(req: NextRequest) {
     }
 
     // Get total count for pagination
-    const total = await prisma.post.count({ where });
-
-    // Get posts with pagination
-    const posts = await prisma.post.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      include: { 
-        author: { 
-          select: { 
-            id: true, 
-            name: true, 
-            email: true 
-          } 
-        },
-        // Include first 5 images per post
-        images: {
-          orderBy: { order: "asc" },
-          take: 5
-        },
-        // Include category relations
+    const total = await prisma.post.count({ where });    // Get posts with pagination - gracefully handling potential missing relations    // Determine include object based on request type
+    let includeObject: any = { 
+      author: { 
+        select: { 
+          id: true, 
+          name: true, 
+          email: true 
+        } 
+      }
+    };
+    
+    // If basic info only, skip relations for faster response
+    if (!basicInfoOnly) {
+      includeObject = {
+        ...includeObject,
+        // Include images with proper error handling
+        images: true,
+        // Include category relations with proper error handling
         categoryRelations: {
           include: {
             category: true
           }
         },
-        // Include tag relations
+        // Include tag relations with proper error handling
         tagRelations: {
           include: {
             tag: true
           }
         }
-      },
+      };
+    }
+    
+    const posts = await prisma.post.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      include: includeObject,
       skip,
       take: limit
     });
@@ -107,11 +154,131 @@ export async function GET(req: NextRequest) {
       page,
       limit,
       totalPages: Math.ceil(total / limit)
-    });
-  } catch (error) {
+    });  } catch (error) {
     console.error("Error fetching posts:", error);
+      // Better error handling with more details for debugging
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    
+    // Analyze the error for common database schema issues
+    const hasSchemaError = errorMessage.includes('Unknown field') || 
+                          errorMessage.includes('does not exist in the current database');
+    const hasRelationError = errorMessage.includes('relation') || 
+                            errorMessage.includes('Foreign key constraint failed');
+    const hasImageError = errorMessage.includes('images');
+    const hasCategoryError = errorMessage.includes('categoryRelations');
+    const hasTagError = errorMessage.includes('tagRelations');
+    
+    if (hasSchemaError || hasRelationError) {
+      console.log(`Detected schema error: ${errorMessage}`);
+      console.log(`Specific errors - Images: ${hasImageError}, Categories: ${hasCategoryError}, Tags: ${hasTagError}`);
+      
+      try {
+        // Build a more tailored include object based on the error
+        const includeObject: any = { 
+          author: { 
+            select: { 
+              id: true, 
+              name: true, 
+              email: true 
+            } 
+          }
+        };
+        
+        // Only include relations that didn't cause errors
+        if (!hasImageError && !hasSchemaError) {
+          includeObject.images = true;
+        }
+        
+        if (!hasCategoryError && !hasSchemaError) {
+          includeObject.categoryRelations = {
+            include: {
+              category: true
+            }
+          };
+        }
+        
+        if (!hasTagError && !hasSchemaError) {
+          includeObject.tagRelations = {
+            include: {
+              tag: true
+            }
+          };
+        }
+        
+        // Fallback query with selective relations
+        const posts = await prisma.post.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          include: includeObject,
+          skip,
+          take: limit
+        });
+        
+        console.log("Fallback query succeeded with selective relations");
+        
+        return NextResponse.json({
+          posts,
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+          warning: "Some relations couldn't be fetched due to database schema issues"
+        });
+      } catch (fallbackError) {
+        console.error("Fallback with selective relations failed:", fallbackError);
+        
+        // Try one more time with no relations at all
+        try {
+          const basicPosts = await prisma.post.findMany({
+            where,
+            orderBy: { createdAt: "desc" },
+            include: { 
+              author: { 
+                select: { 
+                  id: true, 
+                  name: true, 
+                  email: true 
+                } 
+              }
+            },
+            skip,
+            take: limit
+          });
+          
+          console.log("Basic fallback query succeeded with no relations");
+          
+          return NextResponse.json({
+            posts: basicPosts,
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+            warning: "All relations were excluded due to database schema issues"
+          });
+        } catch (basicError) {
+          console.error("Even basic fallback query failed:", basicError);
+        }
+      }
+    }
+      const timestamp = new Date().toISOString();
+    console.error(`[${timestamp}] Final error in posts route:`, { 
+      errorType: error instanceof Error ? error.constructor.name : 'Unknown',
+      hasSchemaError, 
+      hasRelationError,
+      hasImageError, 
+      hasCategoryError, 
+      hasTagError,
+      isRetry
+    });
+    
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { 
+        error: "Failed to fetch posts", 
+        message: errorMessage,
+        timestamp,
+        details: process.env.NODE_ENV === 'development' ? errorStack : undefined
+      },
       { status: 500 }
     );
   }

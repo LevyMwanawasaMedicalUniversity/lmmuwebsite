@@ -19,10 +19,21 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   // Await params in Next.js 15.3+
   const paramsObj = await params;
   const { id } = paramsObj;
-  try {    // Check if id is numeric (assume it's DB id)
-    if (!isNaN(Number(id))) {
+  const isRetry = new URL(req.url).searchParams.get('retry') === 'true';
+  
+  if (isRetry) {
+    console.log(`Retry request for post ${id} received at ${new Date().toISOString()}`);
+  }
+  
+  try {
+    // Check if id is numeric (assume it's DB id)
+    const idValue = !isNaN(Number(id)) ? Number(id) : id;
+    const whereClause = typeof idValue === 'number' ? { id: idValue } : { slug: idValue };
+    
+    // Try with full relations first
+    try {
       const post = await prisma.post.findUnique({
-        where: { id: Number(id) },
+        where: whereClause,
         include: { 
           author: { select: { id: true, name: true, email: true } },
           images: { orderBy: { order: "asc" } },
@@ -31,27 +42,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         },
       });
       
-      if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
-        // Increment view count
-      await prisma.post.update({
-        where: { id: Number(id) },
-        data: { viewCount: { increment: 1 } }
-      });
-      
-      return NextResponse.json(post);
-    }    // Otherwise assume it's a slug
-    else {
-      const post = await prisma.post.findUnique({
-        where: { slug: id },
-        include: { 
-          author: { select: { id: true, name: true, email: true } },
-          images: { orderBy: { order: "asc" } },
-          categoryRelations: { include: { category: true } },
-          tagRelations: { include: { tag: true } }
-        },
-      });
-      
-      if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      if (!post) {
+        return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      }
       
       // Increment view count
       await prisma.post.update({
@@ -60,10 +53,108 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       });
       
       return NextResponse.json(post);
-    }
-  } catch (error) {
-    console.error("Error fetching post:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    } catch (relationsError) {
+      // Handle schema errors with relations gracefully
+      console.error("Error fetching post with relations:", relationsError);
+      const errorMessage = relationsError instanceof Error ? relationsError.message : "Unknown error occurred";
+      
+      // Check for specific errors
+      const hasSchemaError = errorMessage.includes('Unknown field') || 
+                            errorMessage.includes('does not exist in the current database');
+      const hasImageError = errorMessage.includes('images');
+      const hasCategoryError = errorMessage.includes('categoryRelations');
+      const hasTagError = errorMessage.includes('tagRelations');
+      
+      if (hasSchemaError) {
+        console.log(`Detected schema error for post ${id}: ${errorMessage}`);
+        
+        // Build a selective include object based on error
+        const includeObject: any = { 
+          author: { select: { id: true, name: true, email: true } }
+        };
+        
+        // Only include relations that didn't cause errors
+        if (!hasImageError && !hasSchemaError) {
+          includeObject.images = { orderBy: { order: "asc" } };
+        }
+        
+        if (!hasCategoryError && !hasSchemaError) {
+          includeObject.categoryRelations = { include: { category: true } };
+        }
+        
+        if (!hasTagError && !hasSchemaError) {
+          includeObject.tagRelations = { include: { tag: true } };
+        }
+        
+        // Fallback query with selective relations
+        try {
+          const post = await prisma.post.findUnique({
+            where: whereClause,
+            include: includeObject,
+          });
+          
+          if (!post) {
+            return NextResponse.json({ error: "Post not found" }, { status: 404 });
+          }
+          
+          // Increment view count
+          await prisma.post.update({
+            where: { id: post.id },
+            data: { viewCount: { increment: 1 } }
+          });
+          
+          return NextResponse.json({
+            ...post,
+            _warning: "Some relations couldn't be fetched due to database schema issues"
+          });
+        } catch (fallbackError) {
+          // Last resort - try with minimal fields
+          console.error("Fallback with selective relations failed:", fallbackError);
+          
+          const basicPost = await prisma.post.findUnique({
+            where: whereClause,
+            include: { 
+              author: { select: { id: true, name: true, email: true } }
+            }
+          });
+          
+          if (!basicPost) {
+            return NextResponse.json({ error: "Post not found" }, { status: 404 });
+          }
+          
+          // Increment view count
+          await prisma.post.update({
+            where: { id: basicPost.id },
+            data: { viewCount: { increment: 1 } }
+          });
+          
+          return NextResponse.json({
+            ...basicPost,
+            _warning: "All relations were excluded due to database schema issues"
+          });
+        }
+      }
+      
+      // If it's not a schema error, rethrow
+      throw relationsError;
+    }  } catch (error) {
+    const timestamp = new Date().toISOString();
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    
+    console.error(`[${timestamp}] Error fetching post ${id}:`, error);
+    console.error(`[${timestamp}] Error details:`, { 
+      id, 
+      isRetry, 
+      errorType: error instanceof Error ? error.constructor.name : 'Unknown',
+      stack: error instanceof Error ? error.stack : undefined 
+    });
+    
+    return NextResponse.json({ 
+      error: "Internal Server Error", 
+      message: errorMessage,
+      timestamp,
+      details: process.env.NODE_ENV === 'development' ? error : undefined
+    }, { status: 500 });
   }
 }
 

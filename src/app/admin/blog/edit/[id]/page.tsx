@@ -130,13 +130,18 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
           // For backward compatibility, we'll fetch categories by name
           const categoryNames = data.categories.split(',').map(name => name.trim()).filter(Boolean);
           if (categoryNames.length > 0) {
-            try {
-              const response = await fetch('/api/categories');
+            try {              const response = await fetch('/api/categories');
               const allCategories = await response.json();
-              const matchingCategories = allCategories.filter(cat => 
-                categoryNames.some(name => cat.name.toLowerCase() === name.toLowerCase())
-              );
-              setSelectedCategories(matchingCategories);
+              // Ensure allCategories is an array before filtering
+              if (Array.isArray(allCategories)) {
+                const matchingCategories = allCategories.filter(cat => 
+                  categoryNames.some(name => cat.name.toLowerCase() === name.toLowerCase())
+                );
+                setSelectedCategories(matchingCategories);
+              } else {
+                console.error("Expected categories to be an array but got:", allCategories);
+                setSelectedCategories([]);
+              }
             } catch (err) {
               console.error("Error fetching categories:", err);
             }
@@ -151,13 +156,18 @@ export default function EditBlogPost({ params }: { params: { id: string } }) {  
           // For backward compatibility, we'll fetch tags by name
           const tagNames = data.tags.split(',').map(name => name.trim()).filter(Boolean);
           if (tagNames.length > 0) {
-            try {
-              const response = await fetch('/api/tags');
+            try {              const response = await fetch('/api/tags');
               const allTags = await response.json();
-              const matchingTags = allTags.filter(tag => 
-                tagNames.some(name => tag.name.toLowerCase() === name.toLowerCase())
-              );
-              setSelectedTags(matchingTags);
+              // Ensure allTags is an array before filtering
+              if (Array.isArray(allTags)) {
+                const matchingTags = allTags.filter(tag => 
+                  tagNames.some(name => tag.name.toLowerCase() === name.toLowerCase())
+                );
+                setSelectedTags(matchingTags);
+              } else {
+                console.error("Expected tags to be an array but got:", allTags);
+                setSelectedTags([]);
+              }
             } catch (err) {
               console.error("Error fetching tags:", err);
             }
