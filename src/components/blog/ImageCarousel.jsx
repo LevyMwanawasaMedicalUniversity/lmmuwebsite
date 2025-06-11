@@ -22,27 +22,95 @@ export default function ImageCarousel({
   height = 500, 
   currentIndex: externalIndex,
   onIndexChange 
-}) {
-  // Add custom styles for fullscreen modal
+}) {  // Add custom styles for fullscreen modal
   useEffect(() => {
     // Inject custom CSS for improved transitions and interactions
     const style = document.createElement('style');
     style.textContent = `
       .carousel-image {
-        transition: transform 0.3s ease-in-out;
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
       .carousel-image:hover {
         transform: scale(1.02);
       }
       .fullscreen-backdrop {
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(10px);
+        background-color: rgba(0, 0, 0, 0.85) !important;
+      }
+      .carousel-control {
+        background: transparent;
+        border: none;
+        transition: all 0.3s ease;
+        opacity: 0.7;
+      }
+      .carousel-control:hover {
+        opacity: 1;
+      }
+      .carousel-control-icon {
+        background: rgba(0, 0, 0, 0.5);
+        border: 2px solid #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+      }
+      .carousel-control:hover .carousel-control-icon {
+        transform: scale(1.1);
+        background: rgba(0, 0, 0, 0.7);
+      }
+      .carousel-button {
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border: none;
+        transform: translateY(0);
+      }
+      .carousel-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+      .carousel-indicators button {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+      .carousel-indicators button:hover {
+        transform: scale(1.2);
+      }
+      .image-counter {
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 30px;
+        padding: 5px 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
       .fullscreen-controls {
-        opacity: 0.6;
-        transition: opacity 0.3s ease;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        border: 2px solid rgba(255, 255, 255, 0.1);
       }
       .fullscreen-controls:hover {
         opacity: 1;
+        transform: scale(1.05);
+      }
+      .caption-container {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .fullscreen-image-counter {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      .expand-hint {
+        transition: all 0.3s ease;
+        opacity: 0.7;
+      }      .carousel-image:hover .expand-hint {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      @keyframes fadeInOut {
+        0% { opacity: 0.7; transform: translateY(0); }
+        50% { opacity: 1; transform: translateY(-5px); }
+        100% { opacity: 0.7; transform: translateY(0); }
       }
     `;
     document.head.appendChild(style);
@@ -185,26 +253,30 @@ export default function ImageCarousel({
               <p className="text-white m-0">{images[0].caption}</p>
             </div>
           )}
-          
-          {/* Fullscreen hint indicator */}
-          <div className="position-absolute top-0 end-0 m-3 bg-dark bg-opacity-50 rounded-circle p-2">
+            {/* Fullscreen hint indicator */}
+          <div className="position-absolute top-0 end-0 m-3 bg-dark bg-opacity-50 rounded-circle p-2 expand-hint">
             <i className="fas fa-expand text-white"></i>
           </div>
         </div>
-        
-        {/* Fullscreen Modal */}
+          {/* Fullscreen Modal */}
         <AnimatePresence>
           {isFullscreen && (
             <motion.div 
               key="fullscreen-single" 
-              className="fixed-top h-100 w-100 bg-dark d-flex align-items-center justify-content-center fullscreen-backdrop" 
+              className="fixed-top h-100 w-100 d-flex align-items-center justify-content-center fullscreen-backdrop" 
               style={{ zIndex: 1050 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="position-relative h-100 w-100 d-flex align-items-center justify-content-center">
+              <motion.div 
+                className="position-relative h-100 w-100 d-flex align-items-center justify-content-center"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
                 <Image 
                   src={images[0].url}
                   alt={images[0].caption || 'Post image'}
@@ -215,21 +287,38 @@ export default function ImageCarousel({
                 />
                 
                 {images[0].caption && (
-                  <div className="position-absolute bottom-0 start-0 end-0 p-4 bg-dark bg-opacity-75">
-                    <p className="text-white text-center m-0 fs-5">{images[0].caption}</p>
+                  <div className="position-absolute bottom-0 start-0 end-0 p-4 caption-container">
+                    <p 
+                      className="text-white text-center m-0 fs-5"
+                      style={{ 
+                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+                        fontWeight: 500,
+                        maxWidth: '800px',
+                        margin: '0 auto !important'
+                      }}
+                    >
+                      {images[0].caption}
+                    </p>
                   </div>
                 )}
                 
                 <button
-                  className="position-absolute top-0 end-0 m-4 btn btn-sm btn-danger rounded-circle"
+                  className="position-absolute top-0 end-0 m-4 btn btn-danger rounded-circle fullscreen-controls"
                   onClick={toggleFullscreen}
-                  style={{ zIndex: 1051, width: '48px', height: '48px' }}
+                  style={{ 
+                    zIndex: 1051, 
+                    width: '48px', 
+                    height: '48px',
+                    background: 'rgba(220, 53, 69, 0.85)',
+                    backdropFilter: 'blur(3px)',
+                    border: '2px solid rgba(255, 255, 255, 0.3)'
+                  }}
                   aria-label="Close fullscreen"
                   title="Close fullscreen (Esc key)"
                 >
                   <i className="fa fa-times fa-lg"></i>
                 </button>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -312,17 +401,15 @@ export default function ImageCarousel({
                 priority
                 sizes="(max-width: 768px) 100vw, 1200px"
                 quality={80}
-              />
-              {images[currentIndex].caption && (
-                <div className="position-absolute bottom-0 start-0 end-0 p-3 bg-dark bg-opacity-50">
-                  <p className="text-white m-0">
+              />              {images[currentIndex].caption && (
+                <div className="position-absolute bottom-0 start-0 end-0 p-3 caption-container">
+                  <p className="text-white m-0" style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)' }}>
                     {images[currentIndex].caption}
                   </p>
                 </div>
               )}
-              
               {/* Fullscreen hint indicator */}
-              <div className="position-absolute top-0 end-0 m-3 bg-dark bg-opacity-50 rounded-circle p-2">
+              <div className="position-absolute top-0 end-0 m-3 bg-dark bg-opacity-50 rounded-circle p-2 expand-hint">
                 <i className="fas fa-expand text-white"></i>
               </div>
             </motion.div>
@@ -331,77 +418,99 @@ export default function ImageCarousel({
         
         {/* Regular carousel controls */}
         {showControls && (
-          <>
-            <button 
-              className="carousel-control carousel-control-prev" 
+          <>            <button 
+              className="carousel-control carousel-control-prev position-absolute top-50 start-0 translate-middle-y ms-3" 
               onClick={(e) => {
                 e.stopPropagation(); // Prevent triggering fullscreen
                 paginate(-1);
               }}
               aria-label="Previous image"
               title="Previous image (Left arrow key)"
+              style={{ zIndex: 5 }}
             >
-              <span className="carousel-control-prev-icon bg-primary p-3 rounded-circle opacity-75 shadow" aria-hidden="true"></span>
+              <span className="carousel-control-prev-icon carousel-control-icon bg-primary p-3 rounded-circle shadow" aria-hidden="true"></span>
               <span className="visually-hidden">Previous</span>
             </button>
             
             <button 
-              className="carousel-control carousel-control-next" 
+              className="carousel-control carousel-control-next position-absolute top-50 end-0 translate-middle-y me-3" 
               onClick={(e) => {
                 e.stopPropagation(); // Prevent triggering fullscreen
                 paginate(1);
               }}
               aria-label="Next image"
               title="Next image (Right arrow key)"
+              style={{ zIndex: 5 }}
             >
-              <span className="carousel-control-next-icon bg-primary p-3 rounded-circle opacity-75 shadow" aria-hidden="true"></span>
+              <span className="carousel-control-next-icon carousel-control-icon bg-primary p-3 rounded-circle shadow" aria-hidden="true"></span>
               <span className="visually-hidden">Next</span>
-            </button>
-            
-            {/* Play/Pause Button */}
+            </button>            {/* Play/Pause Button */}
             <button
-              className={`position-absolute top-0 end-0 m-3 btn btn-sm ${isPlaying ? 'btn-danger' : 'btn-success'} rounded-circle shadow`}
+              className={`position-absolute top-0 end-0 m-3 btn ${isPlaying ? 'btn-danger' : 'btn-success'} rounded-circle carousel-button`}
               onClick={(e) => {
                 e.stopPropagation(); // Prevent triggering fullscreen
                 toggleAutoPlay();
               }}
-              style={{ zIndex: 10, width: '40px', height: '40px', marginRight: '12px' }}
+              style={{ 
+                zIndex: 10, 
+                width: '42px', 
+                height: '42px', 
+                marginRight: '12px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)',
+                border: '2px solid rgba(255, 255, 255, 0.5)'
+              }}
               aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
               title={isPlaying ? 'Pause slideshow (Space key)' : 'Play slideshow (Space key)'}
             >
               <i className={`fa ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-            </button>
-
-            {/* Indicators/dots for direct navigation */}
-            <div className="carousel-indicators position-absolute start-50 translate-middle-x mb-3">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  className={`rounded-circle mx-1 ${index === currentIndex ? 'active bg-primary border border-light' : 'bg-light bg-opacity-75'}`}
-                  style={{ 
-                    width: index === currentIndex ? '14px' : '10px', 
-                    height: index === currentIndex ? '14px' : '10px',  
-                    border: 'none',
-                    transition: 'all 0.3s ease'
-                  }}
-                  aria-label={`Go to image ${index + 1}`}
-                  title={`Go to image ${index + 1}`}
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent triggering fullscreen
-                    goToSlide(index);
-                  }}
-                />
-              ))}
+            </button>{/* Indicators/dots for direct navigation */}
+            <div className="carousel-indicators position-absolute start-50 translate-middle-x mb-4" style={{ zIndex: 5 }}>
+              <div className="bg-dark bg-opacity-50 px-3 py-2 rounded-pill shadow">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`rounded-circle mx-1 ${index === currentIndex ? 'active bg-primary border border-light' : 'bg-light'}`}
+                    style={{ 
+                      width: index === currentIndex ? '14px' : '10px', 
+                      height: index === currentIndex ? '14px' : '10px',  
+                      border: index === currentIndex ? '2px solid white' : 'none',
+                      opacity: index === currentIndex ? 1 : 0.7,
+                      boxShadow: index === currentIndex ? '0 0 5px rgba(255, 255, 255, 0.5)' : 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                    aria-label={`Go to image ${index + 1}`}
+                    title={`Go to image ${index + 1}`}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering fullscreen
+                      goToSlide(index);
+                    }}
+                  />
+                ))}
+              </div>
+            </div>            {/* Current image indicator */}
+            <div className="position-absolute top-0 start-0 m-3 px-3 py-1 image-counter rounded-pill text-white" style={{ zIndex: 5 }}>
+              <span style={{ fontWeight: 600 }}>
+                <i className="fa fa-image me-2"></i> 
+                <span className="me-1">{currentIndex + 1}</span>/
+                <span className="ms-1" style={{ opacity: 0.8 }}>{images.length}</span>
+              </span>
             </div>
-
-            {/* Current image indicator */}
-            <div className="position-absolute top-0 start-0 m-3 px-2 py-1 bg-dark bg-opacity-50 rounded text-white shadow-sm">
-              <small><i className="fa fa-image me-1"></i> {currentIndex + 1} / {images.length}</small>
-            </div>
-            
-            {/* Swipe hint for mobile */}
-            <div className="position-absolute bottom-0 start-50 translate-middle-x mb-5 text-white bg-dark bg-opacity-50 px-3 py-1 rounded-pill d-none d-md-block">
-              <small><i className="fa fa-hand-point-right me-1"></i> Swipe or use arrow keys to navigate</small>
+              {/* Swipe hint for mobile */}
+            <div 
+              className="position-absolute bottom-0 start-50 translate-middle-x mb-5 text-white px-3 py-2 rounded-pill d-none d-md-block"
+              style={{
+                zIndex: 5,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backdropFilter: 'blur(4px)',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                animation: 'fadeInOut 3s ease-in-out infinite'
+              }}
+            >
+              <small>
+                <i className="fa fa-hand-point-right me-2"></i> 
+                <span style={{ fontWeight: 500 }}>Swipe or use arrow keys to navigate</span>
+              </small>
             </div>
           </>
         )}
@@ -444,10 +553,14 @@ export default function ImageCarousel({
                     priority
                     sizes="100vw"
                     quality={90}
-                  />
-                  {images[currentIndex].caption && (
-                    <div className="position-absolute bottom-0 start-0 end-0 p-4 bg-dark bg-opacity-75">
-                      <p className="text-white text-center m-0 fs-5">
+                  />                  {images[currentIndex].caption && (
+                    <div className="position-absolute bottom-0 start-0 end-0 p-4 caption-container">
+                      <p className="text-white text-center m-0 fs-5" style={{ 
+                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+                        fontWeight: 500,
+                        maxWidth: '800px',
+                        margin: '0 auto !important'
+                      }}>
                         {images[currentIndex].caption}
                       </p>
                     </div>
@@ -456,12 +569,18 @@ export default function ImageCarousel({
               </AnimatePresence>
               
               {/* Fullscreen controls */}
-              <div className="container-fluid h-100 position-relative">
-                {/* Close button */}
+              <div className="container-fluid h-100 position-relative">                {/* Close button */}
                 <button
-                  className="position-absolute top-0 end-0 m-4 btn btn-danger rounded-circle shadow"
+                  className="position-absolute top-0 end-0 m-4 btn btn-danger rounded-circle shadow fullscreen-controls"
                   onClick={toggleFullscreen}
-                  style={{ width: '48px', height: '48px', zIndex: 1051 }}
+                  style={{ 
+                    width: '48px', 
+                    height: '48px', 
+                    zIndex: 1051,
+                    background: 'rgba(220, 53, 69, 0.85)',
+                    backdropFilter: 'blur(3px)',
+                    border: '2px solid rgba(255, 255, 255, 0.3)'
+                  }}
                   aria-label="Exit fullscreen"
                   title="Exit fullscreen (Esc key)"
                 >
@@ -469,15 +588,20 @@ export default function ImageCarousel({
                 </button>
                 
                 {showControls && (
-                  <>
-                    {/* Fullscreen navigation controls */}
+                  <>                    {/* Fullscreen navigation controls */}
                     <button 
-                      className="position-absolute top-50 start-0 translate-middle-y ms-4 btn btn-dark rounded-circle opacity-75 fullscreen-controls"
+                      className="position-absolute top-50 start-0 translate-middle-y ms-4 btn btn-dark rounded-circle fullscreen-controls"
                       onClick={(e) => {
                         e.stopPropagation();
                         paginate(-1);
                       }}
-                      style={{ width: '60px', height: '60px', zIndex: 1051 }}
+                      style={{ 
+                        width: '60px', 
+                        height: '60px', 
+                        zIndex: 1051,
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        backdropFilter: 'blur(5px)'
+                      }}
                       aria-label="Previous image"
                       title="Previous image (Left arrow key)"
                     >
@@ -485,35 +609,50 @@ export default function ImageCarousel({
                     </button>
                     
                     <button 
-                      className="position-absolute top-50 end-0 translate-middle-y me-4 btn btn-dark rounded-circle opacity-75 fullscreen-controls"
+                      className="position-absolute top-50 end-0 translate-middle-y me-4 btn btn-dark rounded-circle fullscreen-controls"
                       onClick={(e) => {
                         e.stopPropagation();
                         paginate(1);
                       }}
-                      style={{ width: '60px', height: '60px', zIndex: 1051 }}
+                      style={{ 
+                        width: '60px', 
+                        height: '60px', 
+                        zIndex: 1051,
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        backdropFilter: 'blur(5px)'
+                      }}
                       aria-label="Next image"
                       title="Next image (Right arrow key)"
                     >
                       <i className="fa fa-chevron-right fa-2x"></i>
                     </button>
-                    
-                    {/* Play/Pause Button in fullscreen */}
+                      {/* Play/Pause Button in fullscreen */}
                     <button
-                      className={`position-absolute top-0 end-0 me-5 mt-4 pe-4 btn ${isPlaying ? 'btn-danger' : 'btn-success'} rounded-circle shadow`}
+                      className={`position-absolute top-0 end-0 me-5 mt-4 pe-4 btn ${isPlaying ? 'btn-danger' : 'btn-success'} rounded-circle shadow fullscreen-controls`}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleAutoPlay();
                       }}
-                      style={{ width: '48px', height: '48px', marginRight: '60px', zIndex: 1051 }}
+                      style={{ 
+                        width: '48px', 
+                        height: '48px', 
+                        marginRight: '60px', 
+                        zIndex: 1051,
+                        background: isPlaying ? 'rgba(220, 53, 69, 0.85)' : 'rgba(40, 167, 69, 0.85)',
+                        backdropFilter: 'blur(3px)', 
+                        border: '2px solid rgba(255, 255, 255, 0.3)'
+                      }}
                       aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
                       title={isPlaying ? 'Pause slideshow (Space key)' : 'Play slideshow (Space key)'}
                     >
                       <i className={`fa ${isPlaying ? 'fa-pause' : 'fa-play'} fa-lg`}></i>
                     </button>
-                    
-                    {/* Fullscreen image counter */}
-                    <div className="position-absolute top-0 start-0 m-4 px-3 py-2 bg-dark rounded text-white shadow" style={{ zIndex: 1051 }}>
-                      <span><i className="fa fa-image me-2"></i> {currentIndex + 1} / {images.length}</span>
+                      {/* Fullscreen image counter */}
+                    <div 
+                      className="position-absolute top-0 start-0 m-4 px-3 py-2 rounded-pill text-white fullscreen-image-counter" 
+                      style={{ zIndex: 1051 }}
+                    >
+                      <span><i className="fa fa-image me-2"></i> <strong>{currentIndex + 1}</strong> / {images.length}</span>
                     </div>
                     
                     {/* Fullscreen indicators/dots */}
