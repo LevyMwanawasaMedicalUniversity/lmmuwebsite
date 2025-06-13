@@ -10,7 +10,7 @@
     "copy-assets": "node scripts/copy-assets.js",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
-    "db:seed": "node prisma/seed-database.js",
+    "db:seed": "dotenv -e .env node prisma/seed-database.js",
     "db:init": "npm run db:migrate && npm run db:generate && npm run db:seed",
     "db:setup": "node scripts/setup-mysql.js",
     "db:migrate-data": "node --experimental-modules prisma/migrate-data.js"
@@ -30,6 +30,7 @@
     "@tiptap/starter-kit": "^2.14.0",
     "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.6",
+    "dotenv": "^16.5.0",
     "framer-motion": "^12.11.4",
     "fs-extra": "^11.3.0",
     "mysql2": "^3.14.1",
@@ -52,6 +53,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/node": "22.15.16",
     "@types/react": "19.1.2",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "tailwindcss": "^4"
