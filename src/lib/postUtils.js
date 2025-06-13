@@ -72,29 +72,43 @@ export function getPostImages(post) {
 /**
  * Get formatted categories from a post
  * @param {Object} post - The post object
- * @returns {Array} - Array of category names
+ * @returns {Array} - Array of category objects with name, id and slug
  */
 export function getPostCategories(post) {
+  if (!post) {
+    return [];
+  }
+
   // First try the new categoryRelations structure
-  if (post?.categoryRelations && Array.isArray(post.categoryRelations) && post.categoryRelations.length > 0) {
-    const validCategories = post.categoryRelations
-      .filter(rel => rel && rel.category && rel.category.name)
-      .map(rel => rel.category);
-      
-    if (validCategories.length > 0) {
-      return validCategories;
+  if (post.categoryRelations && Array.isArray(post.categoryRelations) && post.categoryRelations.length > 0) {
+    try {
+      const validCategories = post.categoryRelations
+        .filter(rel => rel && rel.category && rel.category.name)
+        .map(rel => rel.category);
+        
+      if (validCategories.length > 0) {
+        return validCategories;
+      }
+    } catch (error) {
+      console.error(`Error extracting categories from relations for post ${post.id || post.title}:`, error);
+      // Continue to fallback method
     }
   }
   
   // If no valid categories in relations, try the legacy field
-  if (post?.categories) {
-    const categoryNames = post.categories.split(',').map(name => name.trim()).filter(Boolean);
-    // Create simple category objects from names
-    return categoryNames.map(name => ({
-      id: name,
-      name: name,
-      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-    }));
+  if (post.categories && typeof post.categories === 'string') {
+    try {
+      const categoryNames = post.categories.split(',').map(name => name.trim()).filter(Boolean);
+      // Create simple category objects from names
+      return categoryNames.map(name => ({
+        id: name,
+        name: name,
+        slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      }));
+    } catch (error) {
+      console.error(`Error parsing legacy categories for post ${post.id || post.title}:`, error);
+      // Return empty array on error
+    }
   }
   
   return [];

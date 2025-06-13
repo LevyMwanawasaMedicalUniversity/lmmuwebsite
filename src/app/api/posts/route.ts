@@ -57,33 +57,63 @@ export async function GET(req: NextRequest) {
           categoryId: parseInt(categoryId)
         }
       };
-    }
-    
-    // Legacy support - Filter by category name
+    }    // Legacy support - Filter by category name
     if (categoryName) {
-      where.OR = [
-        ...(where.OR || []),
-        // Check in new relation structure by category name
-        {
-          categoryRelations: {
-            some: {
-              category: {
-                name: {
-                  contains: categoryName,
-                  mode: 'insensitive'
-                }
-              }
+      try {
+        // Decode the category name if it's URL encoded
+        const decodedCategoryName = decodeURIComponent(categoryName);
+        console.log(`Filtering by category: "${decodedCategoryName}"`);
+        
+        // Try to find the category first to get its ID for more accurate filtering
+        const category = await prisma.category.findFirst({
+          where: {
+            name: {
+              equals: decodedCategoryName,
+              mode: 'insensitive'
             }
           }
-        },
-        // Check in legacy categories field for compatibility
-        {
-          categories: {
-            contains: categoryName,
-            mode: 'insensitive'
-          }
+        });
+        
+        if (category) {
+          console.log(`Found matching category with ID: ${category.id}`);
+          // Use the exact category ID for more accurate filtering
+          where.categoryRelations = {
+            some: {
+              categoryId: category.id
+            }
+          };
+        } else {
+          // If no exact category match, fall back to text search
+          console.log(`No exact category match found, using text search instead`);
+          // Combine with existing OR conditions if they exist
+          where.OR = [
+            ...(where.OR || []),
+            // Check in new relation structure by category name
+            {
+              categoryRelations: {
+                some: {
+                  category: {
+                    name: {
+                      contains: decodedCategoryName,
+                      mode: 'insensitive'
+                    }
+                  }
+                }
+              }
+            },
+            // Check in legacy categories field for compatibility
+            {
+              categories: {
+                contains: decodedCategoryName,
+                mode: 'insensitive'
+              }
+            }
+          ];
         }
-      ];
+      } catch (error) {
+        console.error(`Error processing category filter: ${error}`);
+        // If there's an error with the category filter, continue with other filters
+      }
     }
     
     // Filter by tag ID (using relations)
@@ -146,18 +176,27 @@ export async function GET(req: NextRequest) {
       skip,
       take: limit
     });
-    
-    return NextResponse.json({
+      const response = {
       posts,
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit)
-    });  } catch (error) {
+    };
+    
+    // Log the response size for debugging
+    console.log(`Successfully fetched ${posts.length} posts out of ${total} total`);
+    
+    return NextResponse.json(response);  } catch (error) {
     console.error("Error fetching posts:", error);
       // Better error handling with more details for debugging
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     const errorStack = error instanceof Error ? error.stack : undefined;
+    
+    // Log detailed error information for server-side debugging
+    console.error(`API Error Detail - URL: ${req.url}`);
+    console.error(`Query params: ${JSON.stringify(Object.fromEntries(url.searchParams))}`);
+    console.error(`Where clause: ${JSON.stringify(where)}`);
     
     // Analyze the error for common database schema issues
     const hasSchemaError = errorMessage.includes('Unknown field') || 
@@ -167,12 +206,34 @@ export async function GET(req: NextRequest) {
     const hasImageError = errorMessage.includes('images');
     const hasCategoryError = errorMessage.includes('categoryRelations');
     const hasTagError = errorMessage.includes('tagRelations');
-    
-    if (hasSchemaError || hasRelationError) {
-      console.log(`Detected schema error: ${errorMessage}`);
+      if (hasSchemaError || hasRelationError || categoryName) {
+      // Special handling for category filter errors or schema issues
+      console.log(`Detected schema error or category filter issue: ${errorMessage}`);
       console.log(`Specific errors - Images: ${hasImageError}, Categories: ${hasCategoryError}, Tags: ${hasTagError}`);
       
       try {
+        // If the error involves categories, try a simpler query without category filtering
+        if (hasCategoryError || categoryName) {
+          console.log("Attempting fallback query without complex category filtering");
+          // Simplify the where clause by removing categoryRelations
+          const simplifiedWhere: any = { ...where };
+          delete simplifiedWhere.categoryRelations;
+          
+          // If using OR conditions for category, also remove those
+          if (simplifiedWhere.OR) {
+            simplifiedWhere.OR = simplifiedWhere.OR.filter((condition: any) => 
+              !condition.categoryRelations && !condition.categories
+            );
+            
+            // If OR array is now empty, remove it
+            if (simplifiedWhere.OR.length === 0) {
+              delete simplifiedWhere.OR;
+            }
+          }
+          
+          where = simplifiedWhere;
+        }
+        
         // Build a more tailored include object based on the error
         const includeObject: any = { 
           author: { 
