@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: { userId: stri
 
     // Only allow admins or users accessing their own profile
     if (!isAdmin && !isSelf) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     const user = await prisma.user.findUnique({
@@ -27,41 +27,29 @@ export async function GET(req: NextRequest, { params }: { params: { userId: stri
       include: {
         userRoles: {
           include: {
-            role: true
-          }
+            role: true,
+          },
         },
         userPermissions: {
           include: {
-            permission: true
-          }
+            permission: true,
+          },
         },
-        _count: {
-          select: { posts: true }
-        }
-      }
+      },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Remove sensitive fields for non-admin users
-    if (!isAdmin) {
-      // @ts-ignore
-      delete user.password;
-    }
-
     return NextResponse.json(user);
   } catch (error) {
-    console.error("Error fetching user:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Error fetching user details:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-// UPDATE a user (admin only, or self with restrictions)
+// PUT update a user (admin only, or self with restrictions)
 export async function PUT(req: NextRequest, { params }: { params: { userId: string } }) {
   const { userId } = params;
   try {
@@ -76,69 +64,75 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
 
     // Only allow admins or users updating their own profile
     if (!isAdmin && !isSelf) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    // Get the request data
     const data = await req.json();
     
-    // Setup an object for the fields to update
+    // Only admins can update roles
+    if (!isAdmin && data.roles) {
+      return NextResponse.json({ error: "You are not authorized to update roles" }, { status: 403 });
+    }
+
+    // Prepare update data
     const updateData: any = {};
     
-    // Update basic fields (allowed for both admin and self)
+    // Basic fields
     if (data.name) updateData.name = data.name;
-    if (data.email) updateData.email = data.email;
     if (data.username) updateData.username = data.username;
+    if (data.email) updateData.email = data.email;
+    if (data.password) updateData.password = await hashPassword(data.password);
+    
+    // Only admins can change the role field
+    if (isAdmin && data.role) updateData.role = data.role;
 
-    // Update password if provided
-    if (data.password) {
-      updateData.password = await hashPassword(data.password);
-    }
-
-    // Admin-only fields
-    if (isAdmin) {
-      // Only admin can update role
-      if (data.role) updateData.role = data.role;
-    }
-
-    // Update user
+    // Update the user
     const updatedUser = await prisma.user.update({
       where: { id: userIdInt },
       data: updateData,
-      include: {
-        userRoles: {
-          include: {
-            role: true
-          }
-        },
-        userPermissions: {
-          include: {
-            permission: true
-          }
-        }
-      }
     });
 
-    // Remove password from response
-    // @ts-ignore
-    delete updatedUser.password;
+    // Handle role assignments (admin only)
+    if (isAdmin && Array.isArray(data.roles)) {
+      // Delete existing role assignments
+      await prisma.userRole.deleteMany({
+        where: { userId: userIdInt },
+      });
+      
+      // Create new role assignments if roles are provided
+      if (data.roles.length > 0) {
+        await prisma.userRole.createMany({
+          data: data.roles.map((roleId: number) => ({
+            userId: userIdInt,
+            roleId,
+          })),
+        });
+      }
+    }
 
-    return NextResponse.json(updatedUser);
+    return NextResponse.json({ 
+      message: "User updated successfully",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        username: updatedUser.username,
+        role: updatedUser.role
+      }
+    });
   } catch (error: any) {
     console.error("Error updating user:", error);
     
-    // Handle Prisma unique constraint errors
-    if (error.code === 'P2002') {
-      return NextResponse.json(
-        { error: `${error.meta?.target?.[0] || 'Field'} already exists` },
-        { status: 400 }
-      );
+    // Handle specific errors
+    if (error.code === "P2002") {
+      return NextResponse.json({ 
+        error: "This email or username is already taken" 
+      }, { status: 409 });
     }
     
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ 
+      error: "Internal Server Error" 
+    }, { status: 500 });
   }
 }
 
@@ -146,7 +140,6 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
 export async function DELETE(req: NextRequest, { params }: { params: { userId: string } }) {
   const { userId } = params;
   try {
-    // Check if user is authenticated and is an admin
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -156,32 +149,35 @@ export async function DELETE(req: NextRequest, { params }: { params: { userId: s
     
     // Prevent self-deletion
     if (parseInt(session.user.id) === userIdInt) {
-      return NextResponse.json(
-        { error: "You cannot delete your own account" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Cannot delete your own account" }, { status: 400 });
     }
 
     // Check if user exists
     const user = await prisma.user.findUnique({
-      where: { id: userIdInt }
+      where: { id: userIdInt },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Delete user
+    // Delete user roles and permissions first to avoid foreign key constraints
+    await prisma.userRole.deleteMany({
+      where: { userId: userIdInt },
+    });
+    
+    await prisma.userPermission.deleteMany({
+      where: { userId: userIdInt },
+    });
+    
+    // Delete the user
     await prisma.user.delete({
-      where: { id: userIdInt }
+      where: { id: userIdInt },
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error deleting user:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
