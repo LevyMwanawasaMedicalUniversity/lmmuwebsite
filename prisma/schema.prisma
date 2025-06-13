@@ -12,39 +12,94 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String    @unique
-  username      String    @unique
-  password      String
-  role          String    @default("user") // Options: "user", "admin"
-  posts         Post[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              Int              @id @default(autoincrement())
+  name            String
+  email           String           @unique
+  username        String           @unique
+  password        String
+  role            String           @default("user") // Legacy field, kept for backward compatibility
+  posts           Post[]
+  userRoles       UserRole[] // Many-to-many relation with roles
+  userPermissions UserPermission[] // Direct permissions assigned to the user
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Role {
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  description     String?          @db.Text
+  users           UserRole[] // Many-to-many relation with users
+  rolePermissions RolePermission[] // Many-to-many relation with permissions
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Permission {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  description String?          @db.Text
+  roles       RolePermission[] // Many-to-many relation with roles
+  users       UserPermission[] // Many-to-many relation with users (direct permissions)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+// Junction table for User-Role relationship
+model UserRole {
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId     Int
+  assignedAt DateTime @default(now())
+
+  @@id([userId, roleId])
+}
+
+// Junction table for Role-Permission relationship
+model RolePermission {
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId       Int
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId Int
+  assignedAt   DateTime   @default(now())
+
+  @@id([roleId, permissionId])
+}
+
+// Junction table for User-Permission relationship (direct permissions)
+model UserPermission {
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId Int
+  assignedAt   DateTime   @default(now())
+
+  @@id([userId, permissionId])
 }
 
 model Post {
-  id               Int            @id @default(autoincrement())
-  title            String         @db.VarChar(255)
-  slug             String?        @unique @db.VarChar(255)
-  summary          String?        @db.Text
-  content          String         @db.LongText
+  id                Int            @id @default(autoincrement())
+  title             String         @db.VarChar(255)
+  slug              String?        @unique @db.VarChar(255)
+  summary           String?        @db.Text
+  content           String         @db.LongText
   // Keep for backward compatibility
-  image            String?        @db.VarChar(255)
+  image             String?        @db.VarChar(255)
   // Keep for backward compatibility
-  categories       String?        @db.VarChar(255)
+  categories        String?        @db.VarChar(255)
   // Keep for backward compatibility
-  tags             String?        @db.VarChar(255)
-  published        Boolean        @default(false)
-  author           User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  authorId         Int?
+  tags              String?        @db.VarChar(255)
+  published         Boolean        @default(false)
+  author            User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId          Int?
   // New relations
-  images           PostImage[]
+  images            PostImage[]
   categoryRelations PostCategory[]
-  tagRelations     PostTag[]
-  viewCount        Int            @default(0)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  tagRelations      PostTag[]
+  viewCount         Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 }
 
 model PostImage {
@@ -82,15 +137,15 @@ model PostCategory {
   postId     Int
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
-  
+
   @@id([postId, categoryId])
 }
 
 model PostTag {
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId     Int
-  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
-  tagId      Int
-  
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId  Int
+
   @@id([postId, tagId])
 }

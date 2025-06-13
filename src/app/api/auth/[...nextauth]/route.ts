@@ -40,8 +40,7 @@ export const authOptions: AuthOptions = {
         }
       }
     })
-  ],
-  callbacks: {
+  ],  callbacks: {
     // Include user role in session
     async session({ session, token }) {
       if (session.user && token.sub) {

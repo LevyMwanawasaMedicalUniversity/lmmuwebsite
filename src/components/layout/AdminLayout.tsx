@@ -97,6 +97,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link href="/admin/roles" className="nav-link text-dark">
+                    <i className="fas fa-user-tag me-2"></i>
+                    Roles
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/admin/permissions" className="nav-link text-dark">
+                    <i className="fas fa-key me-2"></i>
+                    Permissions
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link href="/admin/settings" className="nav-link text-dark">
                     <i className="fas fa-cog me-2"></i>
                     Settings
