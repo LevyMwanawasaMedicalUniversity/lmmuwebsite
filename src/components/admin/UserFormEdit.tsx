@@ -54,13 +54,11 @@ export default function UserFormEdit({ userId }: UserFormEditProps) {
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.name || !formData.email || !formData.username) {
+    e.preventDefault();             
+      if (!formData.name || !formData.email || !formData.username) {
       toast.error('Name, email, and username are required');
       return;
     }
-
     setIsSubmitting(true);
 
     // Create a copy of the form data, omitting the password if it's empty

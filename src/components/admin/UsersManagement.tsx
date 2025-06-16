@@ -107,8 +107,7 @@ export default function UsersManagement() {
       delete submissionData.password;
     }
 
-    try {
-      const url = currentUser 
+    try {      const url = currentUser 
         ? `/api/users/${currentUser.id}` 
         : '/api/users';
       

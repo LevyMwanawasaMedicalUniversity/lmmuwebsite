@@ -1,5 +1,5 @@
 import React from 'react';
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ClientSessionProvider from "@/components/providers/ClientSessionProvider";
@@ -7,12 +7,12 @@ import LoadingProvider from "@/components/providers/LoadingProvider";
 import "./globals.css";
 import "@/styles/gradients.css"; // Import our unified gradient system
 
-const geistSans = Geist({
+const geistSans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = Roboto_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
