@@ -57,18 +57,66 @@ export default function PostgraduatePage(): React.ReactNode {
 
   return (
     <main>
-      {/* Page Banner */}
-      <section className="page-banner pt-5 pb-4" style={{ backgroundImage: "url('/images/page-banner-5.jpg')" }}>
-        <div className="container">
+      {/* Page Banner - Improved Hero Section */}
+      <section className="hero-section position-relative">
+        <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
+          <div 
+            style={{ 
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: "url('/assets/images/academics/postgrad-banner.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          />
+          {/* Enhanced gradient overlay with LMMU brand colors */}
+          <div className="overlay position-absolute w-100 h-100 top-0 gradient-lmmu-blue-gold" 
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(7, 41, 77, 0.9) 0%, rgba(7, 41, 77, 0.8) 40%, rgba(255, 198, 0, 0.3) 100%)',
+              mixBlendMode: 'multiply'
+            }}>
+          </div>
+          
+          {/* Decorative pattern overlay */}
+          <div className="pattern-overlay position-absolute w-100 h-100 top-0" 
+            style={{ 
+              background: 'url("/assets/images/university/pattern-bg.png") repeat',
+              opacity: '0.05',
+              zIndex: 2
+            }}>
+          </div>
+        </div>
+        <div className="container position-relative" style={{ marginTop: '-120px' }}>
           <div className="row">
-            <div className="col-lg-8">
-              <div className="page-banner-content">
-                <h2>Postgraduate Programs</h2>
-                <ul>
-                  <li><Link href="/">Home</Link></li>
-                  <li><Link href="/academics">Academics</Link></li>
-                  <li>Postgraduate Programs</li>
-                </ul>
+            <div className="col-12">
+              <div 
+                className="hero-content bg-white shadow-lg rounded-3 p-4 p-md-5 text-center position-relative"
+                style={{ 
+                  borderTop: '6px solid #ffc600',
+                  borderRight: '1px solid rgba(7, 41, 77, 0.1)',
+                  borderBottom: '1px solid rgba(7, 41, 77, 0.1)',
+                  borderLeft: '1px solid rgba(7, 41, 77, 0.1)',
+                  borderRadius: '12px'
+                }}
+              >
+                <h1 
+                  className="mb-2 fw-bold"
+                  style={{ color: '#07294d' }}
+                >
+                  Postgraduate Programs
+                </h1>
+                <nav 
+                  aria-label="breadcrumb"
+                >
+                  <ol className="breadcrumb justify-content-center mb-0">
+                    <li className="breadcrumb-item"><Link href="/">Home</Link></li>
+                    <li className="breadcrumb-item"><Link href="/academics">Academics</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Postgraduate Programs</li>
+                  </ol>
+                </nav>
               </div>
             </div>
           </div>
