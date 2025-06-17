@@ -26,7 +26,7 @@ export default function StudentPortalPage(): React.ReactNode {
               style={{ objectFit: 'cover', objectPosition: 'center' }}
             />
             <div className="overlay position-absolute w-100 h-100 top-0" 
-              style={{ background: 'linear-gradient(rgba(7, 41, 77, 0.8), rgba(7, 41, 77, 0.7))' }}>
+              style={{ background: 'linear-gradient(rgba(7, 41, 77, 0.4), rgba(7, 41, 77, 0.3))' }}>
             </div>
           </div>
           <div className="container position-relative" style={{ marginTop: '-150px' }}>
