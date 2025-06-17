@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { hashPassword } from "@/lib/auth/password";
 
-// GET a single user by ID (admin only, or self)
+// GET a single user by userId (admin only, or self)
 export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
   const { userId } = params;
   try {
