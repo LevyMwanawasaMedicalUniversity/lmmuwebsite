@@ -108,12 +108,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     Permissions
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link href="/admin/settings" className="nav-link text-dark">
-                    <i className="fas fa-cog me-2"></i>
-                    Settings
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>

@@ -148,17 +148,7 @@ export default function AdminDashboard() {
               </div>
               <div className="card-body">
                 <div className="row g-3">
-                  <div className="col-md-4 col-lg-2">
-                    <Link href="/admin/blog/create" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
-                      <div className="card-body py-4">
-                        <div className="mb-3">
-                          <i className="fas fa-plus-circle fa-3x text-primary"></i>
-                        </div>
-                        <h5>New Post</h5>
-                        <p className="text-muted small mb-0">Add a new blog post</p>
-                      </div>
-                    </Link>
-                  </div>
+                  
                   <div className="col-md-4 col-lg-2">
                     <Link href="/admin/blog" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
                       <div className="card-body py-4">
@@ -204,13 +194,24 @@ export default function AdminDashboard() {
                     </Link>
                   </div>
                   <div className="col-md-4 col-lg-2">
-                    <Link href="/admin/settings" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
+                    <Link href="/admin/roles" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
                       <div className="card-body py-4">
                         <div className="mb-3">
-                          <i className="fas fa-cog fa-3x text-secondary"></i>
+                          <i className="fas fa-user-shield fa-3x text-secondary"></i>
                         </div>
-                        <h5>Settings</h5>
-                        <p className="text-muted small mb-0">Configure site settings</p>
+                        <h5>Roles</h5>
+                        <p className="text-muted small mb-0">Configure Roles</p>
+                      </div>
+                    </Link>
+                  </div>
+                  <div className="col-md-4 col-lg-2">
+                    <Link href="/admin/permissions" className="card text-center border-0 shadow-sm h-100 text-decoration-none">
+                      <div className="card-body py-4">
+                        <div className="mb-3">
+                          <i className="fas fa-key fa-3x text-primary"></i>
+                        </div>
+                        <h5>Permissions</h5>
+                        <p className="text-muted small mb-0">Configure Permissions</p>
                       </div>
                     </Link>
                   </div>
