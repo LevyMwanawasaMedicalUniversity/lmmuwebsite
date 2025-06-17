@@ -68,7 +68,7 @@ export default function ApplySection() {
                     <i className="fa fa-file-pdf me-2"></i> Download Application Form
                   </Link>
                   
-                  <Link href="/schools" className="btn btn-outline-primary rounded-pill py-2">
+                  <Link href="/academics/schools" className="btn btn-outline-primary rounded-pill py-2">
                     <i className="fa fa-money-bill me-2"></i> Tuition Fees Structure
                   </Link>
                   
