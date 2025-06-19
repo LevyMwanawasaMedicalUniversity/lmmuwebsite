@@ -304,10 +304,10 @@ export default function Header() {
                   <li><h6 className="dropdown-header">ACADEMIC AFFAIRS</h6></li>
                   <li><Link className="dropdown-item" href="/academics/postgrad">Postgraduate Studies</Link></li>
                   <li><Link className="dropdown-item" href="/academics/undergraduate">Undergraduate Studies</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/files/LMMU 2025 ADVERT.pdf">HOW TO APPLY</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/LMMU 2025 APPLICATION FORM  FINAL.pdf">APPLICATION FORM</Link></li>
-                  <li><Link className="dropdown-item" href="/academics/schools">TUITION FEES STRUCTURE</Link></li>
-                  <li><Link className="dropdown-item" href="https://edurole.lmmu.ac.zm">APPLY ONLINE</Link></li>
+                  {/* <li><Link className="dropdown-item" href="/academics/files/LMMU 2025 ADVERT.pdf">HOW TO APPLY</Link></li>
+                  <li><Link className="dropdown-item" href="/academics/LMMU 2025 APPLICATION FORM  FINAL.pdf">APPLICATION FORM</Link></li> */}
+                  <li><Link className="dropdown-item" href="/academics/schools">Tuition Fees Structure</Link></li>
+                  {/* <li><Link className="dropdown-item" href="https://edurole.lmmu.ac.zm">APPLY ONLINE</Link></li> */}
                   <li><hr className="dropdown-divider" /></li>
 
                   {/* <li><h6 className="dropdown-header">GRADUATION INFORMATION</h6></li>
@@ -356,9 +356,9 @@ export default function Header() {
               </li>
             </ul>
             
-            <div className="ms-auto">
+            {/* <div className="ms-auto">
               <a role="button" className="text-dark search-icon" onClick={toggleSearch}><i className="fa fa-search"></i></a>
-            </div>
+            </div> */}
           </div>
           
           {/* Mobile menu */}

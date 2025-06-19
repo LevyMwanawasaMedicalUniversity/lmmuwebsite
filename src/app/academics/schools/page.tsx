@@ -9,21 +9,34 @@ import ProgramsSections from '@/app/university/components/ProgramsSections';
 export default function SchoolsPage(): React.ReactNode {
   return (
     <main>
-    {/* Page Banner */}
+    {/* Page Banner - Improved Hero Section */}
     <section className="hero-section position-relative">
-      <div className="hero-image-container" style={{ height: '300px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 8px 8px' }}>
+      <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
         <Image 
-          src="/assets/images/schools/page-banner.svg" 
+          src="/images/schools/banner.JPG"
           alt="Schools" 
           fill
           priority
           style={{ objectFit: 'cover', objectPosition: 'center' }}
         />
-        <div className="overlay position-absolute w-100 h-100 top-0" 
-          style={{ background: 'linear-gradient(rgba(7, 41, 77, 0.4), rgba(7, 41, 77, 0.3))' }}>
+        {/* Enhanced gradient overlay with LMMU brand colors */}
+        <div className="overlay position-absolute w-100 h-100 top-0 gradient-lmmu-blue-gold" 
+          style={{ 
+            background: 'linear-gradient(135deg, rgba(7, 41, 77, 0.9) 0%, rgba(7, 41, 77, 0.8) 40%, rgba(255, 198, 0, 0.3) 100%)',
+            mixBlendMode: 'multiply'
+          }}>
+        </div>
+        
+        {/* Decorative pattern overlay */}
+        <div className="pattern-overlay position-absolute w-100 h-100 top-0" 
+          style={{ 
+            background: 'url("/assets/images/university/pattern-bg.png") repeat',
+            opacity: '0.05',
+            zIndex: 2
+          }}>
         </div>
       </div>
-      <div className="container position-relative" style={{ marginTop: '-150px' }}>
+      <div className="container position-relative" style={{ marginTop: '-120px' }}>
         <div className="row">
           <div className="col-12">
             <motion.div 
@@ -32,12 +45,20 @@ export default function SchoolsPage(): React.ReactNode {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               whileHover={{ boxShadow: '0 15px 40px rgba(0, 0, 0, 0.15)' }}
+              style={{ 
+                borderTop: '6px solid #ffc600',
+                borderRight: '1px solid rgba(7, 41, 77, 0.1)',
+                borderBottom: '1px solid rgba(7, 41, 77, 0.1)',
+                borderLeft: '1px solid rgba(7, 41, 77, 0.1)',
+                borderRadius: '12px'
+              }}
             >
               <motion.h1 
-                className="mb-3"
+                className="mb-2 fw-bold"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
+                style={{ color: '#07294d' }}
               >
                 Schools
               </motion.h1>
@@ -45,7 +66,7 @@ export default function SchoolsPage(): React.ReactNode {
                 aria-label="breadcrumb"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
               >
                 <ol className="breadcrumb justify-content-center mb-0">
                   <li className="breadcrumb-item"><Link href="/" className="text-primary">Home</Link></li>
@@ -111,7 +132,7 @@ export default function SchoolsPage(): React.ReactNode {
 
     
  {/* Academic Resources */}
-    <section className="academic-resources pt-70 pb-70">
+    {/* <section className="academic-resources pt-70 pb-70">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
@@ -162,7 +183,7 @@ export default function SchoolsPage(): React.ReactNode {
           </div>
         </div>
       </div>
-    </section>
+    </section> */}
 
     {/* Apply Now CTA */}
     <section className="apply-now-cta py-5" style={{ backgroundColor: '#07294d' }}>

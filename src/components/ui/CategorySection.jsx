@@ -102,7 +102,7 @@ export default function CategorySection({ customTitle, customDescription }) {
       id: 6,
       title: "Directorate of Research and Postgraduate Studies",
       description: "Postgraduate studies and research.",
-      icon: "/assets/images/all-icon/ctg-5.png",
+      icon: "/assets/images/all-icon/ctg-6.jpg",
       link: "/academics/schools/drpgs",
       color: "#dc3895"
     },
