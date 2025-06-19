@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="450" viewBox="0 0 400 450" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="450" fill="#f5f5f7"/>
+  
+  <!-- LMMU Brand Colors Accent -->
+  <rect width="400" height="20" y="0" fill="#07294d"/>
+  <rect width="400" height="10" y="440" fill="#ffc600"/>
+  
+  <!-- Abstract Pattern for Background -->
+  <g opacity="0.1" fill="#07294d">
+    <circle cx="40" cy="80" r="5"/>
+    <circle cx="80" cy="100" r="5"/>
+    <circle cx="120" cy="60" r="5"/>
+    <circle cx="160" cy="90" r="5"/>
+    <circle cx="200" cy="70" r="5"/>
+    <circle cx="240" cy="100" r="5"/>
+    <circle cx="280" cy="60" r="5"/>
+    <circle cx="320" cy="90" r="5"/>
+    <circle cx="360" cy="80" r="5"/>
+    
+    <circle cx="40" cy="380" r="5"/>
+    <circle cx="80" cy="360" r="5"/>
+    <circle cx="120" cy="400" r="5"/>
+    <circle cx="160" cy="370" r="5"/>
+    <circle cx="200" cy="390" r="5"/>
+    <circle cx="240" cy="360" r="5"/>
+    <circle cx="280" cy="400" r="5"/>
+    <circle cx="320" cy="370" r="5"/>
+    <circle cx="360" cy="380" r="5"/>
+  </g>
+  
+  <!-- Silhouette -->
+  <g fill="#07294d">
+    <!-- Head -->
+    <circle cx="200" cy="150" r="70"/>
+    
+    <!-- Body -->
+    <path d="M120 310 Q200 280 280 310 L280 380 L120 380 Z"/>
+    
+    <!-- Shoulders -->
+    <rect x="120" y="220" width="160" height="30" rx="15"/>
+    
+    <!-- Neck -->
+    <rect x="180" y="200" width="40" height="40"/>
+  </g>
+  
+  <!-- Academic elements -->
+  <g fill="#ffc600">
+    <!-- Graduation Cap -->
+    <rect x="155" y="110" width="90" height="20" rx="5"/>
+    <polygon points="165,130 235,130 200,160"/>
+    <circle cx="200" cy="145" r="5"/>
+    
+    <!-- Book/Research Symbol (simplified) -->
+    <rect x="170" y="280" width="60" height="70" rx="5" fill="#ffffff" stroke="#ffc600" stroke-width="3"/>
+    <line x1="180" y1="300" x2="220" y2="300" stroke="#ffc600" stroke-width="3"/>
+    <line x1="180" y1="315" x2="220" y2="315" stroke="#ffc600" stroke-width="3"/>
+    <line x1="180" y1="330" x2="220" y2="330" stroke="#ffc600" stroke-width="3"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="200" y="410" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#07294d">DIRECTOR</text>
+  <text x="200" y="430" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#07294d">DRPGS</text>
+  
+  <!-- LMMU Logo Hint (simplified) -->
+  <g transform="translate(190, 20) scale(0.2)">
+    <circle cx="100" cy="100" r="60" fill="none" stroke="#ffc600" stroke-width="6"/>
+    <text x="100" y="115" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffc600">LMMU</text>
+  </g>
+</svg>

@@ -13,7 +13,7 @@ export const drpgsData: SchoolData = {
     name: "",
     title: "Directorate of Research and Postgraduate Studies",
     qualifications: "PhD, MPH",
-    imageSrc: "/images/schools/drpgs/director.png",
+    imageSrc: "/images/schools/drpgs/director.svg",
     message: [
       "Welcome to the Directorate of Research and Postgraduate Studies at Levy Mwanawasa Medical University.",
       "Our directorate is dedicated to advancing healthcare knowledge through innovative research and providing high-quality postgraduate education.",
