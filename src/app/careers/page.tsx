@@ -109,7 +109,7 @@ export default function CareersPage(): React.ReactNode {
               <div className="col-lg-4">
                 <div className="career-image mt-20">
                   <Image 
-                    src="/assets/images/about/careers.jpg" 
+                    src="/assets/images/about/logo.png" 
                     alt="Careers at LMMU" 
                     width={400} 
                     height={300} 
@@ -270,7 +270,7 @@ export default function CareersPage(): React.ReactNode {
         </section>
 
         {/* Current Openings */}
-        <section className="current-openings pt-40 pb-30">
+        {/* <section className="current-openings pt-40 pb-30">
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
@@ -341,7 +341,7 @@ export default function CareersPage(): React.ReactNode {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Why Work With Us */}
         <section className="why-work-with-us pt-40 pb-30 bg-light">
@@ -396,7 +396,7 @@ export default function CareersPage(): React.ReactNode {
         </section>
 
         {/* Application Process */}
-        <section className="application-process pt-40 pb-30">
+        {/* <section className="application-process pt-40 pb-30">
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
@@ -446,7 +446,7 @@ export default function CareersPage(): React.ReactNode {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* CTA Banner */}
         <section className="career-cta py-4" style={{ backgroundColor: '#07294d' }}>

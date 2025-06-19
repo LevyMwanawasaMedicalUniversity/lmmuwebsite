@@ -14,7 +14,7 @@ export default function UniversitySenatePage() {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/university/senate/page-banner.svg" 
+            src="/assets/images/university/senate/banner.jpg" 
             alt="University Senate" 
             fill
             priority
@@ -143,7 +143,7 @@ export default function UniversitySenatePage() {
                 viewport={{ once: true }}
               >
                 <Image 
-                  src="/assets/images/university/senate/senate-image.jpg" 
+                  src="/assets/images/university/senate/senate.jpg" 
                   alt="LMMU University Senate" 
                   width={600} 
                   height={400}

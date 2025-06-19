@@ -48,7 +48,7 @@ export default function TeachingAreasPage() {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/facilities/teaching-areas/page-banner.svg" 
+            src="/assets/images/facilities/teaching-areas/Auditorium.jpeg" 
             alt="Lecture Theatres" 
             fill
             priority

@@ -35,7 +35,7 @@ export default function LibraryPage() {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/facilities/library/page-banner.svg" 
+            src="/assets/images/facilities/library/libBanner.jpg" 
             alt="The Zambia National Health Reference Library" 
             fill
             priority

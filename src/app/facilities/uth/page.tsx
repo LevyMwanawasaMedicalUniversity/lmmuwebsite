@@ -12,7 +12,7 @@ export default function UTHPage() {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/facilities/uth/page-banner.svg" 
+            src="/assets/images/facilities/uth/uth.jpeg" 
             alt="Levy Mwanawasa University Teaching Hospital" 
             fill
             priority

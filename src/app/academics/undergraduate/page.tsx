@@ -142,7 +142,7 @@ export default function UndergraduatePage(): React.ReactNode {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/academics/undergrad-banner.jpg" 
+            src="/assets/images/academics/underGradBanner.jpg" 
             alt="Undergraduate Programs" 
             fill
             priority
@@ -247,7 +247,7 @@ export default function UndergraduatePage(): React.ReactNode {
               >
                 <div className="rounded-3 overflow-hidden shadow-sm">
                   <Image
-                    src="/assets/images/academics/undergrad-students.jpg"
+                    src="/assets/images/academics/underGradBanner.jpg"
                     alt="Undergraduate Students"
                     width={600}
                     height={400}

@@ -12,7 +12,7 @@ export default function MissionVisionPage() {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/university/mission-vision/page-banner.svg" 
+            src="/assets/images/university/mission-vision/page-banner-3.jpg" 
             alt="Mission, Vision and Motto" 
             fill
             priority
@@ -169,7 +169,7 @@ export default function MissionVisionPage() {
               >
                 <div className="rounded-4 overflow-hidden shadow-lg">
                   <Image 
-                    src="/assets/images/university/mission-vision/goals-image.svg" 
+                    src="/assets/images/university/mission-vision/about-logo.png" 
                     width={600}
                     height={400}
                     alt="LMMU Organizational Goals" 

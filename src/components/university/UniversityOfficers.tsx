@@ -16,10 +16,10 @@ interface UniversityOfficersProps {
 
 const defaultOfficers: OfficerData[] = [
   {
-    name: "Prof. Elwyn Chomba",
+    name: "Prof. Sekelani Banda",
     title: "Vice Chancellor",
     description: "Leading the university's strategic vision and academic excellence.",
-    imageUrl: "/assets/images/university/officers/vc.png"
+    imageUrl: "/assets/images/university/officers/ProfBanda.png"
   },
   {
     name: "Prof. Laston Chikoya",

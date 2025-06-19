@@ -12,7 +12,7 @@ export default function PostgradPage(): React.ReactNode {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/academics/postgrad-banner.svg" 
+            src="/assets/images/academics/postGradBanner.jpg" 
             alt="Postgraduate Studies" 
             fill
             priority
@@ -119,7 +119,7 @@ export default function PostgradPage(): React.ReactNode {
               >
                 <div className="rounded-3 overflow-hidden shadow-sm">
                   <Image
-                    src="/assets/images/academics/postgrad-students.jpg"
+                    src="/assets/images/academics/postGradBanner.jpg"
                     alt="Postgraduate Students"
                     width={600}
                     height={400}

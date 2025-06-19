@@ -131,7 +131,7 @@ export default function StaffPortalPage(): React.ReactNode {
                   >
                     <div className="mb-3 py-4">
                       <Image 
-                        src="/assets/images/portals/Microsoft_Office_logo_(2019–present).svg_.png" 
+                        src="/assets/images/portals/Microsoft_Office_logo.png" 
                         alt="Office 365" 
                         width={170} 
                         height={120} 
@@ -140,7 +140,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Office 365</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -172,7 +172,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">E-logbook</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -206,7 +206,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Research for Life</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -240,7 +240,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">SpiceWorks</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -274,7 +274,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Student Information System</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -308,7 +308,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Amboss</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -342,7 +342,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">E-learning</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -374,7 +374,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Koha</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -406,7 +406,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">D-Space</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -440,7 +440,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Up-To-Date</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -474,7 +474,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">SIS Reports</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>
@@ -506,7 +506,7 @@ export default function StaffPortalPage(): React.ReactNode {
                     </div>
                     <div>
                       <h5 className="card-title text-dark">Astria Learning</h5>
-                      <span className="d-block text-primary mt-2">Access Portal</span>
+                      <span className="d-block text-primary mt-2"></span>
                     </div>
                   </a>
                 </motion.div>

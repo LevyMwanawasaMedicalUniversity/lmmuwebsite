@@ -334,8 +334,8 @@ export default function Header() {
                   PORTALS
                 </Link>
                 <ul className="dropdown-menu">
-                  <li><Link className="dropdown-item" href="/portals/staff">Student Portal</Link></li>
-                  <li><Link className="dropdown-item" href="/portals/student">Staff Portal</Link></li>                  
+                  <li><Link className="dropdown-item" href="/portals/student">Student Portal</Link></li>
+                  <li><Link className="dropdown-item" href="/portals/staff">Staff Portal</Link></li>                  
                 </ul>
               </li>
               <li className="nav-item mx-3">

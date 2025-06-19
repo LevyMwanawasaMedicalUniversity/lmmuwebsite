@@ -12,7 +12,7 @@ export default function UniversityOfficersPage() {
       <section className="hero-section position-relative">
         <div className="hero-image-container" style={{ height: '350px', overflow: 'hidden', position: 'relative', borderRadius: '0 0 0px 0px' }}>
           <Image 
-            src="/assets/images/university/officers/campus-image.jpg" 
+            src="/assets/images/university/officers/banner-principle - new.jpg" 
             alt="University Officers" 
             fill
             priority
