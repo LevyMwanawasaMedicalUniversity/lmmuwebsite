@@ -4,14 +4,14 @@ export const drpgsData: SchoolData = {
   name: "Directorate of Research and Postgraduate Studies",
   shortName: "DRPGS",
   slug: "drpgs",
-  heroImage: "/images/schools/drpgs/drpgs-banner.jpg",
+  heroImage: "/images/schools/drpgs/g13.jpg",
   tagline: "Advancing healthcare knowledge through innovative research and postgraduate education",
   overview: "Welcome to the Directorate of Research and Postgraduate Studies at Levy Mwanawasa Medical University (LMMU). The Directorate is committed to advancing healthcare knowledge through innovative research and postgraduate education. We offer a range of postgraduate programs including doctoral, master's, and postgraduate diploma programs designed to develop specialized expertise in various healthcare disciplines.",
   mission: "To foster a culture of research excellence and provide high-quality postgraduate education that addresses healthcare challenges in Zambia and beyond.",
   vision: "To be a leading center for healthcare research and postgraduate education in Africa, contributing to improved health outcomes through knowledge generation and advanced professional training.",
   director: {
-    name: "Prof. [Director Name]",
-    title: "Director – Directorate of Research and Postgraduate Studies",
+    name: "",
+    title: "Directorate of Research and Postgraduate Studies",
     qualifications: "PhD, MPH",
     imageSrc: "/images/schools/drpgs/director.png",
     message: [
