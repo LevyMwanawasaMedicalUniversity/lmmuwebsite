@@ -2,7 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPostById } from '@/lib/blog';
-import BlogPostDetail from '@/components/blog/BlogPostDetail';
+import BlogPostDetail from '@/components/blog/BlogPostDetail.tsx';
 
 type Props = {
   params: { id: string }

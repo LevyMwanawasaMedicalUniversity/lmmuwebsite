@@ -11,6 +11,52 @@
     
     <!--====== Title ======-->
     <title>LMMU</title>
+
+    <style>
+        #teachers-page .singel-teachers {
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 100%;
+            min-height: 370px; /* fixed card height for uniformity */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background: #fff;
+            border-radius: 18px;
+        }
+        #teachers-page .singel-teachers:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+        }
+        #teachers-page .image {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        #teachers-page .cont {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        #teachers-page h6 {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 991.98px) {
+            #teachers-page .col-lg-3 {
+                flex: 0 0 48%;
+                max-width: 48%;
+            }
+        }
+        @media (max-width: 767.98px) {
+            #teachers-page .col-lg-3, #teachers-page .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+        </style>
     
     <!--====== Favicon Icon ======-->
     <link rel="shortcut icon" href="images/favicon.png" type="image/png">
@@ -212,41 +258,44 @@
     
     <section id="teachers-page" class="pt-90 pb-120 gray-bg">
         <div class="container">
-           <div class="row">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="singel-teachers mt-30 text-center">
-                        <div class="image">
-                            <img src="images/about/about-3.jpg"  alt="Teachers">
+            <div class="row justify-content-center">
+                <!-- Teacher Card 1 -->
+                <div class="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch">
+                    <div class="singel-teachers card h-100 text-center shadow-sm border-0">
+                        <div class="image p-3">
+                            <img src="images/about/about-3.jpg" class="img-fluid rounded-circle mx-auto" style="width:130px; height:130px; object-fit:cover;" alt="Prof. Yusuf Ahmed">
                         </div>
-                        <div class="cont">
-                            <h6>Prof. Yusuf Ahmed</h6>
-                            <span>Acting Deputy Vice Chancellor Academics</span>
+                        <div class="cont card-body">
+                            <h6 class="card-title mb-1">Prof. Yusuf Ahmed</h6>
+                            <span class="text-muted small d-block mb-2">Acting Deputy Vice Chancellor Academics</span>
                         </div>
-                    </div> <!-- singel teachers -->
+                    </div>
                 </div>
-               <div class="col-lg-3 col-sm-6">
-                   <div class="singel-teachers mt-30 text-center">
-                        <div class="image">
-                            <img src="images/about/profBanda.png"  alt="Teachers">
+                <!-- Teacher Card 2 -->
+                <div class="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch">
+                    <div class="singel-teachers card h-100 text-center shadow-sm border-0">
+                        <div class="image p-3">
+                            <img src="images/about/profBanda.png" class="img-fluid rounded-circle mx-auto" style="width:130px; height:130px; object-fit:cover;" alt="Prof. Sekelani Banda">
                         </div>
-                        <div class="cont">
-                            <h6>Prof. Sekelani Banda</h6>
-                            <span>Vice Chancellor</span>
+                        <div class="cont card-body">
+                            <h6 class="card-title mb-1">Prof. Sekelani Banda</h6>
+                            <span class="text-muted small d-block mb-2">Vice Chancellor</span>
                         </div>
-                    </div> <!-- singel teachers -->
-               </div>
-               <div class="col-lg-3 col-sm-6">
-                   <div class="singel-teachers mt-30 text-center">
-                        <div class="image">
-                            <img src="images/about/about-2.JPG" alt="Teachers">
+                    </div>
+                </div>
+                <!-- Teacher Card 3 -->
+                <div class="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch">
+                    <div class="singel-teachers card h-100 text-center shadow-sm border-0">
+                        <div class="image p-3">
+                            <img src="images/about/about-2.JPG" class="img-fluid rounded-circle mx-auto" style="width:130px; height:130px; object-fit:cover;" alt="Prof. Laston Chikoya">
                         </div>
-                        <div class="cont">
-                            <h6>Prof. Laston Chikoya</h6>
-                            <span>Deputy Vice Chancellor Administration</span>
+                        <div class="cont card-body">
+                            <h6 class="card-title mb-1">Prof. Laston Chikoya</h6>
+                            <span class="text-muted small d-block mb-2">Deputy Vice Chancellor Administration</span>
                         </div>
-                    </div> <!-- singel teachers -->
-               </div>
-           </div> <!-- row -->
+                    </div>
+                </div>
+            </div> <!-- row -->
         </div> <!-- container -->
     </section>
     
