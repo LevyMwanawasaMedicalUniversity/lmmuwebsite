@@ -82,9 +82,17 @@ export function getPostCategories(post) {
   // First try the new categoryRelations structure
   if (post.categoryRelations && Array.isArray(post.categoryRelations) && post.categoryRelations.length > 0) {
     try {
+      // Make sure we only get valid category objects
       const validCategories = post.categoryRelations
-        .filter(rel => rel && rel.category && rel.category.name)
-        .map(rel => rel.category);
+        .filter(rel => rel && rel.category && typeof rel.category === 'object')
+        .map(rel => {
+          // Ensure category has at least a name property
+          if (rel.category.name) {
+            return rel.category;
+          }
+          // If the category object doesn't have a name, create a sanitized version
+          return { name: `Category ${rel.categoryId || 'Unknown'}`, id: rel.categoryId };
+        });
         
       if (validCategories.length > 0) {
         return validCategories;
@@ -164,7 +172,14 @@ export function getPostUrl(post) {
 export function getCategoriesString(post) {
   const categories = getPostCategories(post);
   if (!categories.length) return '';
-  return categories.map(cat => cat.name).join(', ');
+  
+  // Map through categories, handling both object and string formats
+  return categories.map(cat => {
+    if (typeof cat === 'object' && cat !== null && cat.name) {
+      return cat.name;
+    }
+    return String(cat); // Ensure we have a string even if category is something unexpected
+  }).join(', ');
 }
 
 /**
@@ -175,5 +190,12 @@ export function getCategoriesString(post) {
 export function getTagsString(post) {
   const tags = getPostTags(post);
   if (!tags.length) return '';
-  return tags.map(tag => tag.name).join(', ');
+  
+  // Map through tags, handling both object and string formats
+  return tags.map(tag => {
+    if (typeof tag === 'object' && tag !== null && tag.name) {
+      return tag.name;
+    }
+    return String(tag); // Ensure we have a string even if tag is something unexpected
+  }).join(', ');
 }

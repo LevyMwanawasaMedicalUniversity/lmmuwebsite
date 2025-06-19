@@ -29,8 +29,12 @@ export default function BlogList() {
         
         postCategories.forEach(category => {
           // Check if this category name is already in our accumulator
-          if (category && category.name && !acc.includes(category.name)) {
+          // Ensure we're only working with valid category objects
+          if (category && typeof category === 'object' && category.name && !acc.includes(category.name)) {
             acc.push(category.name);
+          } else if (category && typeof category === 'string' && !acc.includes(category)) {
+            // Handle case where category might be a string
+            acc.push(category);
           }
         });
         return acc;
