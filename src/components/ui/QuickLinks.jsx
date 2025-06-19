@@ -26,9 +26,9 @@ const quickLinks = [
     icon: '/assets/icons/calendar.svg',
     iconColor: '#00896c', // Updated to match our green gradient-success color
     gradientClass: 'gradient-neutral',
-    title: 'Entry Requirements',
-    description: 'Important academic dates, events and deadlines',
-    link: '/entry-requirements'
+    title: 'LM-UTH',
+    description: 'Deatails about the Levy Mwanawasa University Teaching Hospital',
+    link: '/facilities/uth'
   },
   {
     icon: '/assets/icons/tour.svg',

@@ -282,13 +282,15 @@ export default function HomePage(): React.ReactNode {
             through a distributed network of academic health complexes in order to contribute towards 
             Universal Health Coverage in Zambia.
           </p>
-          <motion.button 
-            className="btn btn-light btn-lg px-4"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Learn About LMMU
-          </motion.button>
+          <Link href="/university/background">
+            <motion.button 
+              className="btn btn-light btn-lg px-4"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Learn About LMMU
+            </motion.button>
+          </Link>
         </div>
       </motion.div>
 

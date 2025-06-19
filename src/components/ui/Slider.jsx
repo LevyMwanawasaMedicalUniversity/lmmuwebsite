@@ -18,7 +18,7 @@ export default function Slider() {
       title: "Shaping the Future of Healthcare",
       subtitle: "Excellence in Medical Education",
       text: "Join a world-class institution dedicated to transforming healthcare through education, research, and innovation.",
-      link: "/about",
+      link: "/university",
       linkText: "Discover LMMU",
       overlay: 4
     },
@@ -27,8 +27,8 @@ export default function Slider() {
       title: "World-Class Facilities",
       subtitle: "State-of-the-Art Teaching Hospital",
       text: "Experience hands-on learning in our modern teaching hospital, equipped with the latest medical technology.",
-      link: "/facilities",
-      linkText: "Tour Our Campus",
+      link: "/facilities/teaching-areas",
+      linkText: "View Facilities",
       overlay: 4
     },
     {
@@ -36,7 +36,7 @@ export default function Slider() {
       title: "Your Journey Starts Here",
       subtitle: "Join Our Healthcare Community",
       text: "Begin your path to becoming a healthcare professional at one of Zambia's leading medical universities.",
-      link: "/admissions",
+      link: "https://edurole.lmmu.ac.zm/",
       linkText: "Apply Now",
       overlay: 4
     }

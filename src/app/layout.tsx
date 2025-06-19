@@ -20,6 +20,18 @@ const geistMono = Roboto_Mono({
 export const metadata = {
   title: "Levy Mwanawasa Medical University (LMMU)",
   description: "Levy Mwanawasa Medical University (LMMU) - A Leading Centre of Health Professions, Education, Training and Research in Zambia and Beyond",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/assets/images/all-icon/logo.png' }
+    ],
+    apple: [
+      { url: '/assets/images/all-icon/logo.png' }
+    ],
+    shortcut: [
+      { url: '/assets/images/all-icon/logo.png' }
+    ]
+  }
 };
 
 interface RootLayoutProps {
@@ -42,6 +54,10 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactNo
         
         {/* Magnific Popup */}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" />
+        
+        {/* Legacy favicon support for browsers that don't support the icons in metadata */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" href="/assets/images/all-icon/logo.png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
