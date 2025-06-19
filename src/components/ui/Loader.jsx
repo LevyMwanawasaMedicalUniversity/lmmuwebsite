@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function Loader({ forceShow = false }) {
+// Simple loader component that uses the search params
+function LoaderContent({ forceShow = false }) {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -126,5 +127,14 @@ export default function Loader({ forceShow = false }) {
         }
       `}</style>
     </motion.div>
+  );
+}
+
+// Wrap the LoaderContent with Suspense
+export default function Loader({ forceShow = false }) {
+  return (
+    <Suspense fallback={<div className="simple-loader">Loading...</div>}>
+      <LoaderContent forceShow={forceShow} />
+    </Suspense>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Inter, Roboto_Mono } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -63,11 +63,13 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactNo
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClientSessionProvider>
-          <LoadingProvider>
-            <Header />
-            {children}
-            <Footer />
-          </LoadingProvider>
+          <Suspense fallback={<div>Loading app...</div>}>
+            <LoadingProvider>
+              <Header />
+              {children}
+              <Footer />
+            </LoadingProvider>
+          </Suspense>
         </ClientSessionProvider>
 
         {/* jQuery */}

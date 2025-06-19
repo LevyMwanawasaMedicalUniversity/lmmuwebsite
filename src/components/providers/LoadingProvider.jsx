@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect, createContext, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Loader from '@/components/ui/Loader';
 
@@ -9,7 +9,17 @@ export const LoadingContext = createContext({
   setManualLoading: () => {},
 });
 
+// SearchParams wrapper component with suspense
 export default function LoadingProvider({ children }) {
+  return (
+    <Suspense fallback={<div className="global-loading-fallback">Loading...</div>}>
+      <LoadingState>{children}</LoadingState>
+    </Suspense>
+  );
+}
+
+// Component that safely uses searchParams
+function LoadingState({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isManualLoading, setManualLoading] = useState(false);
   const pathname = usePathname();
@@ -60,3 +70,5 @@ export default function LoadingProvider({ children }) {
     </LoadingContext.Provider>
   );
 }
+
+// This export is now moved to be the default export above
